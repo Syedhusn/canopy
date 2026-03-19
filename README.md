@@ -481,21 +481,23 @@ intelligence**. The workspace IS the intelligence. The agent is just the runtime
 
 ## Why Canopy Beats Everything Else
 
-### vs Server-Based Agent Frameworks
+### Others Have Tried This
 
-Every other agent orchestration system requires a server — Node.js, Postgres, React UI,
-Docker containers. Canopy requires a folder.
+A few projects have taken a run at agent orchestration — Paperclip (server-based
+zero-human companies), ClawTeam (CLI swarm intelligence), Ars Contexta (knowledge
+management via Claude Code), agency-agents (150+ agent library). They all got
+pieces right. None got the whole thing.
 
-| | Server-Based Frameworks | Canopy |
+| | Typical Agent Frameworks | Canopy |
 |---|---|---|
-| **Requires** | Runtime + DB + UI | A folder |
+| **Requires** | Server + DB + UI | A folder |
 | **Templates** | Usually "coming soon" | 159 agents, 83 skills, 5 operations |
 | **Context mgmt** | Flat prompt injection | L0-L3 tiered loading |
 | **Classification** | None | Signal Theory auto-routing |
 | **Knowledge** | None | 6R pipeline, knowledge graph, learning loop |
-| **Runtimes** | Usually 1-6 | 10+ |
-| **Use cases** | Companies only | Companies, second brains, dev, content, automation |
-| **Portability** | Tied to their server | Any agent, any machine |
+| **Runtimes** | 1-6 | 10+ |
+| **Use cases** | One paradigm | Companies, second brains, dev, content, automation, RPA |
+| **Portability** | Vendor-locked | Any agent, any machine, any VM |
 
 ### The Synthesis
 
@@ -590,6 +592,48 @@ Each workspace is a complete AI system in a folder.
 Same protocol. Different domain. Different depth.
 
 **The workspace is the product.** The agent is just the runtime.
+
+---
+
+## Canopy + MIOSA
+
+Canopy is the **protocol**. [MIOSA](https://github.com/Miosa-osa) is the **platform**.
+
+You can run Canopy anywhere — your laptop, a server, a Raspberry Pi. It's just folders.
+But when you want managed infrastructure, MIOSA gives you:
+
+- **Virtual machines on demand** — Each workspace gets its own Firecracker microVM.
+  Isolated, secure, disposable. Spin up a sales engine in seconds, tear it down when done.
+- **Agent marketplace** — Browse, download, and install workspaces. Like an app store
+  for AI agent systems. Community-built, version-controlled, one-click deploy.
+- **Autonomous operation** — Agents running on heartbeats 24/7 inside managed VMs.
+  You set the budget, governance rules, and goals. MIOSA handles uptime, monitoring,
+  and cost tracking.
+- **Team & multi-tenant** — Multiple people, multiple workspaces, shared governance.
+  Your agency runs 50 client workspaces. Each client gets their own isolated VM with
+  their own Canopy workspace, their own budget, their own agents.
+- **Application integrations** — CRM, email, Slack, calendars, payment processors,
+  databases. Canopy skills talk to external systems. MIOSA provides the connectors
+  and manages the credentials.
+
+### How It Works
+
+```
+Your laptop (local development):
+  canopy/sales-engine/     ← Edit skills, test workflows, iterate fast
+
+MIOSA platform (production):
+  VM 1: sales-engine/      ← 5 agents, heartbeat every 15min, $500/mo budget
+  VM 2: dev-shop/          ← 6 agents, CI/CD integration, auto-deploy
+  VM 3: content-factory/   ← 5 agents, publishing pipeline, social scheduling
+  VM 4: client-workspace/  ← Isolated tenant, custom agents, client-specific ROM
+```
+
+Build locally. Deploy to MIOSA. Or don't — Canopy works fine without it.
+
+**Canopy is free forever.** MIOSA is where the business model lives — managed
+infrastructure, marketplace revenue share, enterprise features. The protocol stays
+open. The platform adds value on top.
 
 ---
 
