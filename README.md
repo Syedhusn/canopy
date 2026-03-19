@@ -417,6 +417,68 @@ OpenClaw, Antigravity. Plus install/convert scripts for all.
 
 ---
 
+## ROM vs RAM: Teaching Agents, Not Prompting Them
+
+Most people prompt agents. Canopy **teaches** them.
+
+The difference is ROM vs RAM:
+
+| | RAM (Prompting) | ROM (Canopy) |
+|---|---|---|
+| **Where** | Context window | Workspace files |
+| **Lifespan** | Dies when conversation ends | Persists forever |
+| **Grows** | No — same prompt every time | Yes — agent gets smarter over time |
+| **Transferable** | No — stuck in one chat | Yes — any agent reads the same files |
+| **Auditable** | No — buried in conversation | Yes — version controlled, diffable |
+
+**RAM** is the conversation context. It's temporary. When the window fills up, it's gone.
+You're renting the agent's attention.
+
+**ROM** is the workspace. Skills, agents, reference docs, workflows, playbooks, decision
+trees. It's permanent. The agent loads it on boot, uses it during execution, and the
+knowledge survives across sessions, across runtimes, across teams.
+
+When you write a skill like `/qualify` with MEDDPICC scoring criteria — that's ROM.
+Every agent that enters the workspace inherits it. You taught it once.
+
+### What This Means in Practice
+
+**Computer Use Workflows** — Need an agent to navigate a browser, fill forms, extract
+data from a dashboard? Write a workflow skill. The agent reads the steps, executes them,
+and the workflow persists as ROM. Next time, any agent can run it without being re-taught.
+
+```
+skills/
+├── scrape-leads/SKILL.md        Agent navigates LinkedIn, extracts ICP matches
+├── fill-crm/SKILL.md            Agent opens HubSpot, creates deal records
+├── screenshot-audit/SKILL.md    Agent captures competitor pages, runs analysis
+```
+
+**RPA (Robotic Process Automation)** — Traditional RPA tools are brittle scripts.
+Canopy workflows are natural language instructions that agents interpret with context.
+When the UI changes, the agent adapts. When the process evolves, you edit a markdown file.
+
+**Dynamic Workflows** — Workflows that branch based on context. A `/triage` skill might
+route to `/escalate`, `/resolve`, or `/delegate` depending on what it finds. Skills call
+other skills. Agents spawn other agents. The workspace is a living system, not a static
+playbook.
+
+**Teaching Through Friction** — The learning loop (`/remember` → `/rethink`) captures
+what goes wrong. Agent makes a mistake? `mix optimal.remember "always validate email
+before sending"`. After enough observations accumulate, `/rethink` synthesizes them
+into updated skills or reference docs. The workspace evolves.
+
+### The Knowledge Compound Effect
+
+Every skill you write, every workflow you define, every reference doc you add — it
+compounds. Day 1, your workspace has 10 skills. Day 30, it has 50. Day 90, the agent
+operating inside it is functionally an expert in your domain.
+
+This is why Canopy isn't a chatbot wrapper. It's an **operating system for agent
+intelligence**. The workspace IS the intelligence. The agent is just the runtime.
+
+---
+
 ## Why Canopy Beats Everything Else
 
 ### vs Server-Based Agent Frameworks
