@@ -480,12 +480,12 @@ context and picks up whatever the new workspace provides. Base config persists.
 
 ### [`library/`](library/) — 159 Agents, 83 Skills
 
-**`library/agents/`** — 159 agents across 13 categories:
+**`library/agents/`** — 168 agents across 14 categories:
 academic, design, engineering, game-development, marketing, paid-media,
 product, project-management, sales, spatial-computing, specialized,
 support, testing
 
-**`library/skills/`** — 83 skills across 16 categories:
+**`library/skills/`** — 114 skills across 17 categories:
 development, content, search, knowledge, operations, strategy, agent,
 workflow, learning, security, ai-patterns, processing, coordination,
 governance, analysis, workspace
@@ -607,7 +607,7 @@ pieces right. None got the whole thing.
 | | Typical Agent Frameworks | Canopy |
 |---|---|---|
 | **Requires** | Server + DB + UI | A folder |
-| **Templates** | Usually "coming soon" | 159 agents, 83 skills, 5 operations |
+| **Templates** | Usually "coming soon" | 168 agents, 114 skills, 5 operations |
 | **Context mgmt** | Flat prompt injection | L0-L3 tiered loading |
 | **Classification** | None | Signal Theory auto-routing |
 | **Knowledge** | None | 6R pipeline, knowledge graph, learning loop |
@@ -629,7 +629,7 @@ Three-Space Model    — Self (identity) + Knowledge (graph) + Ops (ephemeral)
 Tiered Loading       — L0/L1/L2/L3 context hierarchy, 96% cost reduction
 Signal Theory        — S=(M,G,T,F,W) classification + auto-routing + quality gates
 Simulation Engine    — Monte Carlo scenario planning + impact analysis
-Agent Library        — 159 agents, 83 skills, 5 ready-to-run operations
+Agent Library        — 168 agents, 114 skills, 5 ready-to-run operations
 Team Templates       — Filesystem-as-DB, inbox messaging, worktree isolation
 ```
 
