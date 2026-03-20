@@ -101,6 +101,7 @@ Different memory types need different storage strategies:
 | **Episodic** | SQLite + compressed JSON | Time-indexed, queryable, compressed. Full transcripts go to cold storage (filesystem or S3). | `episodic_records` table |
 | **Semantic** | SQLite + FTS5 | Fact statements need full-text search. Entity graph in separate edges table. | `semantic_records` + `semantic_fts` + `entity_edges` tables |
 | **Procedural** | YAML files (version controlled) | Procedures are like skills — they should be auditable, diffable, human-editable. Indexed in SQLite for trigger matching. | `.canopy/procedural/*.yaml` + SQLite index |
+| **Foresight** | SQLite | Forward-looking predictions with time bounds. Surfaced during daily boot to catch upcoming deadlines and dependencies. | `foresight` table: `{prediction, confidence, start_time, end_time, source}` |
 
 **Alternative memory backends:**
 
@@ -237,6 +238,49 @@ engine:
   cache: redis_cluster
   monitoring: prometheus + grafana
 ```
+
+---
+
+## Retrieval Patterns
+
+### Single-Pass (Default)
+
+Query → hybrid search (keyword + vector) → RRF fusion → return top N results.
+Fast, cheap, handles 80% of queries. Use this as the default.
+
+### Agentic Multi-Round (Complex Queries)
+
+When single-pass results are insufficient, the engine can run multi-round retrieval:
+
+```
+Round 1: Query → hybrid search → top N results
+  → LLM judges: "Are these results sufficient to answer the query?"
+  → If yes: return results. Done.
+  → If no: LLM generates 2-3 refined sub-queries
+
+Round 2: Sub-queries → parallel hybrid search → combine all results → deduplicate
+  → Return merged, reranked results
+```
+
+More expensive (2+ LLM calls per retrieval), but catches complex queries where
+the user's phrasing doesn't match the stored content. Use for queries like
+"what should I do about the delayed launch?" where no exact keywords match.
+
+### Retrieval Hierarchy
+
+Skills should follow this order, stopping as soon as they have enough:
+
+```
+1. Check L0 (already loaded, 0 cost)
+2. Check working memory (current session, 0 cost)
+3. Search L1 summaries (fast, ~100 tokens per result)
+4. Load L2 full content for top matches (~2K tokens each)
+5. Engine hybrid search (FTS5 + vector + graph)
+6. Agentic multi-round (expensive, last resort)
+```
+
+See [`guides/data-architecture.md`](../guides/data-architecture.md) for the full
+retrieval strategy with decision criteria.
 
 ---
 

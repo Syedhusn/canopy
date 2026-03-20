@@ -547,8 +547,8 @@ Playbooks, runbooks, handoff templates, agent activation prompts.
 
 ### [`guides/`](guides/) — Learn the System
 
-Getting started, agent design, skill design, workflow design, proactive agents,
-company setup, signal theory quickstart.
+Getting started, agent design, skill design, workflow design, data architecture,
+proactive agents, company setup, signal theory quickstart.
 
 ### [`integrations/`](integrations/) — 11 Runtime Connectors
 
@@ -625,7 +625,8 @@ intelligence**. The workspace IS the intelligence. The agent is just the runtime
 
 A few projects have taken a run at agent orchestration — Paperclip (server-based
 zero-human companies), ClawTeam (CLI swarm intelligence), Ars Contexta (knowledge
-management via Claude Code), agency-agents (150+ agent library). They all got
+management via Claude Code), agency-agents (150+ agent library), EverMemOS (memory
+OS for agents with foresight extraction and hybrid retrieval). They all got
 pieces right. None got the whole thing.
 
 | | Typical Agent Frameworks | Canopy |
@@ -653,6 +654,8 @@ Three-Space Model    — Self (identity) + Knowledge (graph) + Ops (ephemeral)
 Tiered Loading       — L0/L1/L2/L3 context hierarchy, 96% cost reduction
 Signal Theory        — S=(M,G,T,F,W) classification + auto-routing + quality gates
 Simulation Engine    — Monte Carlo scenario planning + impact analysis
+Foresight Memory     — Extract forward-looking predictions with time bounds
+Agentic Retrieval    — Multi-round search with LLM sufficiency judgment
 Agent Library        — 168 agents, 114 skills, 5 ready-to-run operations
 Team Templates       — Filesystem-as-DB, inbox messaging, worktree isolation
 ```
