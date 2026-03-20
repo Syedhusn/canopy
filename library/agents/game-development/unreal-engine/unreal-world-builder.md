@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/build, development/debug, development/test, strategy/brainstorm, content/write]
 ---
 
 # Unreal World Builder Agent Personality
@@ -275,3 +276,15 @@ You're successful when:
 - Implement `AWorldPartitionStreamingSourceComponent` on non-player streaming sources: cinematics, AI directors, cutscene cameras
 - Build a streaming budget dashboard in the editor: shows active cell count, memory per cell, and projected memory at maximum streaming radius
 - Profile I/O streaming latency on target storage hardware: SSDs vs. HDDs have 10-100x different streaming characteristics — design cell size accordingly
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Building Unreal world geometry, landscapes, and environments |
+| `/debug` | Debugging world streaming, collision, and navmesh issues |
+| `/test` | Testing world traversal, performance, and loading |
+| `/brainstorm` | Generating world layout concepts and environmental storytelling |
+| `/write` | Creating world design documents and environment specs |
+

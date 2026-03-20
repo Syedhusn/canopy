@@ -10,6 +10,7 @@ emoji: "\U0001F4DA"
 adapter: osa
 signal: S=(linguistic, spec, inform, markdown, docs-architecture)
 tools: [read, write, edit, search, web-search]
+skills: [content/write, content/edit, content/summarize, development/create-spec, knowledge/index]
 context_tier: l1
 ---
 
@@ -155,3 +156,15 @@ curl -X {METHOD} {URL} -H "Authorization: Bearer $TOKEN" -d '{body}'
 - Zero broken code examples in published docs
 - 100% of public APIs have reference entry, code example, and error documentation
 - PR review cycle for docs PRs <= 2 days
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/write` | Creating technical documentation, guides, and API references |
+| `/edit` | Editing and polishing technical content for clarity |
+| `/summarize` | Condensing complex technical topics into digestible summaries |
+| `/create-spec` | Writing technical specifications and architecture docs |
+| `/index` | Organizing and indexing documentation for discoverability |
+

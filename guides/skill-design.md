@@ -129,6 +129,32 @@ This is how skills access domain knowledge without loading everything at boot.
 
 ---
 
+## Connecting Skills to Agents
+
+A skill defines what a command does. An agent definition declares who is authorized
+to invoke it and when.
+
+Every skill should be referenced by at least one agent's `skills` frontmatter field.
+When an agent lists a skill there, it means: "this agent is authorized to invoke
+this skill." The agent's body Skills section provides activation context — the
+conditions under which the agent actually uses it.
+
+```
+skills/code-review/SKILL.md          <- skill definition (what /code-review does)
+agents/engineering/code-reviewer.md  <- agent definition (who uses it + when)
+  frontmatter: skills: [code-review]
+  body: Skills section maps /code-review → "On every PR before merge"
+```
+
+A skill without any agent referencing it is **orphaned** — discoverable by a human
+browsing the directory, but never automatically invoked by the Operation. After
+creating a skill, update the relevant agent definitions to include it.
+
+An agent referencing a skill that does not exist is a **validation error** — the
+agent will attempt to invoke a command the engine cannot resolve.
+
+---
+
 ## Implementation Patterns
 
 ### Pattern 1: Simple Skill (Single Agent, No Dependencies)
@@ -353,6 +379,8 @@ Before adding a skill to your operation:
 - [ ] Examples cover the common case and at least one edge case
 - [ ] Error handling is specified (what happens when a step fails?)
 - [ ] Reference files needed are explicitly named in the process
+- [ ] At least one agent references this skill in its `skills` frontmatter field
+- [ ] Agent body Skills sections specify when this skill activates
 
 ---
 
@@ -382,3 +410,9 @@ If a skill needs more than 5 arguments, it is probably two skills. Split it.
 
 Skills should not invoke other skills. Workflow orchestration handles sequencing.
 A skill that calls `/build` from within `/deploy` creates hidden dependencies.
+
+### 6. Orphaned Skills
+
+A skill that no agent references in its frontmatter will never be automatically
+invoked. After creating a skill, update the relevant agent definitions to include
+it in their `skills` list.

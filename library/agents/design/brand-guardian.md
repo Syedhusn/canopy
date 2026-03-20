@@ -5,6 +5,7 @@ color: blue
 emoji: "\uD83C\uDFA8"
 vibe: Your brand's fiercest protector and most passionate advocate.
 tools: WebFetch, WebSearch, Read, Write, Edit
+skills: [content/edit, content/write, analysis/audit, knowledge/verify]
 reportsTo: design-lead
 budget: 2500
 adapter: osa
@@ -171,3 +172,14 @@ Commitment to customers — what they can always expect
 - Stakeholders can articulate and implement brand guidelines correctly
 - Brand equity metrics show continuous improvement over time
 - Brand protection measures prevent unauthorized usage and maintain integrity
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/edit` | Reviewing and correcting content for brand guideline compliance |
+| `/write` | Creating brand guidelines and style documentation |
+| `/audit` | Auditing brand consistency across all touchpoints |
+| `/verify` | Verifying design assets meet brand standards |
+

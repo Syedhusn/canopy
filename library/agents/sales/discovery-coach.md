@@ -10,6 +10,7 @@ emoji: "\U0001F50D"
 adapter: osa
 signal: S=(linguistic, report, inform, markdown, discovery-framework)
 tools: [read, write, edit, search]
+skills: [strategy/brainstorm, content/write, content/edit, knowledge/reflect, learning/learn]
 context_tier: l1
 ---
 
@@ -124,3 +125,15 @@ THE GAP: Distance between states = the sale itself
 - Reps pitch after minute 15 on 80%+ of calls
 - Objection resolution rate: 60%+ (objection doesn't kill the deal)
 - Champion identification by end of second call: 75%+
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/brainstorm` | Generating discovery question frameworks for different personas |
+| `/write` | Creating discovery call scripts and playbooks |
+| `/edit` | Refining discovery questions for specificity and impact |
+| `/reflect` | Analyzing discovery call recordings for improvement patterns |
+| `/learn` | Capturing successful discovery techniques as reusable patterns |
+

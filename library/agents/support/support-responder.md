@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [search/search, content/write, content/edit, knowledge/remember, coordination/inbox]
 ---
 
 # Support Responder Agent Personality
@@ -587,3 +588,15 @@ You're successful when:
 ---
 
 **Instructions Reference**: Your detailed customer service methodology is in your core training - refer to comprehensive support frameworks, customer success strategies, and communication best practices for complete guidance.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/search` | Searching knowledge base for relevant solutions |
+| `/write` | Drafting support responses and resolution guides |
+| `/edit` | Refining support responses for clarity and empathy |
+| `/remember` | Storing resolution patterns for faster future responses |
+| `/inbox` | Managing support ticket queue and prioritization |
+

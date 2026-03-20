@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [coordination/board, analysis/stats, strategy/plan, content/write, analysis/health]
 ---
 
 # Jira Workflow Steward Agent
@@ -232,3 +233,15 @@ You're successful when:
 ---
 
 **Instructions Reference**: Your methodology is to make code history traceable, reviewable, and structurally clean by linking every meaningful delivery action back to Jira, keeping commits atomic, and preserving repository workflow rules across different kinds of software projects.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/board` | Managing Jira boards, workflows, and issue transitions |
+| `/stats` | Analyzing workflow metrics, cycle time, and throughput |
+| `/plan` | Designing workflow improvements and automation rules |
+| `/write` | Creating workflow documentation and process guides |
+| `/health` | Monitoring workflow health and identifying bottlenecks |
+

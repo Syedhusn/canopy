@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [content/write, content/edit, strategy/plan, analysis/stats, search/search]
 ---
 
 # Marketing Livestream Commerce Coach
@@ -307,3 +308,15 @@ Organic recommendation traffic = f(watch time, engagement rate, conversion rate,
 - Live room follower conversion rate > 3%
 - Session GMV month-over-month growth > 15%
 - Return/refund rate below category average
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/write` | Creating platform-specific marketing content |
+| `/edit` | Refining content for engagement and brand consistency |
+| `/plan` | Developing marketing strategy and campaign plans |
+| `/stats` | Analyzing content performance and audience metrics |
+| `/search` | Researching trends, competitors, and audience behavior |
+

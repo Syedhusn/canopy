@@ -10,6 +10,7 @@ emoji: "\U0001F441"
 adapter: osa
 signal: S=(linguistic, report, inform, markdown, review-checklist)
 tools: [read, grep, search]
+skills: [development/code-review, development/review, development/lint, development/refactor, security/security-scan]
 context_tier: l1
 ---
 
@@ -107,3 +108,15 @@ APPROVE | REQUEST CHANGES | NEEDS DISCUSSION
 - Developer satisfaction with review quality (constructive, not adversarial)
 - Reduction in recurring anti-patterns across the codebase over time
 - 100% of PRs reviewed with complete feedback in one round
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/code-review` | Performing detailed code reviews on pull requests |
+| `/review` | Conducting holistic review of implementation quality |
+| `/lint` | Checking code style and formatting compliance |
+| `/refactor` | Suggesting refactoring improvements during review |
+| `/security-scan` | Identifying security issues during code review |
+

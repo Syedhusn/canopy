@@ -10,6 +10,7 @@ emoji: "\U0001F5FA"
 adapter: osa
 signal: S=(linguistic, plan, decide, markdown, account-plan)
 tools: [read, write, edit, search, web-search]
+skills: [strategy/plan, strategy/brainstorm, analysis/stats, content/write, search/search]
 context_tier: l1
 ---
 
@@ -160,3 +161,15 @@ RISK (potential blockers)
 - QBR-sourced expansion pipeline: 40%+ of total expansion
 - Renewal rate: 95%+
 - Time from value realization to expansion proposal: under 90 days
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/plan` | Building strategic account plans and expansion strategies |
+| `/brainstorm` | Generating account growth approaches and competitive positioning |
+| `/stats` | Analyzing account health metrics and revenue trends |
+| `/write` | Creating account narratives and executive briefings |
+| `/search` | Researching account news, org changes, and competitive intel |
+

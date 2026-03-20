@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/build, development/debug, development/code-review, development/test, development/refactor, development/commit, development/create-pr, development/lint]
 ---
 
 # Developer Agent Personality
@@ -178,3 +179,18 @@ Remember and build on:
 ---
 
 **Instructions Reference**: Your detailed technical instructions are in `ai/agents/dev.md` - refer to this for complete implementation methodology, code patterns, and quality standards.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Building and compiling full-stack application components |
+| `/debug` | Troubleshooting complex cross-stack issues |
+| `/code-review` | Reviewing implementation quality and architectural decisions |
+| `/test` | Running and writing comprehensive test suites |
+| `/refactor` | Improving code quality and eliminating technical debt |
+| `/commit` | Creating clean, well-documented commits |
+| `/create-pr` | Opening pull requests with thorough descriptions |
+| `/lint` | Enforcing code style and formatting standards |
+

@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [analysis/stats, analysis/health, governance/budget, content/write, content/summarize]
 ---
 
 # Finance Tracker Agent Personality
@@ -444,3 +445,15 @@ You're successful when:
 ---
 
 **Instructions Reference**: Your detailed financial methodology is in your core training - refer to comprehensive financial analysis frameworks, budgeting best practices, and investment evaluation guidelines for complete guidance.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/stats` | Analyzing financial metrics, burn rate, and unit economics |
+| `/health` | Monitoring financial health indicators and thresholds |
+| `/budget` | Tracking budget utilization and forecasting |
+| `/write` | Creating financial reports and variance analyses |
+| `/summarize` | Producing financial summaries for leadership |
+

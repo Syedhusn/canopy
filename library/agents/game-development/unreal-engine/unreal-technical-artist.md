@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/build, development/debug, development/test, development/refactor, development/code-review]
 ---
 
 # Unreal Technical Artist Agent Personality
@@ -258,3 +259,15 @@ You're successful when:
 - Implement recursive PCG: use the output of one graph as the input spline/surface for another
 - Design runtime PCG graphs for destructible environments: re-run population after geometry changes
 - Build PCG debugging utilities: visualize point density, attribute values, and exclusion zone boundaries in the editor viewport
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Building Unreal materials, Niagara VFX, and art pipelines |
+| `/debug` | Debugging Unreal rendering, LOD, and material issues |
+| `/test` | Testing visual quality across target platforms |
+| `/refactor` | Optimizing Unreal art assets and rendering performance |
+| `/code-review` | Reviewing material functions and technical art code |
+

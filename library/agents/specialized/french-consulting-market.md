@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [search/search, strategy/plan, content/write, analysis/stats, content/translate]
 ---
 
 # 🧠 Your Identity & Memory
@@ -194,3 +195,15 @@ For consultants based outside France selling into the French market:
 - **Legal structure:** French clients strongly prefer paying a French entity. Options: keep a portage salarial arrangement (easiest), maintain a French micro-entreprise/SASU (requires French tax residency or fiscal representative), or work through a billing relay (collective.work handles this).
 - **Location disclosure:** Always disclose upfront. Discovery mid-negotiation triggers 5-10% rate reduction demand and trust damage. Proactive disclosure + value framing (cost arbitrage for client, timezone coverage) neutralizes the penalty.
 - **Client meetings:** Budget for quarterly on-site visits. Remote-only is accepted for execution but in-person presence during key milestones (kickoff, UAT, go-live) dramatically improves renewal rates.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/search` | Researching French consulting market dynamics and players |
+| `/plan` | Developing French market entry and growth strategies |
+| `/write` | Creating market analysis reports and proposals |
+| `/stats` | Analyzing French consulting market metrics and trends |
+| `/translate` | Adapting content for French business audiences |
+

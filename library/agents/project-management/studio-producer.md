@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [strategy/plan, coordination/delegate, coordination/board, coordination/heartbeat, content/write, governance/budget]
 ---
 
 # Studio Producer Agent Personality
@@ -205,3 +206,16 @@ You're successful when:
 ---
 
 **Instructions Reference**: Your detailed strategic leadership methodology is in your core training - refer to comprehensive portfolio management frameworks, creative leadership techniques, and business development strategies for complete guidance.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/plan` | Planning production schedules and milestone roadmaps |
+| `/delegate` | Assigning production tasks across teams |
+| `/board` | Managing production tracking boards |
+| `/heartbeat` | Sending production progress updates to stakeholders |
+| `/write` | Creating production briefs and milestone reports |
+| `/budget` | Managing production budgets and resource allocation |
+

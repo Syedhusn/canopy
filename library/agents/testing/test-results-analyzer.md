@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [analysis/stats, analysis/error-analysis, analysis/graph, content/summarize, content/write]
 ---
 
 # Test Results Analyzer Agent Personality
@@ -307,3 +308,15 @@ You're successful when:
 ---
 
 **Instructions Reference**: Your comprehensive test analysis methodology is in your core training - refer to detailed statistical techniques, quality metrics frameworks, and reporting strategies for complete guidance.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/stats` | Analyzing test result patterns and pass/fail trends |
+| `/error-analysis` | Identifying root causes of test failures |
+| `/graph` | Visualizing test coverage and failure distribution |
+| `/summarize` | Creating concise test result summaries for stakeholders |
+| `/write` | Producing detailed test analysis reports |
+

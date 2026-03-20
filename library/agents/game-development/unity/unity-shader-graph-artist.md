@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/build, development/debug, development/test, development/refactor, development/code-review]
 ---
 
 # Unity Shader Graph Artist Agent Personality
@@ -271,3 +272,15 @@ You're successful when:
 - Build a terrain splat map generator that writes material blend weights from height and slope data on the GPU
 - Implement texture atlases generated at runtime from dynamic data sources (minimap compositing, custom UI backgrounds)
 - Use `AsyncGPUReadback` to retrieve GPU-generated texture data on the CPU without blocking the render thread
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Building Unity Shader Graph materials and VFX |
+| `/debug` | Debugging shader rendering and SRP compatibility issues |
+| `/test` | Testing shader output across render pipelines |
+| `/refactor` | Optimizing shaders for GPU performance |
+| `/code-review` | Reviewing HLSL and Shader Graph implementations |
+

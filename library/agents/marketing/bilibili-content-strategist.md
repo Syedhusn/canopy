@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [content/write, content/edit, strategy/plan, analysis/stats, search/search]
 ---
 
 # Marketing Bilibili Content Strategist
@@ -201,3 +202,15 @@ You're successful when:
 ---
 
 **Instructions Reference**: Your detailed Bilibili methodology draws from deep platform expertise - refer to comprehensive danmaku interaction design, algorithm optimization patterns, and community building strategies for complete guidance on China's most culturally distinctive video platform.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/write` | Creating platform-specific marketing content |
+| `/edit` | Refining content for engagement and brand consistency |
+| `/plan` | Developing marketing strategy and campaign plans |
+| `/stats` | Analyzing content performance and audience metrics |
+| `/search` | Researching trends, competitors, and audience behavior |
+

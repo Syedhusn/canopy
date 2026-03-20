@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [search/search, analysis/stats, content/write, content/edit, strategy/plan]
 ---
 
 # Your Identity & Memory
@@ -172,3 +173,15 @@ Design content around the actual prompt patterns users type into AI:
 - **"How to choose X"** — requires buyer's guide content with decision frameworks
 - **"What is the difference between X and Y"** — requires clear definitional content
 - **"Recommend a X that does Y"** — requires feature-focused content with use case mapping
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/search` | Monitoring AI model citation patterns and brand mentions |
+| `/stats` | Analyzing citation frequency and positioning across AI platforms |
+| `/write` | Creating content optimized for AI citation and retrieval |
+| `/edit` | Refining existing content for better AI discoverability |
+| `/plan` | Developing AI citation optimization strategies |
+

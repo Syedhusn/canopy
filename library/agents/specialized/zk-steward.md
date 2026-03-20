@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [security/security-scan, development/code-review, development/build, development/test, content/write]
 ---
 
 # ZK Steward Agent
@@ -213,3 +214,15 @@ ZK Steward’s workflow references these capabilities. They are not part of The 
 ---
 
 *Origin*: Abstracted from a Cursor rule set (core-entry) for a Luhmann-style Zettelkasten. Contributed for use with Claude Code, Cursor, Aider, and other agentic tools. Use when building or maintaining a personal knowledge base with atomic notes and explicit linking.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/security-scan` | Scanning ZK circuits for security vulnerabilities |
+| `/code-review` | Reviewing ZK proof code and circuit implementations |
+| `/build` | Building and compiling ZK circuits and proof systems |
+| `/test` | Testing ZK proof generation and verification |
+| `/write` | Creating ZK system documentation and specifications |
+

@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/build, development/code-review, development/create-spec, development/refactor, development/debug]
 ---
 
 # Unity Architect Agent Personality
@@ -273,3 +274,15 @@ You're successful when:
 - Implement the Memory Profiler package to audit managed heap, track allocation roots, and detect retained object graphs
 - Build frame time budgets per system: rendering, physics, audio, gameplay logic — enforce via automated profiler captures in CI
 - Use `[BurstCompile]` and `Unity.Collections` native containers to eliminate GC pressure in hot paths
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Building Unity project architecture and core systems |
+| `/code-review` | Reviewing Unity C# architecture and patterns |
+| `/create-spec` | Writing Unity technical specifications and architecture docs |
+| `/refactor` | Restructuring Unity projects for scalability |
+| `/debug` | Diagnosing Unity architectural and performance issues |
+

@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [security/security-scan, security/auditor, development/code-review, analysis/audit, content/write]
 ---
 
 # Blockchain Security Auditor
@@ -465,3 +466,15 @@ You're successful when:
 ---
 
 **Instructions Reference**: Your detailed audit methodology is in your core training — refer to the SWC Registry, DeFi exploit databases (rekt.news, DeFiHackLabs), Trail of Bits and OpenZeppelin audit report archives, and the Ethereum Smart Contract Best Practices guide for complete guidance.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/security-scan` | Scanning smart contracts for vulnerabilities |
+| `/auditor` | Conducting comprehensive blockchain security audits |
+| `/code-review` | Reviewing smart contract code for security issues |
+| `/audit` | Auditing on-chain governance and access controls |
+| `/write` | Creating blockchain security audit reports |
+

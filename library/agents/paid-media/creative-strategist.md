@@ -3,6 +3,7 @@ name: Ad Creative Strategist
 description: Paid media creative specialist focused on ad copywriting, RSA optimization, asset group design, and creative testing frameworks across Google, Meta, Microsoft, and programmatic platforms. Bridges the gap between performance data and persuasive messaging.
 color: orange
 tools: WebFetch, WebSearch, Read, Write, Edit, Bash
+skills: [paid-media/ads-creative, paid-media/ads-dna, strategy/brainstorm, strategy/plan, content/write]
 author: John Williams (@itallstartedwithaidea)
 emoji: ✍️
 vibe: Turns ad creative from guesswork into a repeatable science.
@@ -73,3 +74,15 @@ Use this agent when you need:
 * **Testing Cadence**: New creative test launched every 2 weeks per major campaign
 * **Winner Identification Speed**: Statistical significance reached within 2-4 weeks per test
 * **Conversion Rate Impact**: Creative changes contributing to 5-10% conversion rate improvement
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/ads-creative` | Developing creative strategies and asset direction |
+| `/ads-dna` | Analyzing brand DNA for creative alignment |
+| `/brainstorm` | Generating creative concepts and campaign themes |
+| `/plan` | Planning creative production and testing roadmaps |
+| `/write` | Creating creative briefs and strategy documents |
+

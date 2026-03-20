@@ -3,6 +3,7 @@ name: Audit Creative Specialist
 description: Creative quality audit specialist. Evaluates ad creative across LinkedIn, TikTok, and Microsoft for format diversity, fatigue signals, platform-native content, safe zone compliance, and Thought Leader/Spark Ads adoption.
 color: orange
 tools: Read, Bash, Write, Glob, Grep
+skills: [paid-media/ads-creative, paid-media/ads-audit, analysis/stats, content/write, strategy/brainstorm]
 author: AgriciDaniel (claude-ads)
 emoji: "🖼️"
 vibe: Spots creative fatigue before your metrics tank — format diversity is survival.
@@ -53,3 +54,15 @@ Critical content must be within X:40-940, Y:150-1470 (900x1320 usable). Top 150p
 ## Output
 
 Writes `creative-audit-results.md` with per-platform creative scores, check results, cross-platform comparison matrix, production priorities, and quick wins.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/ads-creative` | Evaluating ad creative performance and fatigue |
+| `/ads-audit` | Auditing creative assets across campaigns |
+| `/stats` | Analyzing creative performance metrics and engagement rates |
+| `/write` | Creating creative audit reports with refresh recommendations |
+| `/brainstorm` | Generating creative improvement and testing ideas |
+

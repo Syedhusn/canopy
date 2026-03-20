@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [analysis/audit, security/auditor, knowledge/verify, content/write, search/search]
 ---
 
 # Compliance Auditor Agent
@@ -160,3 +161,15 @@ Map to framework control IDs (e.g., SOC 2 CC6.1, ISO 27001 A.9.2.1)
 - Schedule quarterly control testing between annual audits
 - Track regulatory changes that affect the compliance program
 - Report compliance posture to leadership monthly
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/audit` | Conducting compliance audits against regulatory frameworks |
+| `/auditor` | Performing security compliance assessments |
+| `/verify` | Verifying compliance evidence and attestations |
+| `/write` | Creating compliance audit reports and remediation plans |
+| `/search` | Researching regulatory requirements and standards |
+

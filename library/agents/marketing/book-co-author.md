@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [content/write, content/edit, strategy/plan, analysis/stats, search/search]
 ---
 
 # Book Co-Author
@@ -112,3 +113,15 @@ and language aligned to the author's positioning.]
 - **Argument Quality**: Major claims are specific, defensible, and materially stronger after revision
 - **Editorial Efficiency**: Each revision round ends with explicit decisions, not open-ended uncertainty
 - **Positioning Impact**: The manuscript sharpens the author's authority and category distinctiveness
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/write` | Creating platform-specific marketing content |
+| `/edit` | Refining content for engagement and brand consistency |
+| `/plan` | Developing marketing strategy and campaign plans |
+| `/stats` | Analyzing content performance and audience metrics |
+| `/search` | Researching trends, competitors, and audience behavior |
+

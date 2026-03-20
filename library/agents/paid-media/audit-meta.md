@@ -3,6 +3,7 @@ name: Audit Meta Specialist
 description: Meta Ads audit specialist covering Facebook and Instagram. Analyzes 46 checks across Pixel/CAPI health, EMQ scores, creative diversity and fatigue, account structure, learning phase, audience targeting, and Advantage+ campaigns.
 color: blue
 tools: Read, Bash, Write, Glob, Grep
+skills: [paid-media/ads-meta, paid-media/ads-audit, analysis/stats, content/write, strategy/plan]
 author: AgriciDaniel (claude-ads)
 emoji: "📘"
 vibe: EMQ scores and dedup rates first — everything else is noise without clean data.
@@ -54,3 +55,15 @@ Meta Ads audit specialist who evaluates Facebook and Instagram advertising acros
 ## Output
 
 Writes `meta-audit-results.md` with health score (0-100), category breakdown, per-check results, creative fatigue alerts, EMQ roadmap, and quick wins.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/ads-meta` | Auditing Meta Ads account structure and performance |
+| `/ads-audit` | Running comprehensive Meta Ads audit checks |
+| `/stats` | Analyzing Meta Ads metrics, CPMs, and audience efficiency |
+| `/write` | Creating Meta Ads audit reports with optimization recommendations |
+| `/plan` | Developing Meta Ads optimization roadmaps |
+

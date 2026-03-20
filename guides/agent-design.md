@@ -9,7 +9,7 @@
 Every agent is a single markdown file with two parts:
 
 1. **YAML frontmatter** -- Machine-readable metadata (organizational, budget, signal encoding)
-2. **Markdown body** -- The system prompt injected when the agent activates (7 required sections)
+2. **Markdown body** -- The system prompt injected when the agent activates (8 required sections)
 
 ### YAML Frontmatter
 
@@ -26,6 +26,7 @@ emoji: "\U0001F50D"
 adapter: osa
 signal: S=(linguistic, report, inform, markdown, review-checklist)
 tools: [read, write, edit, search, bash]
+skills: [code-review, lint]
 context_tier: l1
 ---
 ```
@@ -43,11 +44,12 @@ context_tier: l1
 | `adapter` | Yes | Runtime adapter: `osa`, `claude-code`, `cursor`, `http` |
 | `signal` | Yes | Default signal encoding: S=(M, G, T, F, W) |
 | `tools` | Yes | List of tools this agent can use |
+| `skills` | Yes | List of skill slugs this agent can invoke (from `skills/` directory) |
 | `context_tier` | No | Default context loading tier: `l0`, `l1`, `full` |
 
-### The 7 Body Sections
+### The 8 Body Sections
 
-Every agent markdown body MUST contain these 7 sections:
+Every agent markdown body MUST contain these 8 sections:
 
 ```markdown
 # Identity & Memory
@@ -61,6 +63,14 @@ NEVER/ALWAYS rules that constrain agent behavior.
 
 # Process / Methodology
 How the agent works -- frameworks, decision trees, reference tables.
+
+# Skills
+Which skills this agent activates and when each is used.
+
+| Skill | When |
+|-------|------|
+| `/review` | On every PR before merge |
+| `/lint` | After writing any code |
 
 # Deliverable Templates
 Markdown templates for the agent's primary outputs.
@@ -193,6 +203,72 @@ Common tool sets:
 
 ---
 
+## Connecting Agents to Skills
+
+Skills are an agent's executable capabilities -- they define what an agent can **DO**, not just who it **IS**.
+
+### The Three-Layer Model
+
+```
+Agent identity      → frontmatter (who this agent is, what it costs, how it encodes output)
+Agent methodology   → body sections (how this agent thinks and decides)
+Agent capabilities  → skills (what this agent can execute)
+```
+
+All three layers are required. An agent without declared skills is like a developer without a toolchain: the identity and methodology exist, but there is no executable capability the system can invoke.
+
+### How Skills Connect
+
+**`skills` frontmatter field** -- declares which skills this agent is authorized to invoke:
+
+```yaml
+skills: [code-review, lint]
+```
+
+This is machine-readable. The orchestrator reads this field to know what the agent can do before routing work to it.
+
+**Skills body section** -- maps each declared skill to its activation context:
+
+```markdown
+# Skills
+
+| Skill | When |
+|-------|------|
+| `code-review` | On every PR before merging to main |
+| `lint` | After writing or modifying any code file |
+```
+
+This is human-readable methodology. It tells the agent (and any reader) under what conditions each skill fires.
+
+**At runtime** -- the agent reads `skills/{slug}/SKILL.md` and follows the Process section of that skill definition. The skill file is the contract; the agent body declares when to invoke it.
+
+### Example: Code Reviewer Agent
+
+Frontmatter:
+```yaml
+skills: [code-review, lint]
+```
+
+Body Skills section:
+```markdown
+# Skills
+
+| Skill | When |
+|-------|------|
+| `code-review` | Every PR opened against main or release branches |
+| `lint` | Any file modified during review if lint errors are detected |
+```
+
+The agent does not re-implement the review logic in its body. It delegates to `skills/code-review/SKILL.md`. The body only records *when* to delegate.
+
+### Why This Separation Matters
+
+- **Reuse**: The same `code-review` skill can be declared by Code Reviewer, Tech Lead, and QA Engineer -- each with different activation triggers, same execution contract.
+- **Discoverability**: The orchestrator can query which agents have a given skill without reading every agent body.
+- **Auditability**: Removing a skill from `skills/` immediately surfaces all agents that declared it -- broken references, not silent omissions.
+
+---
+
 ## Signal Theory Integration
 
 Every agent carries a default signal encoding:
@@ -254,6 +330,7 @@ budget: 200
 adapter: osa
 signal: S=(linguistic, report, decide, markdown, triage-template)
 tools: [read, search]
+skills: [triage]
 context_tier: l0
 ---
 
@@ -290,6 +367,12 @@ component, and likely root cause. You are fast, decisive, and never block the qu
 | P1 | Major feature broken, workaround exists | 2 hour response |
 | P2 | Minor feature broken, low-impact workaround | 24 hour response |
 | P3 | Cosmetic, documentation, nice-to-have | Next sprint |
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `triage` | On every incoming bug report before assigning severity |
 
 # Deliverable Templates
 
@@ -408,6 +491,14 @@ Without metrics, you cannot tell if the agent is performing. Every agent needs
 Personality adjectives should constrain: "data-driven" means lead with numbers.
 "Allergic to generic outreach" means reject template-based messaging.
 
+### 8. No Skills Declaration
+
+Agents that can invoke skills but don't declare them are invisible to the orchestrator.
+The frontmatter `skills` field is how the system knows what an agent can DO, not just
+who it IS. An agent that silently invokes skills it hasn't declared breaks discoverability,
+auditability, and routing. If an agent uses a skill, declare it -- in frontmatter and in
+the body Skills section.
+
 ---
 
 ## Agent Design Checklist
@@ -417,9 +508,12 @@ Before deploying an agent, verify:
 - [ ] YAML frontmatter has all required fields
 - [ ] Signal encoding resolves all 5 dimensions (M, G, T, F, W)
 - [ ] `reportsTo` references an agent that exists in the operation
-- [ ] All 7 body sections are present and substantive
+- [ ] All 8 body sections are present and substantive
 - [ ] Critical Rules prevent the agent's top 3-5 failure modes
 - [ ] Process section contains actionable methodology (not just advice)
+- [ ] `skills` field lists all skills this agent needs to invoke
+- [ ] Skills section in body maps each skill to its activation trigger
+- [ ] All referenced skills exist in `skills/` directory
 - [ ] Deliverable templates match the signal encoding genre
 - [ ] Communication style specifies receiver calibration
 - [ ] Success metrics are measurable and map to core mission

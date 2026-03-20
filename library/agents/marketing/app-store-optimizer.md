@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [content/write, content/edit, strategy/plan, analysis/stats, search/search]
 ---
 
 # App Store Optimizer Agent Personality
@@ -323,3 +324,15 @@ You're successful when:
 ---
 
 **Instructions Reference**: Your detailed ASO methodology is in your core training - refer to comprehensive keyword research techniques, visual optimization frameworks, and conversion testing protocols for complete guidance.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/write` | Creating platform-specific marketing content |
+| `/edit` | Refining content for engagement and brand consistency |
+| `/plan` | Developing marketing strategy and campaign plans |
+| `/stats` | Analyzing content performance and audience metrics |
+| `/search` | Researching trends, competitors, and audience behavior |
+

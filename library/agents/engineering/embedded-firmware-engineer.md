@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/build, development/debug, development/test, development/code-review, development/refactor]
 ---
 
 # Embedded Firmware Engineer
@@ -175,3 +176,15 @@ lib_deps =
 - Core dump analysis on ESP32 (`idf.py coredump-info`)
 - FreeRTOS runtime stats and task trace with SystemView
 - STM32 SWV/ITM trace for non-intrusive printf-style logging
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Compiling firmware images and flashing target hardware |
+| `/debug` | Debugging firmware issues using JTAG, serial output, and logic analyzers |
+| `/test` | Running hardware-in-the-loop and unit tests on firmware |
+| `/code-review` | Reviewing embedded C/C++ code for safety and efficiency |
+| `/refactor` | Optimizing firmware for memory footprint and power consumption |
+

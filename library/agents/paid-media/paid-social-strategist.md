@@ -3,6 +3,7 @@ name: Paid Social Strategist
 description: Cross-platform paid social advertising specialist covering Meta (Facebook/Instagram), LinkedIn, TikTok, Pinterest, X, and Snapchat. Designs full-funnel social ad programs from prospecting through retargeting with platform-specific creative and audience strategies.
 color: orange
 tools: WebFetch, WebSearch, Read, Write, Edit, Bash
+skills: [paid-media/ads-meta, paid-media/ads-tiktok, paid-media/ads-linkedin, strategy/plan, analysis/stats]
 author: John Williams (@itallstartedwithaidea)
 emoji: 📱
 vibe: Makes every dollar on Meta, LinkedIn, and TikTok ads work harder.
@@ -73,3 +74,15 @@ Use this agent when you need:
 * **ROAS**: 3:1+ for retargeting campaigns, 1.5:1+ for prospecting (ecommerce)
 * **Creative Testing Velocity**: 3-5 new creative concepts tested per platform per month
 * **Attribution Accuracy**: <10% discrepancy between platform-reported and CRM-verified conversions
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/ads-meta` | Managing Meta paid social campaigns and optimization |
+| `/ads-tiktok` | Managing TikTok paid social campaigns |
+| `/ads-linkedin` | Managing LinkedIn paid social campaigns |
+| `/plan` | Developing paid social strategy and budget allocation |
+| `/stats` | Analyzing paid social performance and ROAS |
+

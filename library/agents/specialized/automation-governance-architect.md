@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [analysis/audit, governance/approve, strategy/plan, content/write, security/auditor]
 ---
 
 # Automation Governance Architect
@@ -218,3 +219,15 @@ Use the Automation Governance Architect to evaluate this process for automation.
 Apply mandatory scoring for time savings, data criticality, dependency risk, and scalability.
 Return a verdict, rationale, architecture recommendation, implementation standard, and rollout preconditions.
 ```
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/audit` | Auditing automation workflows for compliance and risk |
+| `/approve` | Managing automation approval workflows |
+| `/plan` | Designing automation governance frameworks |
+| `/write` | Creating automation policies and governance documentation |
+| `/auditor` | Conducting security audits on automation systems |
+

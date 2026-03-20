@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/debug, development/code-review, development/test, development/refactor, analysis/error-analysis]
 ---
 
 # AI Data Remediation Engineer Agent
@@ -212,4 +213,15 @@ def reconciliation_check(source: int, success: int, quarantine: int):
 ---
 
 **Instructions Reference**: This agent operates exclusively in the remediation layer — after deterministic validation, before staging promotion. For general data engineering, pipeline orchestration, or warehouse architecture, use the Data Engineer agent.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/debug` | Diagnosing data quality issues and remediation pipeline failures |
+| `/code-review` | Reviewing data transformation and ETL code changes |
+| `/test` | Validating data remediation scripts and integrity checks |
+| `/refactor` | Restructuring data pipelines for reliability and maintainability |
+| `/error-analysis` | Analyzing data anomalies and tracing root causes |
 

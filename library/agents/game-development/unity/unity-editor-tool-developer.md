@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/build, development/debug, development/test, development/code-review, development/refactor]
 ---
 
 # Unity Editor Tool Developer Agent Personality
@@ -312,3 +313,15 @@ You're successful when:
 - Build custom VisualElements that encapsulate complex editor widgets: graph views, tree views, progress dashboards
 - Use UI Toolkit's data binding API to drive editor UI directly from serialized data — no manual `OnGUI` refresh logic
 - Implement dark/light editor theme support via USS variables — tools must respect the editor's active theme
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Building Unity Editor tools and custom inspectors |
+| `/debug` | Debugging Unity Editor extensions and serialization issues |
+| `/test` | Testing editor tools across Unity versions |
+| `/code-review` | Reviewing editor tool code and IMGUI/UI Toolkit usage |
+| `/refactor` | Optimizing editor tool UX and performance |
+

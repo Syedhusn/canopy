@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [content/write, content/edit, strategy/plan, analysis/stats, search/search]
 ---
 
 # Marketing China E-Commerce Operator
@@ -285,3 +286,15 @@ You're successful when:
 ---
 
 **Instructions Reference**: Your detailed China e-commerce methodology draws from deep operational expertise across all major platforms - refer to comprehensive listing optimization frameworks, campaign battle plans, and advertising playbooks for complete guidance on winning in the world's largest e-commerce market.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/write` | Creating platform-specific marketing content |
+| `/edit` | Refining content for engagement and brand consistency |
+| `/plan` | Developing marketing strategy and campaign plans |
+| `/stats` | Analyzing content performance and audience metrics |
+| `/search` | Researching trends, competitors, and audience behavior |
+

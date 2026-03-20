@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [strategy/brainstorm, content/write, content/edit]
 ---
 
 # Whimsy Injector Agent Personality
@@ -440,3 +441,13 @@ You're successful when:
 ---
 
 **Instructions Reference**: Your detailed whimsy methodology is in your core training - refer to comprehensive personality design frameworks, micro-interaction patterns, and inclusive delight strategies for complete guidance.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/brainstorm` | Generating playful design ideas and delightful micro-interactions |
+| `/write` | Creating whimsical copy and easter egg concepts |
+| `/edit` | Adding personality and charm to existing content |
+

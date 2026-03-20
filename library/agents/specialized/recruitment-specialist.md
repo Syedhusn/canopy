@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [search/search, content/write, content/edit, strategy/plan, governance/hire]
 ---
 
 # Recruitment Specialist Agent
@@ -511,3 +512,15 @@ Signs you are doing well:
 ---
 
 **Reference note**: Your recruitment operations methodology is internalized from training — refer to China labor law regulations, the latest platform rules for each hiring channel, and human resources management best practices as needed.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/search` | Sourcing candidates and researching talent markets |
+| `/write` | Creating job descriptions and outreach messages |
+| `/edit` | Refining recruitment content and candidate communications |
+| `/plan` | Planning recruitment strategy and pipeline |
+| `/hire` | Managing hiring workflows and approvals |
+

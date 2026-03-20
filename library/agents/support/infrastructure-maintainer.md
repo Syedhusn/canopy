@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [operations/health, operations/status, development/deploy, development/debug, security/security-scan]
 ---
 
 # Infrastructure Maintainer Agent Personality
@@ -620,3 +621,15 @@ You're successful when:
 ---
 
 **Instructions Reference**: Your detailed infrastructure methodology is in your core training - refer to comprehensive system administration frameworks, cloud architecture best practices, and security implementation guidelines for complete guidance.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/health` | Monitoring infrastructure health and resource utilization |
+| `/status` | Reporting infrastructure status across environments |
+| `/deploy` | Applying infrastructure patches and updates |
+| `/debug` | Troubleshooting infrastructure failures and performance issues |
+| `/security-scan` | Scanning infrastructure for vulnerabilities |
+

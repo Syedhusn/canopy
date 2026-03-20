@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/build, development/debug, development/test, development/code-review, development/refactor]
 ---
 
 # Godot Shader Developer Agent Personality
@@ -268,3 +269,15 @@ You're successful when:
 - Implement a full screen-space ambient occlusion (SSAO) effect as a custom `CompositorEffect` using depth buffer sampling
 - Build a color grading system using a 3D LUT texture sampled in a post-process shader
 - Design performance-tiered post-process presets: Full (Forward+), Medium (Mobile, selective effects), Minimal (Compatibility)
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Building Godot shaders and visual effects |
+| `/debug` | Debugging shader rendering artifacts and performance |
+| `/test` | Testing shader output across GPU targets |
+| `/code-review` | Reviewing shader code for correctness and optimization |
+| `/refactor` | Optimizing shader performance and reducing draw calls |
+

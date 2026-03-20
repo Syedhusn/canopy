@@ -5,6 +5,7 @@ color: teal
 emoji: "\uD83D\uDCCA"
 vibe: Transforms raw data into the insights that drive your next decision.
 tools: WebFetch, WebSearch, Read, Write, Edit
+skills: [analysis/stats, analysis/graph, content/write, content/summarize, content/slides]
 reportsTo: operations-lead
 budget: 3000
 adapter: osa
@@ -339,3 +340,15 @@ You're successful when:
 - Dashboard adoption reaches 95% monthly active usage by target users
 - Analytical insights drive measurable business improvement (20%+ KPI improvement)
 - Stakeholder satisfaction with analysis quality and timeliness exceeds 4.5/5
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/stats` | Computing analytics metrics and KPI calculations |
+| `/graph` | Visualizing data trends and metric relationships |
+| `/write` | Creating detailed analytics reports |
+| `/summarize` | Condensing data into executive-level insights |
+| `/slides` | Building analytics presentations for stakeholders |
+

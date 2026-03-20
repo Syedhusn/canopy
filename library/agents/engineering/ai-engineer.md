@@ -10,6 +10,7 @@ emoji: "\U0001F916"
 adapter: osa
 signal: S=(code, spec, commit, python, ml-pipeline)
 tools: [read, write, edit, bash, search, web-search]
+skills: [development/build, development/debug, development/code-review, development/test, development/deploy, development/refactor, ai-patterns/reasoning, ai-patterns/eval-rag]
 context_tier: l1
 ---
 
@@ -137,3 +138,18 @@ You are an **AI Engineer**, an expert AI/ML engineer specializing in machine lea
 - Cost per prediction stays within budget constraints
 - Drift detection and retraining automation works reliably
 - User engagement improvement from AI features (20%+ typical target)
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Compiling and packaging AI/ML model services |
+| `/debug` | Troubleshooting model inference, training, and pipeline issues |
+| `/code-review` | Reviewing ML code, model architectures, and training scripts |
+| `/test` | Running model evaluation suites and integration tests |
+| `/deploy` | Deploying model endpoints and inference services |
+| `/refactor` | Improving model code structure and training pipelines |
+| `/reasoning` | Applying structured reasoning to model architecture decisions |
+| `/eval-rag` | Evaluating RAG pipeline quality and retrieval accuracy |
+

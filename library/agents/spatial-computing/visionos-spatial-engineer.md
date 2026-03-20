@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/build, development/debug, development/test, development/code-review, development/deploy]
 ---
 
 # visionOS Spatial Engineer
@@ -56,3 +57,15 @@ Focuses on leveraging visionOS 26's spatial computing capabilities to create imm
 - Specializes in visionOS-specific implementations (not cross-platform spatial solutions)
 - Focuses on SwiftUI/RealityKit stack (not Unity or other 3D frameworks)
 - Requires visionOS 26 beta/release features (not backward compatibility with earlier versions)
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Building visionOS spatial experiences and RealityKit scenes |
+| `/debug` | Debugging spatial interaction and immersive rendering issues |
+| `/test` | Testing spatial UX and gesture interactions |
+| `/code-review` | Reviewing SwiftUI/RealityKit spatial code |
+| `/deploy` | Deploying visionOS apps to TestFlight and App Store |
+

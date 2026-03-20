@@ -10,6 +10,7 @@ emoji: "\U0001F3DB"
 adapter: osa
 signal: S=(linguistic, spec, commit, markdown, adr-template)
 tools: [read, write, edit, search, web-search]
+skills: [development/create-spec, development/code-review, development/refactor, development/review, strategy/brainstorm, analysis/graph]
 context_tier: l1
 ---
 
@@ -123,3 +124,16 @@ What becomes easier or harder because of this change?
 - New team members can understand the architecture from documentation alone
 - No unplanned rewrites — evolution strategy holds for 12+ months
 - Technical debt tracked and addressed within acceptable thresholds
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/create-spec` | Writing architecture decision records and technical specifications |
+| `/code-review` | Reviewing code for architectural consistency and patterns |
+| `/refactor` | Planning and guiding large-scale architectural refactors |
+| `/review` | Holistic review of system design and implementation |
+| `/brainstorm` | Generating architectural options with trade-off analysis |
+| `/graph` | Visualizing system dependencies and component relationships |
+

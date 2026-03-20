@@ -23,7 +23,8 @@ color: string                   # Hex color for UI display (#1B4D3E)
 emoji: string                   # Single emoji identifier
 adapter: string                 # Default runtime adapter (see below)
 signal: string                  # Signal Theory default encoding
-tools: [string]                 # Tool/skill slugs this agent can use
+tools: [string]                 # Tool slugs this agent can use
+skills: [string]                # Skill slugs this agent can invoke (from skills/)
 context_tier: string            # Default context loading depth (l0 | l1 | full)
 ---
 ```
@@ -33,6 +34,7 @@ context_tier: string            # Default context loading depth (l0 | l1 | full)
 All fields are required except:
 - `reportsTo` — null for top-level agents (CEO, board)
 - `tools` — empty list if agent uses no tools
+- `skills` — empty list if agent uses no skills
 - `context_tier` — defaults to `l1` if omitted
 
 ### Adapter Values
@@ -68,9 +70,30 @@ signal: S=(code, spec, commit, markdown, system-architecture)
 signal: S=(data, report, inform, markdown, slo-framework)
 ```
 
+### Skills
+
+Skills are slash commands defined in `skills/{category}/{skill-slug}/SKILL.md`. The `skills`
+field lists which skills this agent is authorized to invoke. At runtime, when a skill is
+invoked, the agent reads the corresponding SKILL.md and follows its Process section.
+
+Skills bridge the gap between agent identity (who they are) and agent capability (what they
+can do). An agent's `tools` field covers raw integrations; `skills` covers structured
+multi-step procedures the agent can execute on demand.
+
+```yaml
+# A code reviewer who can invoke /code-review and /lint
+skills: [code-review, lint]
+
+# A devops agent who can invoke /deploy, /build, and /health
+skills: [deploy, build, health]
+
+# An orchestrator who can invoke all development skills
+skills: [build, test, lint, deploy, review, commit, create-pr]
+```
+
 ## Body Sections
 
-The Markdown body below the frontmatter MUST contain these 7 sections in order:
+The Markdown body below the frontmatter MUST contain these 8 sections in order:
 
 ### 1. Identity & Memory
 
@@ -160,6 +183,16 @@ Quantified targets the agent self-evaluates against.
 - [Metric]: [target]
 ```
 
+### 8. Skills
+
+Which skills this agent activates and when. Maps skill slugs from frontmatter to
+activation conditions specific to this agent's domain.
+
+| Skill | Activates When |
+|-------|---------------|
+| `/code-review` | On every PR before merge — run structured review |
+| `/lint` | After writing code — check style compliance |
+
 ## Org Chart
 
 The `reportsTo` field composes agents into a directed acyclic org chart. Cycles are
@@ -185,6 +218,7 @@ An agent file is valid if:
 2. All required frontmatter fields are present
 3. `signal` field has exactly 5 comma-separated dimensions
 4. `reportsTo` references an existing agent id or is null
-5. All 7 body sections are present (matched by `# Section Name` headers)
-6. No emoji in section headers (emoji are for display, not structure)
-7. Deliverable templates are fenced in code blocks
+5. All 8 body sections are present (matched by `# Section Name` headers)
+6. `skills` field references existing skill directories in `skills/`
+7. No emoji in section headers (emoji are for display, not structure)
+8. Deliverable templates are fenced in code blocks

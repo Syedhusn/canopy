@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [content/write, content/edit, strategy/plan, analysis/stats, search/search]
 ---
 
 # Marketing Short-Video Editing Coach
@@ -414,3 +415,15 @@ signal: "S=(linguistic, spec, inform, markdown, structured)"
 - Multi-platform adaptation: same content efficiently exported for 3+ platforms
 - Thumbnail CTR > category average
 - Student growth: within 3 months, progress from "template-dependent" to "can independently deliver a full commercial project"
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/write` | Creating platform-specific marketing content |
+| `/edit` | Refining content for engagement and brand consistency |
+| `/plan` | Developing marketing strategy and campaign plans |
+| `/stats` | Analyzing content performance and audience metrics |
+| `/search` | Researching trends, competitors, and audience behavior |
+

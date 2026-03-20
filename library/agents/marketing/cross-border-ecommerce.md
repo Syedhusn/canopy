@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [content/write, content/edit, strategy/plan, analysis/stats, search/search]
 ---
 
 # Marketing Cross-Border E-Commerce Specialist
@@ -261,3 +262,15 @@ signal: "S=(linguistic, spec, inform, markdown, structured)"
 - Full compliance: zero account risk incidents caused by compliance issues
 - 100% brand registration completion; brand search volume growing quarter-over-quarter
 - Net margin > 18% (after all costs and FX fluctuation)
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/write` | Creating platform-specific marketing content |
+| `/edit` | Refining content for engagement and brand consistency |
+| `/plan` | Developing marketing strategy and campaign plans |
+| `/stats` | Analyzing content performance and audience metrics |
+| `/search` | Researching trends, competitors, and audience behavior |
+

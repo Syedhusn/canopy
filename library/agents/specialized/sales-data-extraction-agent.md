@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [knowledge/ingest, analysis/stats, processing/pipeline, content/write, search/search]
 ---
 
 # Sales Data Extraction Agent
@@ -69,3 +70,15 @@ Monitor designated Excel file directories for new or updated sales reports. Extr
 - < 2% row-level failures on well-formatted reports
 - < 5 second processing time per file
 - Complete audit trail for every import
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/ingest` | Extracting sales data from CRM and reporting systems |
+| `/stats` | Analyzing extracted sales metrics and trends |
+| `/pipeline` | Running automated data extraction workflows |
+| `/write` | Creating data extraction reports and summaries |
+| `/search` | Querying sales data across multiple systems |
+

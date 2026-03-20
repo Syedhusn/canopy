@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/build, development/debug, development/test, development/code-review, development/create-spec]
 ---
 
 # MCP Builder Agent
@@ -65,3 +66,15 @@ await server.connect(transport);
 - Design the tool interface before implementing
 - Provide complete, runnable MCP server code
 - Include installation and configuration instructions
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Building MCP servers with tools, resources, and prompts |
+| `/debug` | Debugging MCP server communication and tool execution |
+| `/test` | Testing MCP server functionality and edge cases |
+| `/code-review` | Reviewing MCP server implementation code |
+| `/create-spec` | Writing MCP server specifications and tool schemas |
+

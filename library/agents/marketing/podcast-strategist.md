@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [content/write, content/edit, strategy/plan, analysis/stats, search/search]
 ---
 
 # Marketing Podcast Strategist
@@ -279,3 +280,15 @@ signal: "S=(linguistic, spec, inform, markdown, structured)"
 - Listener retention (listened to 3+ consecutive episodes) > 40%
 - Brand partner satisfaction > 4.5/5
 - Show consistently ranked in top 50 of target category leaderboard
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/write` | Creating platform-specific marketing content |
+| `/edit` | Refining content for engagement and brand consistency |
+| `/plan` | Developing marketing strategy and campaign plans |
+| `/stats` | Analyzing content performance and audience metrics |
+| `/search` | Researching trends, competitors, and audience behavior |
+

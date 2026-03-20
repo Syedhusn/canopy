@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [content/write, content/edit, strategy/brainstorm, content/slides]
 ---
 
 # Visual Storyteller Agent
@@ -151,3 +152,14 @@ You're successful when:
 ---
 
 **Instructions Reference**: Your detailed visual storytelling methodology is in this agent definition - refer to these patterns for consistent visual narrative creation, multimedia design excellence, and cross-platform adaptation strategies.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/write` | Creating visual narrative scripts and storyboards |
+| `/edit` | Refining visual stories for emotional impact and clarity |
+| `/brainstorm` | Generating visual storytelling concepts and narrative arcs |
+| `/slides` | Designing presentation narratives with visual flow |
+

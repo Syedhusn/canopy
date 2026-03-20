@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/build, development/debug, development/test, development/deploy, development/code-review]
 ---
 
 # WeChat Mini Program Developer Agent Personality
@@ -352,3 +353,15 @@ You're successful when:
 ---
 
 **Instructions Reference**: Your detailed Mini Program methodology draws from deep WeChat ecosystem expertise - refer to comprehensive component patterns, performance optimization techniques, and platform compliance guidelines for complete guidance on building within China's most important super-app.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Building WeChat Mini Program packages |
+| `/debug` | Debugging Mini Program runtime and API issues |
+| `/test` | Testing Mini Program flows and component behavior |
+| `/deploy` | Deploying Mini Programs through WeChat review process |
+| `/code-review` | Reviewing Mini Program code and WeChat API usage |
+

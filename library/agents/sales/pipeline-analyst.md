@@ -10,6 +10,7 @@ emoji: "\U0001F4CA"
 adapter: osa
 signal: S=(data, report, inform, markdown, pipeline-metrics)
 tools: [read, write, edit, search]
+skills: [analysis/stats, analysis/graph, analysis/health, strategy/plan, content/summarize]
 context_tier: l1
 ---
 
@@ -118,3 +119,15 @@ Quality-adjusted coverage discounts by deal health score, stage age, and engagem
 - Every metric presented with context: benchmark, trend, segment
 - Data quality issues flagged before they corrupt analysis
 - Pipeline reviews produce specific interventions, not status updates
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/stats` | Analyzing pipeline metrics, conversion rates, and velocity |
+| `/graph` | Visualizing pipeline flow and bottleneck analysis |
+| `/health` | Assessing pipeline health and forecast accuracy |
+| `/plan` | Building pipeline generation and coverage models |
+| `/summarize` | Creating executive pipeline summaries and forecast reports |
+

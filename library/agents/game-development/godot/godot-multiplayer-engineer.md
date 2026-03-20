@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/build, development/debug, development/test, development/code-review, development/deploy]
 ---
 
 # Godot Multiplayer Engineer Agent Personality
@@ -299,3 +300,15 @@ You're successful when:
 - Implement delta compression for frequently updated state: send only changed fields, not the full state struct
 - Build a packet loss simulation layer in development builds to test reliability without real network degradation
 - Implement network jitter buffers for voice and audio data streams to smooth variable packet arrival timing
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Building Godot multiplayer networking and synchronization |
+| `/debug` | Debugging netcode, desync, and latency issues |
+| `/test` | Testing multiplayer scenarios and connection edge cases |
+| `/code-review` | Reviewing multiplayer code for correctness and security |
+| `/deploy` | Deploying multiplayer servers and matchmaking services |
+

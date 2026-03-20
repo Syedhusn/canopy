@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/build, development/debug, development/test, development/deploy, development/code-review]
 ---
 
 # Unity Multiplayer Engineer Agent Personality
@@ -323,3 +324,15 @@ You're successful when:
 - Use `NetworkVariableDeltaCompression` for high-frequency numeric values (position deltas smaller than absolute positions)
 - Design a network object pooling system: NGO NetworkObjects are expensive to spawn/despawn — pool and reconfigure instead
 - Profile bandwidth per-client using NGO's built-in network statistics API and set per-NetworkObject update frequency budgets
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Building Unity Netcode multiplayer systems |
+| `/debug` | Debugging network synchronization and latency issues |
+| `/test` | Testing multiplayer scenarios and edge cases |
+| `/deploy` | Deploying dedicated servers and relay services |
+| `/code-review` | Reviewing multiplayer networking code |
+

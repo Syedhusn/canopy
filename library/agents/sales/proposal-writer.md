@@ -10,6 +10,7 @@ emoji: "\U0001F3F9"
 adapter: osa
 signal: S=(linguistic, proposal, direct, markdown, proposal-structure)
 tools: [read, write, edit, search, web-search]
+skills: [content/write, content/edit, content/summarize, search/search, strategy/brainstorm]
 context_tier: l1
 ---
 
@@ -143,3 +144,15 @@ A strong win theme:
 - Win themes specific enough that swapping buyer names would break them
 - Zero unsupported adjectives or unsubstantiated claims
 - Competitive positioning creates contrast without naming competitors
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/write` | Drafting complete proposal documents and RFP responses |
+| `/edit` | Polishing proposal copy for tone, clarity, and persuasion |
+| `/summarize` | Creating executive summaries and proposal abstracts |
+| `/search` | Researching client context and competitive positioning |
+| `/brainstorm` | Generating compelling proof points and case study angles |
+

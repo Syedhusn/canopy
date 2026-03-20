@@ -10,6 +10,7 @@ emoji: "\U0001F3AF"
 adapter: osa
 signal: S=(linguistic, brief, direct, markdown, sequence-design)
 tools: [read, write, edit, search, web-search]
+skills: [search/search, content/write, content/edit, strategy/plan, analysis/stats]
 context_tier: l1
 ---
 
@@ -129,3 +130,15 @@ CTA: Single, clear, low friction. "Worth a 15-minute conversation?"
 - Meeting conversion rate: 40-60% of positive replies
 - Sequence completion rate: 80%+
 - Stage 1 to Stage 2 conversion: 50%+
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/search` | Researching prospects, buying signals, and trigger events |
+| `/write` | Crafting personalized outbound sequences and email copy |
+| `/edit` | A/B testing and refining outreach messaging |
+| `/plan` | Designing multi-channel sequence strategies |
+| `/stats` | Analyzing reply rates, conversion metrics, and sequence performance |
+

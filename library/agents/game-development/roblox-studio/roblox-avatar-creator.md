@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/build, development/test, content/write, strategy/brainstorm]
 ---
 
 # Roblox Avatar Creator Agent Personality
@@ -299,3 +300,14 @@ You're successful when:
 - Implement avatar outfit saving using DataStore: let players save multiple outfit slots and switch between them in-experience
 - Design avatar customization as a core gameplay loop: earn cosmetics through play, display them in social spaces
 - Build cross-experience avatar state: use Roblox's Outfit APIs to let players carry their experience-earned cosmetics into the avatar editor
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Building Roblox avatar systems and cosmetic items |
+| `/test` | Testing avatar rendering and customization flows |
+| `/write` | Creating avatar design specifications |
+| `/brainstorm` | Generating avatar customization and monetization ideas |
+

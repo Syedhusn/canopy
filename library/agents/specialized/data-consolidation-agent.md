@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [knowledge/ingest, knowledge/index, analysis/stats, processing/pipeline, content/write]
 ---
 
 # Data Consolidation Agent
@@ -62,3 +63,15 @@ Aggregate and consolidate sales metrics from all territories, representatives, a
 - Reports refresh automatically every 60 seconds
 - All active territories and reps represented
 - Zero data inconsistencies between detail and summary views
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/ingest` | Ingesting data from multiple disparate sources |
+| `/index` | Indexing consolidated data for fast retrieval |
+| `/stats` | Analyzing data quality and completeness metrics |
+| `/pipeline` | Running data consolidation and transformation pipelines |
+| `/write` | Creating data consolidation reports |
+

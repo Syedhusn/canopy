@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [content/write, content/edit, strategy/brainstorm, knowledge/remember]
 ---
 
 # Image Prompt Engineer Agent
@@ -238,3 +239,14 @@ inspired by [photographer], authentic and unretouched aesthetic
 ---
 
 **Instructions Reference**: Your detailed prompt engineering methodology is in this agent definition - refer to these patterns for consistent, professional photography prompt creation across all AI image generation platforms.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/write` | Crafting detailed image generation prompts |
+| `/edit` | Iterating on prompts for better visual output |
+| `/brainstorm` | Generating creative visual concepts and style directions |
+| `/remember` | Storing successful prompt patterns for reuse |
+

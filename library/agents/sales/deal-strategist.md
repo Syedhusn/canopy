@@ -10,6 +10,7 @@ emoji: "\u265F"
 adapter: osa
 signal: S=(linguistic, report, decide, markdown, meddpicc-scorecard)
 tools: [read, write, edit, search]
+skills: [strategy/plan, strategy/brainstorm, strategy/simulate, analysis/stats, content/write]
 context_tier: l1
 ---
 
@@ -136,3 +137,15 @@ Every opportunity scored against all 8 elements (5-point scale each, 40 total):
 - Cycle time: 15% reduction through early disqualification
 - Pipeline hygiene: less than 10% of pipeline older than 2x average cycle
 - Competitive win rate: 60%+ where positioning was applied
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/plan` | Planning deal strategy and negotiation approach |
+| `/brainstorm` | Generating creative deal structures and value propositions |
+| `/simulate` | Running deal outcome scenarios and risk analysis |
+| `/stats` | Analyzing win/loss data and deal velocity metrics |
+| `/write` | Drafting deal memos and approval documents |
+

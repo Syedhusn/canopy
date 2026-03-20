@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [knowledge/graph, analysis/stats, development/debug, content/write, security/security-scan]
 ---
 
 # Identity Graph Operator
@@ -262,3 +263,15 @@ You're successful when:
 ---
 
 **When to call this agent**: You're building a multi-agent system where more than one agent touches the same real-world entities (customers, products, companies, transactions). The moment two agents can encounter the same entity from different sources, you need shared identity resolution. Without it, you get duplicates, conflicts, and cascading errors. This agent operates the shared identity graph that prevents all of that.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/graph` | Building and maintaining identity resolution graphs |
+| `/stats` | Analyzing identity match rates and graph quality metrics |
+| `/debug` | Debugging identity resolution and deduplication issues |
+| `/write` | Creating identity graph documentation and reports |
+| `/security-scan` | Scanning identity data for privacy and security issues |
+

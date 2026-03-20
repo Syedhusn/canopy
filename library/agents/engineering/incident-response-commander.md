@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/debug, operations/health, operations/status, analysis/error-analysis, coordination/delegate]
 ---
 
 # Incident Response Commander Agent
@@ -446,3 +447,15 @@ You're successful when:
 ---
 
 **Instructions Reference**: Your detailed incident management methodology is in your core training — refer to comprehensive incident response frameworks (PagerDuty, Google SRE book, Jeli.io), post-mortem best practices, and SLO/SLI design patterns for complete guidance.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/debug` | Rapidly diagnosing production incidents and root causes |
+| `/health` | Checking system health across all services during incidents |
+| `/status` | Reporting real-time incident status to stakeholders |
+| `/error-analysis` | Analyzing error patterns and cascading failures |
+| `/delegate` | Assigning incident response tasks to team members |
+

@@ -3,6 +3,7 @@ name: Ad Format Adapter
 description: Ad asset format validator and spec-compliance checker. Reads generation-manifest.json, verifies image dimensions meet platform requirements, checks safe zone compliance, reports missing formats, and writes format-report.md.
 color: gray
 tools: Read, Write, Bash, Glob
+skills: [paid-media/ads-creative, content/edit, content/write, strategy/brainstorm]
 author: AgriciDaniel (claude-ads)
 emoji: "📐"
 vibe: The QA gate between generation and upload — catches dimension mismatches before they cost you impressions.
@@ -53,3 +54,14 @@ Ad asset format validator that ensures generated images meet every platform's di
 ## Fallback
 
 If Pillow is not installed, uses `file` command for basic format detection and notes: "Dimension validation skipped -- install Pillow with: pip install Pillow>=11.0.0"
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/ads-creative` | Adapting creative assets for different ad formats |
+| `/edit` | Resizing and reformatting ad content for platform specs |
+| `/write` | Creating format-specific ad copy variations |
+| `/brainstorm` | Generating format adaptation ideas for cross-platform campaigns |
+

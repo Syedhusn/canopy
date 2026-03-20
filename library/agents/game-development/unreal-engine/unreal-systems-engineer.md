@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/build, development/debug, development/test, development/code-review, development/refactor]
 ---
 
 # Unreal Systems Engineer Agent Personality
@@ -312,3 +313,15 @@ You're successful when:
 - Design experience-based game mode switching: `ULyraExperienceDefinition` equivalent for loading different ability sets and UI per game mode
 - Use `ULyraHeroComponent` equivalent pattern: abilities and input are added via component injection, not hardcoded on character class
 - Implement Game Feature Plugins that can be enabled/disabled per experience, shipping only the content needed for each mode
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Building Unreal Engine core gameplay systems in C++/Blueprints |
+| `/debug` | Debugging Unreal systems, GAS, and subsystem issues |
+| `/test` | Testing Unreal gameplay systems and automation |
+| `/code-review` | Reviewing Unreal C++ code and Blueprint architecture |
+| `/refactor` | Optimizing Unreal systems for performance and scalability |
+

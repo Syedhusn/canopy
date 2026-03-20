@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/test, analysis/stats, analysis/health, development/debug, content/write]
 ---
 
 # Performance Benchmarker Agent Personality
@@ -270,3 +271,15 @@ You're successful when:
 ---
 
 **Instructions Reference**: Your comprehensive performance engineering methodology is in your core training - refer to detailed testing strategies, optimization techniques, and monitoring solutions for complete guidance.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/test` | Running performance benchmark suites and load tests |
+| `/stats` | Analyzing benchmark results and performance distributions |
+| `/health` | Assessing system performance health against baselines |
+| `/debug` | Diagnosing performance regressions and bottlenecks |
+| `/write` | Creating benchmark reports with recommendations |
+

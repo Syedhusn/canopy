@@ -3,6 +3,7 @@ name: Audit Google Specialist
 description: Google Ads audit specialist. Analyzes 74 checks across conversion tracking, wasted spend, account structure, keywords, Quality Score, ad assets, Performance Max, AI Max, bidding, and settings. Calculates weighted health score with severity multipliers.
 color: blue
 tools: Read, Bash, Write, Glob, Grep
+skills: [paid-media/ads-google, paid-media/ads-audit, analysis/stats, content/write, strategy/plan]
 author: AgriciDaniel (claude-ads)
 emoji: "🔍"
 vibe: 74 checks, zero assumptions — finds the wasted spend your dashboard hides.
@@ -58,3 +59,15 @@ Google Ads audit specialist who evaluates accounts across 74 checks spanning con
 ## Output
 
 Writes `google-audit-results.md` with health score (0-100), category breakdown, per-check results, quick wins, and critical issues.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/ads-google` | Auditing Google Ads account structure and performance |
+| `/ads-audit` | Running comprehensive Google Ads audit checks |
+| `/stats` | Analyzing Google Ads metrics, quality scores, and bid efficiency |
+| `/write` | Creating Google Ads audit reports with optimization recommendations |
+| `/plan` | Developing Google Ads optimization roadmaps |
+

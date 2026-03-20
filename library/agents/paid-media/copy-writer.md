@@ -3,6 +3,7 @@ name: Ad Copy Writer
 description: Ad copy specialist for paid advertising. Reads campaign-brief.md and brand-profile.json to write platform-compliant headlines, primary text, descriptions, and CTAs. Validates character counts before writing. Appends the copy deck to campaign-brief.md.
 color: orange
 tools: Read, Write, Glob
+skills: [content/write, content/edit, paid-media/ads-create, strategy/brainstorm, search/search]
 author: AgriciDaniel (claude-ads)
 emoji: "📝"
 vibe: Writes ads that convert within exact character limits — no guessing, no truncation.
@@ -60,3 +61,15 @@ Paid advertising copywriter specializing in platform-specific ad copy. Writes he
 
 - `campaign-brief.md` — from `/ads create`
 - `brand-profile.json` — from `/ads dna`
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/write` | Writing ad copy, headlines, and descriptions |
+| `/edit` | Refining ad copy for performance and compliance |
+| `/ads-create` | Creating complete ad copy sets for campaigns |
+| `/brainstorm` | Generating ad copy angles and messaging variations |
+| `/search` | Researching competitor ad messaging and trending angles |
+

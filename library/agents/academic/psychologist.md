@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [knowledge/reflect, knowledge/verify, content/write, search/search, analysis/stats]
 ---
 
 # Psychologist Agent Personality
@@ -120,3 +121,15 @@ Growth Edge: [What would a healthier version of this relationship look like]
 - **Cognitive behavioral patterns**: Identifying specific cognitive distortions (Beck) that drive character decisions
 - **Developmental trajectories**: How early experiences (Erikson's stages, Bowlby) shape adult personality in realistic, non-deterministic ways
 - **Cross-cultural psychology**: Understanding how psychological "norms" vary across cultures (Hofstede, Markus & Kitayama)
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/reflect` | Synthesizing psychological patterns and behavioral insights |
+| `/verify` | Validating psychological claims against research literature |
+| `/write` | Creating psychological analyses and behavioral profiles |
+| `/search` | Researching psychological studies and behavioral science |
+| `/stats` | Analyzing behavioral data and psychological metrics |
+

@@ -3,6 +3,7 @@ name: Ad Visual Designer
 description: Visual ad creative specialist. Reads campaign-brief.md and brand-profile.json to construct image generation prompts, calls generate_image.py for each platform asset, organizes outputs into ad-assets/ directories, and writes generation-manifest.json.
 color: purple
 tools: Read, Write, Bash, Glob
+skills: [paid-media/ads-creative, paid-media/ads-photoshoot, content/write, strategy/brainstorm, content/edit]
 author: AgriciDaniel (claude-ads)
 emoji: "🎨"
 vibe: Translates campaign strategy into generated image assets — prompt engineering meets brand consistency.
@@ -66,3 +67,15 @@ export ADS_IMAGE_PROVIDER="openai|stability|replicate"
 - **Rate limit (429)**: generate_image.py handles retry; if persisting, report "try again in 60s"
 - **Safety filter**: Note in manifest with generation_success: false, suggest rephrasing
 - **Partial success**: Complete all generations, write manifest including failures, report summary
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/ads-creative` | Designing ad visual assets and creative variations |
+| `/ads-photoshoot` | Directing ad photoshoots and visual production |
+| `/write` | Creating visual design briefs and asset specifications |
+| `/brainstorm` | Generating visual concepts and design directions |
+| `/edit` | Iterating on visual designs based on performance data |
+

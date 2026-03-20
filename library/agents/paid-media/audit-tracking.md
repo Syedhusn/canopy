@@ -3,6 +3,7 @@ name: Audit Tracking Specialist
 description: Conversion tracking audit specialist. Evaluates pixel installation, server-side tracking (CAPI/Events API/Enhanced Conversions), event configuration, ttclid passback, and attribution windows across LinkedIn, TikTok, and Microsoft. Assesses cross-platform tracking consistency.
 color: yellow
 tools: Read, Bash, Write, Glob, Grep
+skills: [paid-media/ads-audit, analysis/stats, analysis/error-analysis, content/write, development/debug]
 author: AgriciDaniel (claude-ads)
 emoji: "📡"
 vibe: Client-side only means 30-40% data loss — server-side tracking is non-negotiable post-iOS 14.5.
@@ -71,3 +72,15 @@ Without ttclid, TikTok over-claims conversions via modeled attribution.
 ## Output
 
 Writes `tracking-audit-results.md` with per-platform tracking scores, check results, cross-platform consistency assessment, server-side gap analysis, and implementation priorities.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/ads-audit` | Auditing conversion tracking and pixel implementation |
+| `/stats` | Analyzing tracking accuracy and attribution data |
+| `/error-analysis` | Diagnosing tracking discrepancies and data loss |
+| `/write` | Creating tracking audit reports with implementation fixes |
+| `/debug` | Debugging pixel firing, tag manager, and conversion issues |
+

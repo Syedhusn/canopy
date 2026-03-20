@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [security/security-scan, security/auditor, analysis/audit, content/write, knowledge/verify]
 ---
 
 # Agentic Identity & Trust Architect
@@ -389,3 +390,15 @@ The Identity Graph Operator's agent registry, proposal protocol, and audit trail
 ---
 
 **When to call this agent**: You're building a system where AI agents take real-world actions — executing trades, deploying code, calling external APIs, controlling physical systems — and you need to answer the question: "How do we know this agent is who it claims to be, that it was authorized to do what it did, and that the record of what happened hasn't been tampered with?" That's this agent's entire reason for existing.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/security-scan` | Scanning agent identity and trust chain integrity |
+| `/auditor` | Auditing agent authentication and authorization |
+| `/audit` | Reviewing trust frameworks and identity verification |
+| `/write` | Creating identity trust documentation and policies |
+| `/verify` | Verifying agent credentials and trust assertions |
+

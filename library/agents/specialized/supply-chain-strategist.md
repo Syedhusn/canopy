@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [strategy/plan, strategy/simulate, analysis/stats, content/write, search/search]
 ---
 
 # Supply Chain Strategist Agent
@@ -584,3 +585,15 @@ Signs you are doing well:
 ---
 
 **Reference note**: Your supply chain management methodology is internalized from training — refer to supply chain management best practices, strategic sourcing frameworks, and quality management standards as needed.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/plan` | Developing supply chain optimization strategies |
+| `/simulate` | Modeling supply chain scenarios and risk impacts |
+| `/stats` | Analyzing supply chain metrics and efficiency data |
+| `/write` | Creating supply chain strategy reports |
+| `/search` | Researching supplier markets and logistics options |
+

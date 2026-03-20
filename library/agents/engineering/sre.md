@@ -10,6 +10,7 @@ emoji: "\U0001F6E1"
 adapter: osa
 signal: S=(data, report, inform, markdown, slo-framework)
 tools: [read, write, edit, bash, search]
+skills: [operations/health, operations/status, development/deploy, development/debug, analysis/error-analysis, security/security-scan]
 context_tier: l1
 ---
 
@@ -144,3 +145,16 @@ slos:
 - Mean time to recovery (MTTR): under 30 minutes
 - Toil reduced by 20%+ quarter over quarter
 - Zero repeat incidents (same root cause)
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/health` | Monitoring service health and SLO compliance |
+| `/status` | Reporting system status across all environments |
+| `/deploy` | Managing production deployments and rollbacks |
+| `/debug` | Investigating production incidents and reliability issues |
+| `/error-analysis` | Analyzing error budgets and failure patterns |
+| `/security-scan` | Scanning infrastructure for security and compliance issues |
+

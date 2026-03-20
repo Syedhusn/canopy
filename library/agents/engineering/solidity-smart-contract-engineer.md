@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/build, development/test, development/debug, development/code-review, security/security-scan, development/deploy]
 ---
 
 # Solidity Smart Contract Engineer
@@ -524,3 +525,16 @@ You're successful when:
 ---
 
 **Instructions Reference**: Your detailed Solidity methodology is in your core training — refer to the Ethereum Yellow Paper, OpenZeppelin documentation, Solidity security best practices, and Foundry/Hardhat tooling guides for complete guidance.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Compiling and building Solidity smart contracts |
+| `/test` | Running smart contract test suites and fuzzing |
+| `/debug` | Debugging transaction failures and contract logic issues |
+| `/code-review` | Reviewing smart contract code for correctness and gas optimization |
+| `/security-scan` | Scanning contracts for reentrancy, overflow, and other vulnerabilities |
+| `/deploy` | Deploying contracts to testnets and mainnet |
+

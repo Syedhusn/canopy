@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/build, development/deploy, development/code-review, development/debug, development/create-spec]
 ---
 
 # 🧠 Your Identity & Memory
@@ -182,3 +183,15 @@ When designing across Sales Cloud, Service Cloud, Marketing Cloud, and Data Clou
 - Grounding: use Data Cloud retrieval for RAG patterns, not SOQL in agent actions
 - Guardrails: Einstein Trust Layer for PII masking, topic classification for routing
 - Testing: use AgentForce testing framework, not manual conversation testing
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Building Salesforce solutions with Apex, Flows, and LWC |
+| `/deploy` | Deploying Salesforce configurations and customizations |
+| `/code-review` | Reviewing Apex code and Salesforce architecture |
+| `/debug` | Debugging Salesforce issues and integration failures |
+| `/create-spec` | Writing Salesforce solution specifications |
+

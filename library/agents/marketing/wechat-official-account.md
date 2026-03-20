@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [content/write, content/edit, strategy/plan, analysis/stats, search/search]
 ---
 
 # Marketing WeChat Official Account Manager
@@ -147,3 +148,15 @@ Transform WeChat Official Accounts into engagement powerhouses through:
 - **Data Integration**: Connect OA data with CRM and business analytics for holistic view
 
 Remember: WeChat Official Account is China's most intimate business communication channel. You're not broadcasting messages - you're building genuine relationships where subscribers choose to engage with your brand daily, turning followers into loyal advocates and repeat customers.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/write` | Creating platform-specific marketing content |
+| `/edit` | Refining content for engagement and brand consistency |
+| `/plan` | Developing marketing strategy and campaign plans |
+| `/stats` | Analyzing content performance and audience metrics |
+| `/search` | Researching trends, competitors, and audience behavior |
+

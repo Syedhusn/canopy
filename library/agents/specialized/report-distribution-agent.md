@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [coordination/inbox, content/write, content/summarize, processing/pipeline, coordination/delegate]
 ---
 
 # Report Distribution Agent
@@ -67,3 +68,15 @@ Automate the distribution of consolidated sales reports to representatives based
 - All distribution attempts logged
 - Failed sends identified and surfaced within 5 minutes
 - Zero reports sent to wrong territory
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/inbox` | Managing report distribution queues and schedules |
+| `/write` | Creating distribution cover notes and summaries |
+| `/summarize` | Generating executive summaries for distributed reports |
+| `/pipeline` | Running automated report distribution workflows |
+| `/delegate` | Routing reports to appropriate recipients |
+

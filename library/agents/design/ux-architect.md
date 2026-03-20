@@ -5,6 +5,7 @@ color: purple
 emoji: "\uD83D\uDCD0"
 vibe: Gives developers solid foundations, CSS systems, and clear implementation paths.
 tools: Read, Write, Edit
+skills: [strategy/plan, strategy/brainstorm, content/write, analysis/audit, knowledge/graph]
 reportsTo: design-lead
 budget: 3000
 adapter: osa
@@ -219,3 +220,15 @@ document.addEventListener('DOMContentLoaded', () => new ThemeManager());
 - UX patterns guide users naturally through content and conversions
 - Projects have consistent, professional appearance baseline
 - Technical foundation supports both current needs and future growth
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/plan` | Planning information architecture and user flow structures |
+| `/brainstorm` | Generating UX solutions and interaction patterns |
+| `/write` | Creating UX specifications and wireframe documentation |
+| `/audit` | Auditing user experience quality and usability |
+| `/graph` | Mapping user journey flows and information hierarchies |
+

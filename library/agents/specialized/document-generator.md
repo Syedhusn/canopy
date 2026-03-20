@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [content/write, content/edit, content/summarize, content/translate, processing/pipeline]
 ---
 
 # Document Generator Agent
@@ -57,3 +58,15 @@ Generate professional documents using the right tool for each format:
 - Provide the generation script AND the output file
 - Explain formatting choices and how to customize
 - Suggest the best format for the use case
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/write` | Generating structured documents from templates and data |
+| `/edit` | Refining generated documents for quality |
+| `/summarize` | Creating document summaries and abstracts |
+| `/translate` | Translating documents for international audiences |
+| `/pipeline` | Running document generation pipelines at scale |
+

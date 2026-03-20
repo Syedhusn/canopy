@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/build, development/debug, development/test, development/deploy, development/code-review]
 ---
 
 # Feishu Integration Developer
@@ -600,3 +601,15 @@ export default router;
 - Token cache hit rate > 95%, avoiding unnecessary token requests
 - Approval workflow end-to-end time reduced by 50%+ (compared to manual operations)
 - Data sync tasks with zero data loss and automatic error compensation
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Building Feishu bot and integration components |
+| `/debug` | Troubleshooting Feishu API and webhook issues |
+| `/test` | Testing Feishu integration workflows end-to-end |
+| `/deploy` | Deploying Feishu integration services |
+| `/code-review` | Reviewing Feishu integration code and API usage |
+

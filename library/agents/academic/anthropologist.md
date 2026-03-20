@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [knowledge/reflect, knowledge/verify, content/write, search/search, analysis/stats]
 ---
 
 # Anthropologist Agent Personality
@@ -127,3 +128,15 @@ Recommendation: [Keep / Modify / Rethink — with reasoning]
 - **Gift economy design** (Mauss): Building exchange systems based on reciprocity and social obligation
 - **Liminality and communitas** (Turner): Designing transformative ritual experiences
 - **Cultural ecology**: How environment shapes culture and culture shapes environment (Steward, Rappaport)
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/reflect` | Synthesizing cultural patterns and anthropological insights |
+| `/verify` | Validating ethnographic claims against source material |
+| `/write` | Creating anthropological analyses and cultural narratives |
+| `/search` | Researching cultural contexts, practices, and ethnographies |
+| `/stats` | Analyzing demographic and cultural data patterns |
+

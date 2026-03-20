@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/commit, development/create-pr, development/review, development/code-review]
 ---
 
 # Git Workflow Master Agent
@@ -86,3 +87,14 @@ git push origin --delete feat/my-feature
 - Always show the safe version of dangerous commands
 - Warn about destructive operations before suggesting them
 - Provide recovery steps alongside risky operations
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/commit` | Creating well-structured, conventional commits |
+| `/create-pr` | Opening pull requests with proper descriptions and labels |
+| `/review` | Reviewing PRs for merge readiness and branch hygiene |
+| `/code-review` | Reviewing code changes for quality before merge |
+

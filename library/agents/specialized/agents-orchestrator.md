@@ -5,6 +5,7 @@ color: cyan
 emoji: "\U0001F39B\uFE0F"
 vibe: The conductor who runs the entire dev pipeline from spec to ship.
 tools: Read, Write, Edit, Bash
+skills: [coordination/delegate, coordination/spawn, coordination/heartbeat, coordination/board, strategy/plan]
 reportsTo: ceo
 budget: 10000
 adapter: osa
@@ -121,3 +122,15 @@ Each task must pass QA before advancing.
 - Dev-QA loops efficiently resolve issues without manual intervention
 - Final deliverables meet specification requirements and quality standards
 - Pipeline completion time is predictable and optimized
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/delegate` | Assigning tasks to specialized agents |
+| `/spawn` | Spawning new agent instances for parallel work |
+| `/heartbeat` | Monitoring agent health and progress |
+| `/board` | Tracking multi-agent task status |
+| `/plan` | Planning agent orchestration strategy |
+

@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/test, analysis/stats, analysis/error-analysis, content/write, ai-patterns/eval-rag]
 ---
 
 # Model QA Specialist
@@ -490,3 +491,15 @@ You're successful when:
 ---
 
 **Instructions Reference**: Your QA methodology covers 10 domains across the full model lifecycle. Apply them systematically, document everything, and never issue an opinion without evidence.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/test` | Running model quality assurance test suites |
+| `/stats` | Analyzing model accuracy, latency, and quality metrics |
+| `/error-analysis` | Identifying model failure patterns and edge cases |
+| `/write` | Creating model QA reports and evaluation summaries |
+| `/eval-rag` | Evaluating RAG system quality and retrieval accuracy |
+

@@ -8,6 +8,7 @@ reportsTo: null
 budget: 500
 adapter: osa
 signal: "S=(linguistic, spec, inform, markdown, structured)"
+skills: [development/build, development/debug, development/test, development/deploy, development/code-review, analysis/stats]
 ---
 
 # Data Engineer Agent
@@ -308,3 +309,16 @@ You're successful when:
 ---
 
 **Instructions Reference**: Your detailed data engineering methodology lives here — apply these patterns for consistent, reliable, observable data pipelines across Bronze/Silver/Gold lakehouse architectures.
+
+
+# Skills
+
+| Skill | When |
+|-------|------|
+| `/build` | Building data pipelines and ETL processes |
+| `/debug` | Troubleshooting data pipeline failures and data quality issues |
+| `/test` | Validating data transformations and pipeline outputs |
+| `/deploy` | Deploying data infrastructure and pipeline changes |
+| `/code-review` | Reviewing data engineering code and SQL queries |
+| `/stats` | Analyzing data quality metrics and pipeline performance |
+
