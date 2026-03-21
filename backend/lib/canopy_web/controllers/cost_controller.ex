@@ -2,7 +2,7 @@ defmodule CanopyWeb.CostController do
   use CanopyWeb, :controller
 
   alias Canopy.Repo
-  alias Canopy.Schemas.{CostEvent, Agent}
+  alias Canopy.Schemas.{CostEvent, Agent, BudgetPolicy}
   import Ecto.Query
 
   def summary(conn, _params) do
@@ -14,6 +14,23 @@ defmodule CanopyWeb.CostController do
     today_cost = cost_since(beginning_of_today)
     week_cost = cost_since(beginning_of_week)
     month_cost = cost_since(beginning_of_month)
+
+    # Fetch the workspace-level budget policy (if one exists). BudgetPolicy has no
+    # daily_limit_cents column — only monthly_limit_cents — so daily_budget_cents
+    # is not yet tracked in the schema and remains 0.
+    workspace_policy =
+      Repo.one(
+        from bp in BudgetPolicy,
+          where: bp.scope_type == "workspace",
+          limit: 1
+      )
+
+    monthly_budget_cents = if workspace_policy, do: workspace_policy.monthly_limit_cents, else: 0
+
+    monthly_remaining_cents =
+      if monthly_budget_cents > 0,
+        do: max(monthly_budget_cents - month_cost, 0),
+        else: 0
 
     top_agent =
       Repo.one(
@@ -35,10 +52,12 @@ defmodule CanopyWeb.CostController do
       today_cents: today_cost,
       week_cents: week_cost,
       month_cents: month_cost,
+      # daily_budget_cents: BudgetPolicy has no daily_limit_cents column yet
       daily_budget_cents: 0,
-      monthly_budget_cents: 0,
+      monthly_budget_cents: monthly_budget_cents,
+      # daily_remaining_cents: no daily limit tracked yet
       daily_remaining_cents: 0,
-      monthly_remaining_cents: 0,
+      monthly_remaining_cents: monthly_remaining_cents,
       cache_savings_cents: 0,
       top_agent: top_agent
     })

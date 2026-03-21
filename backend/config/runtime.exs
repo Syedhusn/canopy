@@ -53,6 +53,16 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
+  guardian_secret_key =
+    System.get_env("GUARDIAN_SECRET_KEY") ||
+      raise """
+      environment variable GUARDIAN_SECRET_KEY is missing.
+      You can generate one by calling: mix phx.gen.secret
+      """
+
+  config :canopy, Canopy.Guardian,
+    secret_key: guardian_secret_key
+
   host = System.get_env("PHX_HOST") || "example.com"
 
   config :canopy, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")

@@ -2,7 +2,7 @@ defmodule CanopyWeb.ScheduleController do
   use CanopyWeb, :controller
 
   alias Canopy.Repo
-  alias Canopy.Schemas.{Schedule, Agent}
+  alias Canopy.Schemas.{Schedule, Agent, Session}
   import Ecto.Query
 
   def index(conn, params) do
@@ -27,7 +27,6 @@ defmodule CanopyWeb.ScheduleController do
           last_run_at: s.last_run_at,
           next_run_at: s.next_run_at,
           last_run_status: s.last_run_status,
-          run_count: 0,
           created_at: s.inserted_at,
           inserted_at: s.inserted_at,
           updated_at: s.updated_at
@@ -39,6 +38,24 @@ defmodule CanopyWeb.ScheduleController do
         else: query
 
     schedules = Repo.all(query)
+
+    # Fetch session counts for all returned schedules in a single aggregate query.
+    schedule_ids = Enum.map(schedules, & &1.id)
+
+    run_counts =
+      Repo.all(
+        from sess in Session,
+          where: sess.schedule_id in ^schedule_ids,
+          group_by: sess.schedule_id,
+          select: {sess.schedule_id, count(sess.id)}
+      )
+      |> Map.new()
+
+    schedules =
+      Enum.map(schedules, fn s ->
+        Map.put(s, :run_count, Map.get(run_counts, s.id, 0))
+      end)
+
     json(conn, %{schedules: schedules})
   end
 
@@ -47,7 +64,7 @@ defmodule CanopyWeb.ScheduleController do
 
     case Repo.insert(changeset) do
       {:ok, schedule} ->
-        conn |> put_status(201) |> json(%{schedule: serialize(schedule)})
+        conn |> put_status(201) |> json(%{schedule: serialize(schedule, 0)})
 
       {:error, changeset} ->
         conn
@@ -59,7 +76,7 @@ defmodule CanopyWeb.ScheduleController do
   def show(conn, %{"id" => id}) do
     case Repo.get(Schedule, id) do
       nil -> conn |> put_status(404) |> json(%{error: "not_found"})
-      schedule -> json(conn, %{schedule: serialize(schedule)})
+      schedule -> json(conn, %{schedule: serialize(schedule, run_count_for(schedule.id))})
     end
   end
 
@@ -73,7 +90,7 @@ defmodule CanopyWeb.ScheduleController do
 
         case Repo.update(changeset) do
           {:ok, updated} ->
-            json(conn, %{schedule: serialize(updated)})
+            json(conn, %{schedule: serialize(updated, run_count_for(updated.id))})
 
           {:error, changeset} ->
             conn
@@ -112,7 +129,14 @@ defmodule CanopyWeb.ScheduleController do
           %{event: "agent.heartbeat_started", schedule_id: id, agent_id: schedule.agent_id}
         )
 
-        json(conn, %{schedule: serialize(updated), triggered: true})
+        Task.Supervisor.start_child(Canopy.HeartbeatRunner, fn ->
+          Canopy.Heartbeat.run(schedule.agent_id,
+            schedule_id: schedule.id,
+            context: schedule.context || "Scheduled heartbeat: #{schedule.name}"
+          )
+        end)
+
+        json(conn, %{schedule: serialize(updated, run_count_for(updated.id)), triggered: true})
     end
   end
 
@@ -149,7 +173,7 @@ defmodule CanopyWeb.ScheduleController do
     json(conn, %{ok: true, paused_count: count})
   end
 
-  defp serialize(%Schedule{} = s) do
+  defp serialize(%Schedule{} = s, run_count) do
     %{
       id: s.id,
       name: s.name,
@@ -165,11 +189,18 @@ defmodule CanopyWeb.ScheduleController do
       last_run_at: s.last_run_at,
       next_run_at: s.next_run_at,
       last_run_status: s.last_run_status,
-      run_count: 0,
+      run_count: run_count,
       created_at: s.inserted_at,
       inserted_at: s.inserted_at,
       updated_at: s.updated_at
     }
+  end
+
+  defp run_count_for(schedule_id) do
+    Repo.aggregate(
+      from(sess in Session, where: sess.schedule_id == ^schedule_id),
+      :count
+    )
   end
 
   defp format_errors(changeset) do

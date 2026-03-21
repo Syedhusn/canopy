@@ -1,6 +1,24 @@
 defmodule Canopy.Adapters.Cursor do
-  @moduledoc "Cursor background agent adapter (P2 — placeholder)."
+  @moduledoc """
+  Cursor background agent adapter.
+
+  **Status: stub placeholder (P2).**
+
+  This adapter is not yet implemented. To implement it, wire up the
+  Cursor background-agent API: authenticate via a Cursor API key in
+  `config`, open a session over their HTTP/WebSocket transport, and
+  stream `run.delta` events matching the `Canopy.Adapter` event shape.
+
+  Calls to `execute_heartbeat/1` and `send_message/2` will fail with
+  `run.failed` until a real implementation is provided.
+  """
+
+  @stub true
+
   @behaviour Canopy.Adapter
+
+  @doc "Returns true — this adapter is a stub placeholder."
+  def stub?, do: @stub
 
   @impl true
   def type, do: "cursor"
@@ -24,12 +42,14 @@ defmodule Canopy.Adapters.Cursor do
   def stop(_), do: :ok
 
   @impl true
-  def execute_heartbeat(_params), do: stub_stream("Cursor")
+  def execute_heartbeat(_params), do: stub_stream()
 
   @impl true
-  def send_message(_session, _message), do: stub_stream("Cursor")
+  def send_message(_session, _message), do: stub_stream()
 
-  defp stub_stream(name) do
+  defp stub_stream do
+    adapter_name = name()
+
     Stream.resource(
       fn -> :once end,
       fn
@@ -37,7 +57,12 @@ defmodule Canopy.Adapters.Cursor do
           {[
              %{
                event_type: "run.failed",
-               data: %{"error" => "#{name} adapter not yet implemented"},
+               data: %{
+                 "error" => "#{adapter_name} adapter is a stub and has not been implemented",
+                 "adapter" => type(),
+                 "hint" =>
+                   "Implement #{adapter_name} by wiring the Cursor background-agent API. See @moduledoc for details."
+               },
                tokens: 0
              }
            ], :done}

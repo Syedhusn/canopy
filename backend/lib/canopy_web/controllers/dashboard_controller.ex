@@ -2,7 +2,7 @@ defmodule CanopyWeb.DashboardController do
   use CanopyWeb, :controller
 
   alias Canopy.Repo
-  alias Canopy.Schemas.{Agent, Session, ActivityEvent, Issue}
+  alias Canopy.Schemas.{Agent, Session, ActivityEvent, Issue, BudgetPolicy}
   import Ecto.Query
 
   def show(conn, _params) do
@@ -80,6 +80,29 @@ defmodule CanopyWeb.DashboardController do
 
     open_issues = Repo.aggregate(from(i in Issue, where: i.status in ["backlog", "in_progress"]), :count)
 
+    # Workspace-level budget policy for budget_remaining_pct. BudgetPolicy tracks
+    # monthly limits only; daily_limit_cents is not yet in the schema.
+    workspace_policy =
+      Repo.one(
+        from bp in BudgetPolicy,
+          where: bp.scope_type == "workspace",
+          limit: 1
+      )
+
+    {monthly_limit_cents, budget_remaining_pct} =
+      case workspace_policy do
+        nil ->
+          {0, 100}
+
+        %BudgetPolicy{monthly_limit_cents: limit} when limit > 0 ->
+          used_pct = Float.round(month_cost / limit * 100, 1)
+          remaining_pct = max(100.0 - used_pct, 0.0)
+          {limit, remaining_pct}
+
+        _ ->
+          {0, 100}
+      end
+
     memory_info = :erlang.memory()
     memory_mb = div(memory_info[:total], 1_048_576)
 
@@ -89,7 +112,7 @@ defmodule CanopyWeb.DashboardController do
         total_agents: total_count,
         live_runs: length(live_runs),
         open_issues: open_issues,
-        budget_remaining_pct: 100
+        budget_remaining_pct: budget_remaining_pct
       },
       live_runs: live_runs,
       recent_activity: recent_activity,
@@ -97,7 +120,10 @@ defmodule CanopyWeb.DashboardController do
         today_cents: today_cost,
         week_cents: week_cost,
         month_cents: month_cost,
+        # daily_limit_cents: BudgetPolicy has no daily_limit_cents column yet
         daily_limit_cents: 0,
+        monthly_limit_cents: monthly_limit_cents,
+        # cache_savings_pct: no cache token tracking in CostEvent yet
         cache_savings_pct: 0
       },
       system_health: %{
@@ -105,6 +131,7 @@ defmodule CanopyWeb.DashboardController do
         primary_gateway: "anthropic",
         gateway_status: "ok",
         memory_mb: memory_mb,
+        # cpu_pct: no system metrics collection yet
         cpu_pct: 0
       }
     })

@@ -2,7 +2,7 @@ defmodule CanopyWeb.AgentController do
   use CanopyWeb, :controller
 
   alias Canopy.Repo
-  alias Canopy.Schemas.{Agent, Session, Schedule}
+  alias Canopy.Schemas.{Agent, ActivityEvent, CostEvent, Session, Schedule}
   import Ecto.Query
 
   def index(conn, params) do
@@ -194,9 +194,46 @@ defmodule CanopyWeb.AgentController do
     })
   end
 
-  def inbox(conn, %{"agent_id" => _id}) do
-    # Inbox populated by budget warnings, issue assignments, etc. — empty for now
-    json(conn, %{messages: []})
+  def inbox(conn, %{"agent_id" => id} = params) do
+    unread_only = params["unread"] == "true"
+    limit = min(String.to_integer(params["limit"] || "50"), 200)
+    offset = String.to_integer(params["offset"] || "0")
+
+    query =
+      from e in ActivityEvent,
+        where: e.agent_id == ^id and e.level == "notification",
+        order_by: [desc: e.inserted_at],
+        limit: ^limit,
+        offset: ^offset
+
+    query =
+      if unread_only do
+        where(
+          query,
+          [e],
+          fragment("COALESCE((?->>'read')::boolean, false) = false", e.metadata)
+        )
+      else
+        query
+      end
+
+    messages = Repo.all(query)
+
+    unread_count =
+      Repo.aggregate(
+        from(e in ActivityEvent,
+          where:
+            e.agent_id == ^id and
+              e.level == "notification" and
+              fragment("COALESCE((?->>'read')::boolean, false) = false", e.metadata)
+        ),
+        :count
+      )
+
+    json(conn, %{
+      messages: Enum.map(messages, &serialize_inbox_message/1),
+      unread_count: unread_count
+    })
   end
 
   def hierarchy(conn, _params) do
@@ -254,10 +291,48 @@ defmodule CanopyWeb.AgentController do
           select: as_.skill_id
       )
 
-    serialize(a) |> Map.put(:skills, skill_ids)
+    today = Date.utc_today()
+    beginning_of_today = DateTime.new!(today, ~T[00:00:00], "Etc/UTC")
+
+    today_stats =
+      Repo.one(
+        from ce in CostEvent,
+          where: ce.agent_id == ^a.id and ce.inserted_at >= ^beginning_of_today,
+          select: %{
+            cost_cents: coalesce(sum(ce.cost_cents), 0),
+            tokens_input: coalesce(sum(ce.tokens_input), 0),
+            tokens_output: coalesce(sum(ce.tokens_output), 0),
+            tokens_cache: coalesce(sum(ce.tokens_cache), 0)
+          }
+      )
+
+    last_active_at =
+      Repo.one(
+        from s in Session,
+          where: s.agent_id == ^a.id,
+          order_by: [desc: s.updated_at],
+          limit: 1,
+          select: s.updated_at
+      )
+
+    serialize(a, today_stats, last_active_at) |> Map.put(:skills, skill_ids)
   end
 
-  defp serialize(%Agent{} = a) do
+  defp serialize(%Agent{} = a, today_stats, last_active_at) do
+    cost_today_cents = if today_stats, do: today_stats.cost_cents, else: 0
+
+    token_usage_today =
+      if today_stats do
+        %{
+          input: today_stats.tokens_input,
+          output: today_stats.tokens_output,
+          cache_read: today_stats.tokens_cache,
+          cache_write: 0
+        }
+      else
+        %{input: 0, output: 0, cache_read: 0, cache_write: 0}
+      end
+
     %{
       id: a.id,
       slug: a.slug,
@@ -277,12 +352,31 @@ defmodule CanopyWeb.AgentController do
       schedule_id: nil,
       budget_policy_id: nil,
       current_task: nil,
-      last_active_at: nil,
-      token_usage_today: %{input: 0, output: 0, cache_read: 0, cache_write: 0},
-      cost_today_cents: 0,
+      last_active_at: last_active_at,
+      token_usage_today: token_usage_today,
+      cost_today_cents: cost_today_cents,
       created_at: a.inserted_at,
       inserted_at: a.inserted_at,
       updated_at: a.updated_at
+    }
+  end
+
+  defp serialize_inbox_message(%ActivityEvent{} = e) do
+    %{
+      id: e.id,
+      type: e.event_type,
+      event_type: e.event_type,
+      message: e.message,
+      title: e.message,
+      body: e.message,
+      level: e.level,
+      metadata: e.metadata,
+      agent_id: e.agent_id,
+      workspace_id: e.workspace_id,
+      read: get_in(e.metadata || %{}, ["read"]) == true,
+      status: if(get_in(e.metadata || %{}, ["read"]) == true, do: "read", else: "unread"),
+      created_at: e.inserted_at,
+      inserted_at: e.inserted_at
     }
   end
 

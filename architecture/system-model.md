@@ -480,6 +480,24 @@ CROSS-CUTTING:
   Adversarial Noise     → Deliberate degradation. Escalate.
 ```
 
+## Optimal System Layer Mapping
+
+The 4-dimension coordinate space IS the **Layer 5 (Data Layer)** addressing scheme of the Optimal System. Every piece of workspace state has a position in (Persistence, Attention, Authorship, Space), and this position determines how the signal is stored, loaded, and routed.
+
+The three system flows map to OS layers:
+
+| Flow | OS Layer | Connection |
+|------|----------|-----------|
+| **Attention Flow** | Layer 4 (Interface) | What surfaces to the agent — progressive disclosure, tiered loading |
+| **Production Flow** | Layer 2 (Signal) + Layer 3 (Composition) | Signals created, encoded, transmitted between agents |
+| **Learning Flow** | Layer 6 (Feedback Loop) | Results fed back, patterns accumulated, knowledge synthesized |
+
+The coordinate space provides what the paper's Optimal System requires but does not specify: a concrete addressing scheme for the data substrate.
+
+See `optimal-system-mapping.md` for the canonical 7-layer mapping.
+
+---
+
 ### Signal Theory Is Not a Dimension
 
 It's tempting to add Signal Theory as a 5th dimension. It's not.

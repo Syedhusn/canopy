@@ -26,6 +26,10 @@ defmodule CanopyWeb.SpawnController do
           %{event: "run.started", session_id: session.id, context: context}
         )
 
+        Task.Supervisor.start_child(Canopy.HeartbeatRunner, fn ->
+          Canopy.Heartbeat.run(agent_id, context: context)
+        end)
+
         conn
         |> put_status(201)
         |> json(%{session: %{id: session.id, status: session.status}})

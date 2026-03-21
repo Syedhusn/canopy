@@ -23,18 +23,23 @@ import {
   updateMockEntry,
   deleteMockEntry,
 } from "./memory";
-import type {
-  CanopyAgent,
-  Schedule,
-  HeartbeatRun,
-  Issue,
-  Skill,
-  Webhook,
-  AlertRule,
-  AgentTemplate,
-  User,
-  ConfigEntry,
-} from "../types";
+import { mockSkills } from "./skills";
+import { mockWebhooks } from "./webhooks";
+import { mockAlertRules } from "./alerts";
+import { mockIntegrations, mockAdapters } from "./integrations";
+import { mockGateways } from "./gateways";
+import { mockUsers } from "./users";
+import { mockConfig } from "./config";
+import { mockTemplates } from "./templates";
+import { mockSecrets } from "./secrets";
+import { mockApprovals } from "./approvals";
+import { mockOrganizations, mockOrgMembers } from "./organizations";
+import { mockLabels } from "./labels";
+import { mockPlugins, mockPluginLogs } from "./plugins";
+import { mockSignals } from "./signals";
+import { mockAudit } from "./audit";
+import { mockLogs } from "./logs";
+import type { CanopyAgent, Schedule, HeartbeatRun, Issue } from "../types";
 
 // Simulated network delay (kept minimal for responsiveness)
 function delay(ms = 30): Promise<void> {
@@ -47,195 +52,6 @@ type RouteHandler = (
   options: RequestInit,
   rawPath: string,
 ) => unknown;
-
-// ── Minimal mock data for stub endpoints ─────────────────────────────────────
-
-const MOCK_SKILLS: Skill[] = [
-  {
-    id: "skill-codegen",
-    name: "Code Generation",
-    description:
-      "Generate, refactor, and review source code across multiple languages.",
-    category: "core",
-    source: "builtin",
-    enabled: true,
-    triggers: ["implement", "write", "refactor", "generate code"],
-    version: "1.0.0",
-    author: "MIOSA",
-    downloads: 0,
-    rating: 0,
-  },
-  {
-    id: "skill-search",
-    name: "Web Search",
-    description:
-      "Search the web for documentation, research papers, and technical references.",
-    category: "utility",
-    source: "builtin",
-    enabled: true,
-    triggers: ["search", "find", "look up", "research"],
-    version: "1.0.0",
-    author: "MIOSA",
-    downloads: 0,
-    rating: 0,
-  },
-  {
-    id: "skill-review",
-    name: "PR Review",
-    description:
-      "Review pull requests for correctness, security, and style adherence.",
-    category: "core",
-    source: "builtin",
-    enabled: true,
-    triggers: ["review", "PR", "pull request", "LGTM"],
-    version: "1.0.0",
-    author: "MIOSA",
-    downloads: 0,
-    rating: 0,
-  },
-  {
-    id: "skill-deploy",
-    name: "Deployment",
-    description:
-      "Deploy services to staging and production via automated pipelines.",
-    category: "automation",
-    source: "builtin",
-    enabled: false,
-    triggers: ["deploy", "release", "rollout", "ship"],
-    version: "1.0.0",
-    author: "MIOSA",
-    downloads: 0,
-    rating: 0,
-  },
-];
-
-const MOCK_WEBHOOKS: Webhook[] = [
-  {
-    id: "wh-1",
-    name: "GitHub Push Events",
-    direction: "incoming",
-    url: "https://canopy.local/webhooks/github",
-    events: ["push", "pull_request"],
-    secret: null,
-    enabled: true,
-    last_triggered_at: new Date(Date.now() - 3_600_000).toISOString(),
-    failure_count: 0,
-    created_at: "2026-03-01T00:00:00Z",
-  },
-];
-
-const MOCK_ALERT_RULES: AlertRule[] = [
-  {
-    id: "ar-1",
-    name: "Agent error rate high",
-    entity_type: "agent",
-    field: "error_rate",
-    operator: "gt",
-    value: "0.05",
-    action: "notify",
-    enabled: true,
-    triggered_count: 2,
-    last_triggered_at: new Date(Date.now() - 86_400_000).toISOString(),
-    created_at: "2026-03-01T00:00:00Z",
-  },
-];
-
-const MOCK_TEMPLATES: AgentTemplate[] = [
-  {
-    id: "tmpl-fullstack",
-    name: "Full-Stack Development Team",
-    description:
-      "A complete dev team setup with orchestrator, frontend, backend, reviewer, and devops agents. Includes code generation, PR review, and deployment skills.",
-    adapter: "osa",
-    model: "claude-opus-4-6",
-    system_prompt: "",
-    skills: ["skill-codegen", "skill-review", "skill-deploy", "skill-search"],
-    config: {
-      agents: {
-        orchestrator: { adapter: "osa", model: "claude-opus-4-6" },
-        frontend: { adapter: "claude-code", model: "claude-sonnet-4-6" },
-        backend: { adapter: "claude-code", model: "claude-sonnet-4-6" },
-        reviewer: { adapter: "claude-code", model: "claude-sonnet-4-6" },
-        devops: { adapter: "bash" },
-      },
-      skills: {
-        code_generation: { enabled: true },
-        pr_review: { enabled: true },
-        deployment: { enabled: false },
-        web_search: { enabled: true },
-      },
-      schedules: {},
-    },
-    category: "development",
-    downloads: 0,
-    created_at: "2026-03-01T00:00:00Z",
-  },
-  {
-    id: "tmpl-research",
-    name: "Research Assistant",
-    description:
-      "A focused research team: one orchestrator coordinating a researcher and a writer. Optimised for document synthesis, literature review, and report generation.",
-    adapter: "osa",
-    model: "claude-opus-4-6",
-    system_prompt: "",
-    skills: ["skill-search"],
-    config: {
-      agents: {
-        orchestrator: { adapter: "osa", model: "claude-opus-4-6" },
-        researcher: { adapter: "claude-code", model: "claude-sonnet-4-6" },
-        writer: { adapter: "claude-code", model: "claude-sonnet-4-6" },
-      },
-      skills: {
-        web_search: { enabled: true },
-      },
-      schedules: {},
-    },
-    category: "research",
-    downloads: 0,
-    created_at: "2026-03-01T00:00:00Z",
-  },
-];
-
-const MOCK_USERS: User[] = [
-  {
-    id: "user-admin",
-    email: "admin@canopy.dev",
-    name: "Roberto Luna",
-    role: "admin",
-    created_at: "2026-01-01T00:00:00Z",
-  },
-  {
-    id: "user-dev",
-    email: "dev@canopy.dev",
-    name: "Dev User",
-    role: "member",
-    created_at: "2026-01-01T00:00:00Z",
-  },
-];
-
-const MOCK_CONFIG: ConfigEntry[] = [
-  {
-    key: "llm.default_model",
-    value: "claude-sonnet-4-6",
-    type: "string",
-    description: "Default LLM model for new agents",
-    editable: true,
-  },
-  {
-    key: "budget.default_daily_cents",
-    value: 500,
-    type: "number",
-    description: "Default daily budget for new agents (cents)",
-    editable: true,
-  },
-  {
-    key: "system.log_level",
-    value: "info",
-    type: "string",
-    description: "System log level",
-    editable: true,
-  },
-];
 
 // ── Route table ───────────────────────────────────────────────────────────────
 
@@ -271,7 +87,6 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
       const id = path.split("/")[2];
       const method = (options.method ?? "GET").toUpperCase();
       if (method === "DELETE") return undefined;
-      // PATCH: merge body into agent (shallow mock)
       if (method === "PATCH" && options.body) {
         const base = mockAgentById(id);
         try {
@@ -293,7 +108,6 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
     pattern: /^\/agents$/,
     handler: (_path, options) => {
       if ((options.method ?? "GET").toUpperCase() === "POST") {
-        // Return a minimal newly-created agent
         const agents = mockAgents();
         const base = agents[0];
         try {
@@ -598,7 +412,7 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
     handler: () => ({ models: mockCosts().byModel }),
   },
 
-  // ── Budgets — client calls /budgets and /budgets/incidents ─────────────────────
+  // ── Budgets ────────────────────────────────────────────────────────────────────
   {
     pattern: /^\/budgets\/incidents$/,
     handler: () => ({ incidents: mockCosts().incidents }),
@@ -618,7 +432,6 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
     handler: (path, options) => {
       const parts = path.split("/");
       const itemId = parts[2];
-      // Determine actionId from URL or body
       let actionId = parts[4] ?? "ack";
       if (!parts[4] && options.body) {
         try {
@@ -643,13 +456,13 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
   // ── Skills ────────────────────────────────────────────────────────────────────
   {
     pattern: /^\/skills\/([^/]+)\/toggle$/,
-    handler: (path): Skill => {
+    handler: (path) => {
       const id = path.split("/")[2];
-      const skill = MOCK_SKILLS.find((s) => s.id === id) ?? MOCK_SKILLS[0];
+      const skill = mockSkills().find((s) => s.id === id) ?? mockSkills()[0];
       return { ...skill, enabled: !skill.enabled };
     },
   },
-  { pattern: /^\/skills$/, handler: () => ({ skills: MOCK_SKILLS }) },
+  { pattern: /^\/skills$/, handler: () => ({ skills: mockSkills() }) },
 
   // ── Webhooks ──────────────────────────────────────────────────────────────────
   {
@@ -658,16 +471,16 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
     handler: (_path, options) => {
       if ((options.method ?? "GET").toUpperCase() === "DELETE")
         return undefined;
-      return MOCK_WEBHOOKS[0];
+      return mockWebhooks()[0];
     },
   },
   {
     pattern: /^\/webhooks$/,
     handler: (_path, options) => {
       if ((options.method ?? "GET").toUpperCase() === "POST") {
-        return { ...MOCK_WEBHOOKS[0], id: `wh-new-${Date.now()}` } as Webhook;
+        return { ...mockWebhooks()[0], id: `wh-new-${Date.now()}` };
       }
-      return { webhooks: MOCK_WEBHOOKS };
+      return { webhooks: mockWebhooks() };
     },
   },
 
@@ -676,161 +489,29 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
     pattern: /^\/alerts\/rules$/,
     handler: (_path, options) => {
       if ((options.method ?? "GET").toUpperCase() === "POST") {
-        return {
-          ...MOCK_ALERT_RULES[0],
-          id: `ar-new-${Date.now()}`,
-        } as AlertRule;
+        return { ...mockAlertRules()[0], id: `ar-new-${Date.now()}` };
       }
-      return { rules: MOCK_ALERT_RULES };
+      return { rules: mockAlertRules() };
     },
   },
-  // Catch-all /alerts for backward compat
-  { pattern: /^\/alerts$/, handler: () => ({ rules: MOCK_ALERT_RULES }) },
+  { pattern: /^\/alerts$/, handler: () => ({ rules: mockAlertRules() }) },
 
   // ── Integrations ──────────────────────────────────────────────────────────────
   {
     pattern: /^\/integrations$/,
-    handler: () => ({
-      integrations: [
-        {
-          id: "int-anthropic",
-          name: "Anthropic",
-          category: "auth",
-          provider: "anthropic",
-          icon_url: null,
-          status: "connected",
-          config: { api_key_set: true, default_model: "claude-opus-4-6" },
-          last_sync_at: "2026-03-21T08:00:00Z",
-          created_at: "2026-03-01T00:00:00Z",
-        },
-        {
-          id: "int-github",
-          name: "GitHub",
-          category: "version_control",
-          provider: "github",
-          icon_url: null,
-          status: "connected",
-          config: { org: "Miosa-osa", default_branch: "main" },
-          last_sync_at: "2026-03-21T07:45:00Z",
-          created_at: "2026-03-01T00:00:00Z",
-        },
-        {
-          id: "int-slack",
-          name: "Slack",
-          category: "communication",
-          provider: "slack",
-          icon_url: null,
-          status: "connected",
-          config: { workspace: "miosa", default_channel: "#agents" },
-          last_sync_at: "2026-03-21T08:10:00Z",
-          created_at: "2026-03-05T00:00:00Z",
-        },
-        {
-          id: "int-linear",
-          name: "Linear",
-          category: "custom",
-          provider: "linear",
-          icon_url: null,
-          status: "connected",
-          config: { team_id: "MIOSA", sync_issues: true },
-          last_sync_at: "2026-03-21T06:00:00Z",
-          created_at: "2026-03-07T00:00:00Z",
-        },
-        {
-          id: "int-notion",
-          name: "Notion",
-          category: "storage",
-          provider: "notion",
-          icon_url: null,
-          status: "disconnected",
-          config: {},
-          last_sync_at: null,
-          created_at: "2026-03-10T00:00:00Z",
-        },
-        {
-          id: "int-vercel",
-          name: "Vercel",
-          category: "ci_cd",
-          provider: "vercel",
-          icon_url: null,
-          status: "connected",
-          config: { team_slug: "miosa", auto_deploy: true },
-          last_sync_at: "2026-03-21T05:30:00Z",
-          created_at: "2026-03-03T00:00:00Z",
-        },
-      ],
-    }),
+    handler: () => ({ integrations: mockIntegrations() }),
   },
 
   // ── Adapters ──────────────────────────────────────────────────────────────────
   {
     pattern: /^\/adapters$/,
-    handler: () => ({
-      adapters: [
-        {
-          id: "osa",
-          type: "osa",
-          name: "OSA Runtime",
-          description: "Native OSA Elixir agent runtime",
-          status: "available",
-          config: {},
-          agent_count: 1,
-        },
-        {
-          id: "claude_code",
-          type: "claude_code",
-          name: "Claude Code",
-          description: "Claude Code CLI subprocess",
-          status: "available",
-          config: {},
-          agent_count: 3,
-        },
-        {
-          id: "bash",
-          type: "bash",
-          name: "Bash",
-          description: "Raw shell execution",
-          status: "available",
-          config: {},
-          agent_count: 1,
-        },
-        {
-          id: "http",
-          type: "http",
-          name: "HTTP",
-          description: "External HTTP service",
-          status: "available",
-          config: {},
-          agent_count: 1,
-        },
-      ],
-    }),
+    handler: () => ({ adapters: mockAdapters() }),
   },
 
   // ── Gateways ──────────────────────────────────────────────────────────────────
   {
     pattern: /^\/gateways$/,
-    handler: () => ({
-      gateways: [
-        {
-          id: "gw-1",
-          name: "Anthropic",
-          provider: "anthropic",
-          endpoint: "https://api.anthropic.com",
-          api_key_set: true,
-          is_primary: true,
-          status: "healthy",
-          latency_ms: 142,
-          last_probe_at: new Date(Date.now() - 60_000).toISOString(),
-          models: [
-            "claude-sonnet-4-6",
-            "claude-opus-4-6",
-            "claude-haiku-4-5-20251001",
-          ],
-          created_at: "2026-03-01T00:00:00Z",
-        },
-      ],
-    }),
+    handler: () => ({ gateways: mockGateways() }),
   },
 
   // ── Workspaces ────────────────────────────────────────────────────────────────
@@ -912,13 +593,18 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
   },
 
   // ── Audit ─────────────────────────────────────────────────────────────────────
-  { pattern: /^\/audit/, handler: () => ({ entries: [] }) },
+  {
+    pattern: /^\/audit/,
+    handler: () => ({ entries: mockAudit() }),
+  },
 
   // ── Logs ──────────────────────────────────────────────────────────────────────
-  { pattern: /^\/logs/, handler: () => ({ entries: [] }) },
+  {
+    pattern: /^\/logs/,
+    handler: () => ({ entries: mockLogs() }),
+  },
 
   // ── Memory ────────────────────────────────────────────────────────────────────
-  // GET /memory/search?q=...
   {
     pattern: /^\/memory\/search$/,
     handler: (_path, _options, rawPath) => {
@@ -929,12 +615,10 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
       };
     },
   },
-  // GET /memory/namespaces
   {
     pattern: /^\/memory\/namespaces$/,
     handler: () => ({ namespaces: getMockMemoryNamespaces() }),
   },
-  // GET/PUT/DELETE /memory/:id
   {
     pattern: /^\/memory\/([^/]+)$/,
     handler: (path, options) => {
@@ -959,7 +643,6 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
       return { entry: getMockMemoryById(id) };
     },
   },
-  // GET /memory?q=... + POST /memory
   {
     pattern: /^\/memory$/,
     handler: (_path, options) => {
@@ -971,8 +654,7 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
               ? options.body
               : JSON.stringify(options.body),
           );
-          const entry = createMockEntry(body);
-          return { entry };
+          return { entry: createMockEntry(body) };
         } catch {
           return { entry: null };
         }
@@ -987,9 +669,12 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
   // ── Signals ───────────────────────────────────────────────────────────────────
   {
     pattern: /^\/signals\/feed$/,
-    handler: () => ({ signals: [] }),
+    handler: () => ({ signals: mockSignals() }),
   },
-  { pattern: /^\/signals/, handler: () => ({ signals: [] }) },
+  {
+    pattern: /^\/signals/,
+    handler: () => ({ signals: mockSignals() }),
+  },
 
   // ── Spawn ─────────────────────────────────────────────────────────────────────
   {
@@ -1033,37 +718,31 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
     pattern: /^\/templates\/([^/]+)$/,
     handler: (path) => {
       const id = path.split("/")[2];
-      return MOCK_TEMPLATES.find((t) => t.id === id) ?? MOCK_TEMPLATES[0];
+      return mockTemplates().find((t) => t.id === id) ?? mockTemplates()[0];
     },
   },
-  { pattern: /^\/templates$/, handler: () => ({ templates: MOCK_TEMPLATES }) },
+  { pattern: /^\/templates$/, handler: () => ({ templates: mockTemplates() }) },
 
   // ── Config ────────────────────────────────────────────────────────────────────
-  { pattern: /^\/config/, handler: () => ({ config: MOCK_CONFIG }) },
+  { pattern: /^\/config/, handler: () => ({ config: mockConfig() }) },
 
   // ── Users ─────────────────────────────────────────────────────────────────────
   {
     pattern: /^\/users\/([^/]+)$/,
     handler: (path) => {
       const id = path.split("/")[2];
-      return MOCK_USERS.find((u) => u.id === id) ?? MOCK_USERS[0];
+      return mockUsers().find((u) => u.id === id) ?? mockUsers()[0];
     },
   },
-  { pattern: /^\/users$/, handler: () => ({ users: MOCK_USERS }) },
+  { pattern: /^\/users$/, handler: () => ({ users: mockUsers() }) },
 
   // ── Secrets ──────────────────────────────────────────────────────────────────
   {
     pattern: /^\/secrets\/([^/]+)\/rotate$/,
     handler: (path) => {
       const id = path.split("/")[2];
-      return {
-        id,
-        name: "rotated-secret",
-        provider: "vault",
-        created_at: "2026-03-01T00:00:00Z",
-        last_rotated_at: new Date().toISOString(),
-        expires_at: null,
-      };
+      const secret = mockSecrets().find((s) => s.id === id) ?? mockSecrets()[0];
+      return { ...secret, last_rotated_at: new Date().toISOString() };
     },
   },
   {
@@ -1072,14 +751,7 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
       const id = path.split("/")[2];
       if ((options.method ?? "GET").toUpperCase() === "DELETE")
         return undefined;
-      return {
-        id,
-        name: `secret-${id}`,
-        provider: "vault",
-        created_at: "2026-03-01T00:00:00Z",
-        last_rotated_at: null,
-        expires_at: null,
-      };
+      return mockSecrets().find((s) => s.id === id) ?? mockSecrets()[0];
     },
   },
   {
@@ -1089,32 +761,16 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
         return {
           id: `secret-new-${Date.now()}`,
           name: "new-secret",
-          provider: "vault",
-          created_at: new Date().toISOString(),
+          type: "api_key",
+          description: null,
           last_rotated_at: null,
           expires_at: null,
+          created_by: "user-admin",
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         };
       }
-      return {
-        secrets: [
-          {
-            id: "secret-anthropic",
-            name: "ANTHROPIC_API_KEY",
-            provider: "env",
-            created_at: "2026-01-15T00:00:00Z",
-            last_rotated_at: "2026-03-01T00:00:00Z",
-            expires_at: null,
-          },
-          {
-            id: "secret-github",
-            name: "GITHUB_TOKEN",
-            provider: "env",
-            created_at: "2026-01-15T00:00:00Z",
-            last_rotated_at: null,
-            expires_at: "2026-06-01T00:00:00Z",
-          },
-        ],
-      };
+      return { secrets: mockSecrets() };
     },
   },
 
@@ -1124,14 +780,15 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
     handler: (path) => {
       const id = path.split("/")[2];
       const action = path.split("/")[3];
+      const base =
+        mockApprovals().find((a) => a.id === id) ?? mockApprovals()[0];
       return {
-        id,
-        type: "budget_override",
+        ...base,
         status: action === "approve" ? "approved" : "rejected",
-        requested_by: "agent-orchestrator",
         reviewed_by: "user-admin",
+        reviewer_name: "Roberto Luna",
         reviewed_at: new Date().toISOString(),
-        created_at: "2026-03-20T10:00:00Z",
+        updated_at: new Date().toISOString(),
       };
     },
   },
@@ -1139,17 +796,7 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
     pattern: /^\/approvals\/([^/]+)$/,
     handler: (path) => {
       const id = path.split("/")[2];
-      return {
-        id,
-        type: "budget_override",
-        status: "pending",
-        requested_by: "agent-orchestrator",
-        reason: "Budget limit exceeded for code generation task",
-        context: { agent_id: "agent-orchestrator", amount_cents: 500 },
-        reviewed_by: null,
-        reviewed_at: null,
-        created_at: "2026-03-20T10:00:00Z",
-      };
+      return mockApprovals().find((a) => a.id === id) ?? mockApprovals()[0];
     },
   },
   {
@@ -1158,56 +805,33 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
       if ((options.method ?? "GET").toUpperCase() === "POST") {
         return {
           id: `approval-new-${Date.now()}`,
-          type: "budget_override",
+          title: "New approval request",
+          description: null,
           status: "pending",
-          requested_by: "user-admin",
+          requester_id: "user-admin",
+          requester_name: "Roberto Luna",
+          reviewer_id: null,
+          reviewer_name: null,
+          entity_type: null,
+          entity_id: null,
+          comment: null,
+          expires_at: null,
+          reviewed_at: null,
           created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         };
       }
-      return {
-        approvals: [
-          {
-            id: "approval-1",
-            type: "budget_override",
-            status: "pending",
-            requested_by: "agent-orchestrator",
-            reason:
-              "Daily budget exceeded — requesting $5 override for code review task",
-            context: { agent_id: "agent-orchestrator", amount_cents: 500 },
-            reviewed_by: null,
-            reviewed_at: null,
-            created_at: "2026-03-20T10:00:00Z",
-          },
-          {
-            id: "approval-2",
-            type: "tool_access",
-            status: "approved",
-            requested_by: "agent-researcher",
-            reason: "Requesting web_fetch tool access for market research",
-            context: { agent_id: "agent-researcher", tool: "web_fetch" },
-            reviewed_by: "user-admin",
-            reviewed_at: "2026-03-20T09:30:00Z",
-            created_at: "2026-03-20T09:00:00Z",
-          },
-        ],
-      };
+      return { approvals: mockApprovals() };
     },
   },
 
   // ── Organizations ──────────────────────────────────────────────────────────────
   {
     pattern: /^\/organizations\/([^/]+)\/members$/,
-    handler: () => ({
-      members: [
-        {
-          id: "mem-1",
-          user_id: "user-admin",
-          user_name: "Roberto Luna",
-          role: "owner",
-          joined_at: "2026-01-01T00:00:00Z",
-        },
-      ],
-    }),
+    handler: (path) => {
+      const id = path.split("/")[2];
+      return { members: mockOrgMembers(id) };
+    },
   },
   {
     pattern: /^\/organizations\/([^/]+)$/,
@@ -1215,14 +839,9 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
       const id = path.split("/")[2];
       if ((options.method ?? "GET").toUpperCase() === "DELETE")
         return undefined;
-      return {
-        id,
-        name: "MIOSA",
-        slug: "miosa",
-        plan: "enterprise",
-        member_count: 1,
-        created_at: "2026-01-01T00:00:00Z",
-      };
+      return (
+        mockOrganizations().find((o) => o.id === id) ?? mockOrganizations()[0]
+      );
     },
   },
   {
@@ -1233,33 +852,27 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
           id: `org-new-${Date.now()}`,
           name: "New Org",
           slug: "new-org",
+          description: null,
+          avatar_url: null,
           plan: "free",
           member_count: 1,
+          agent_count: 0,
           created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         };
       }
-      return {
-        organizations: [
-          {
-            id: "org-miosa",
-            name: "MIOSA",
-            slug: "miosa",
-            plan: "enterprise",
-            member_count: 1,
-            created_at: "2026-01-01T00:00:00Z",
-          },
-        ],
-      };
+      return { organizations: mockOrganizations() };
     },
   },
 
   // ── Labels ─────────────────────────────────────────────────────────────────────
   {
     pattern: /^\/labels\/([^/]+)$/,
-    handler: (_path, options) => {
+    handler: (path, options) => {
+      const id = path.split("/")[2];
       if ((options.method ?? "GET").toUpperCase() === "DELETE")
         return undefined;
-      return { id: "label-1", name: "priority", color: "#ef4444" };
+      return mockLabels().find((l) => l.id === id) ?? mockLabels()[0];
     },
   },
   {
@@ -1270,55 +883,23 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
           id: `label-new-${Date.now()}`,
           name: "new-label",
           color: "#3b82f6",
+          description: null,
+          project_id: null,
+          issue_count: 0,
+          created_at: new Date().toISOString(),
         };
       }
-      return {
-        labels: [
-          {
-            id: "label-priority",
-            name: "priority",
-            color: "#ef4444",
-            entity_type: "agent",
-            count: 3,
-          },
-          {
-            id: "label-review",
-            name: "needs-review",
-            color: "#f59e0b",
-            entity_type: "session",
-            count: 5,
-          },
-          {
-            id: "label-prod",
-            name: "production",
-            color: "#10b981",
-            entity_type: "agent",
-            count: 2,
-          },
-        ],
-      };
+      return { labels: mockLabels() };
     },
   },
 
   // ── Plugins ────────────────────────────────────────────────────────────────────
   {
     pattern: /^\/plugins\/([^/]+)\/logs$/,
-    handler: () => ({
-      logs: [
-        {
-          id: "plog-1",
-          level: "info",
-          message: "Plugin initialized",
-          timestamp: new Date(Date.now() - 3600000).toISOString(),
-        },
-        {
-          id: "plog-2",
-          level: "info",
-          message: "Webhook received",
-          timestamp: new Date(Date.now() - 1800000).toISOString(),
-        },
-      ],
-    }),
+    handler: (path) => {
+      const id = path.split("/")[2];
+      return { logs: mockPluginLogs(id) };
+    },
   },
   {
     pattern: /^\/plugins\/([^/]+)$/,
@@ -1326,17 +907,7 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
       const id = path.split("/")[2];
       if ((options.method ?? "GET").toUpperCase() === "DELETE")
         return undefined;
-      return {
-        id,
-        name: "GitHub Integration",
-        slug: "github",
-        version: "1.0.0",
-        status: "active",
-        author: "MIOSA",
-        description: "GitHub webhook processing and PR automation",
-        config: {},
-        installed_at: "2026-03-01T00:00:00Z",
-      };
+      return mockPlugins().find((p) => p.id === id) ?? mockPlugins()[0];
     },
   },
   {
@@ -1346,38 +917,18 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
         return {
           id: `plugin-new-${Date.now()}`,
           name: "New Plugin",
-          slug: "new-plugin",
+          description: "",
           version: "1.0.0",
+          author: "MIOSA",
           status: "inactive",
+          enabled: false,
+          config: {},
+          capabilities: [],
           installed_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         };
       }
-      return {
-        plugins: [
-          {
-            id: "plugin-github",
-            name: "GitHub Integration",
-            slug: "github",
-            version: "1.2.0",
-            status: "active",
-            author: "MIOSA",
-            description: "GitHub webhook processing and PR automation",
-            config: { repo: "miosa/canopy", events: ["push", "pull_request"] },
-            installed_at: "2026-03-01T00:00:00Z",
-          },
-          {
-            id: "plugin-slack",
-            name: "Slack Notifications",
-            slug: "slack",
-            version: "1.0.0",
-            status: "inactive",
-            author: "MIOSA",
-            description: "Send agent notifications to Slack channels",
-            config: {},
-            installed_at: "2026-03-10T00:00:00Z",
-          },
-        ],
-      };
+      return { plugins: mockPlugins() };
     },
   },
 
@@ -1446,7 +997,7 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
     }),
   },
 
-  // ── Session message send (POST /sessions/:id/message) ─────────────────────────
+  // ── Session message send ───────────────────────────────────────────────────────
   {
     pattern: /^\/sessions\/([^/]+)\/message$/,
     handler: (path) => {

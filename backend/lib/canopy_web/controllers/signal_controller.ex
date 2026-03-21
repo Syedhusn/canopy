@@ -52,11 +52,54 @@ defmodule CanopyWeb.SignalController do
     json(conn, %{signals: signals})
   end
 
-  def patterns(conn, _params) do
-    # Placeholder — future: mine ActivityEvent for recurring patterns
+  def patterns(conn, params) do
+    workspace_id = params["workspace_id"]
+    limit = min(String.to_integer(params["limit"] || "10"), 50)
+    since = DateTime.add(DateTime.utc_now(), -7, :day)
+
+    base_query =
+      from e in ActivityEvent,
+        where: e.inserted_at >= ^since
+
+    base_query =
+      if workspace_id,
+        do: where(base_query, [e], e.workspace_id == ^workspace_id),
+        else: base_query
+
+    # Frequency analysis: count occurrences of each event_type in the window
+    type_counts =
+      Repo.all(
+        base_query
+        |> group_by([e], e.event_type)
+        |> select([e], %{event_type: e.event_type, count: count(e.id)})
+        |> order_by([e], desc: count(e.id))
+        |> limit(^limit)
+      )
+
+    total_events = Enum.sum(Enum.map(type_counts, & &1.count))
+
+    patterns =
+      type_counts
+      |> Enum.with_index(1)
+      |> Enum.map(fn {%{event_type: event_type, count: count}, rank} ->
+        frequency =
+          if total_events > 0,
+            do: Float.round(count / total_events * 100, 1),
+            else: 0.0
+
+        %{
+          rank: rank,
+          event_type: event_type,
+          count: count,
+          frequency_pct: frequency,
+          window_days: 7
+        }
+      end)
+
     json(conn, %{
-      patterns: [],
-      note: "Pattern analysis not yet implemented"
+      patterns: patterns,
+      total_events: total_events,
+      window_days: 7
     })
   end
 

@@ -329,6 +329,19 @@ manages knowledge resources independently.
 
 ---
 
+## Interface Layer Position
+
+Progressive disclosure implements **Layer 4 (The Interface)** of the Optimal System — the decoding surface through which information is presented to agents.
+
+- **L0/L1/L2 tiers ARE Shannon constraint enforcement** — token budgets ensure the agent's context window (channel) is not overloaded
+- **`context_tier` field IS autonomy-appropriate information density** — L1 agents get activation context, L5 agents can request full resources
+- **LRU eviction IS Ashby's variety engineering** — when context capacity is finite, the system maintains requisite variety by keeping the most relevant signals and evicting the least relevant
+- The tiered loading model IS bandwidth matching (Encoding Principle 6): match output density to the receiver's decoding capacity
+
+See `architecture/optimal-system-mapping.md` for the full 7-layer mapping.
+
+---
+
 ## See Also
 
 - `architecture/tiered-loading.md` — Tiered loading for knowledge base resources

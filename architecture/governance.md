@@ -316,6 +316,26 @@ skills directory that lets other agents discover who can help with what.
 
 ---
 
+## VSM Position
+
+Governance implements **Layer 7 (The Governance / VSM)** of the Optimal System — Beer's Viable System Model applied to AI agent organizations.
+
+| VSM Subsystem | Governance Implementation |
+|--------------|--------------------------|
+| S5 (Policy) | Board powers, SYSTEM.md identity rules, immutable constraints |
+| S4 (Intelligence) | CEO/orchestrator environmental scanning, strategic adaptation |
+| S3 (Control) | Budget enforcement, approval workflows, resource allocation |
+| S2 (Coordination) | Team coordination protocols, cross-agent scheduling |
+| S1 (Operations) | Individual agent execution within governance constraints |
+
+**Algedonic channel**: The escalation protocol IS the algedonic bypass — when normal channels are too slow or too noisy, critical signals route directly from the point of disturbance to the policy level (board/human operator).
+
+**Autonomy levels**: Approval gates define the boundary between autonomy levels. An agent at Level 4 (Approver) operates independently but requires human gates for consequential actions. The governance spec encodes WHERE those gates fire.
+
+See `architecture/optimal-system-mapping.md` for the full 7-layer mapping.
+
+---
+
 ## Related Docs
 
 - [heartbeat.md](heartbeat.md) — Pause behavior and orphaned run detection

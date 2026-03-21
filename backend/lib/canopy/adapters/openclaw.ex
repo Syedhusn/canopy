@@ -1,6 +1,25 @@
 defmodule Canopy.Adapters.OpenClaw do
-  @moduledoc "OpenClaw WebSocket adapter (P2 — placeholder)."
+  @moduledoc """
+  OpenClaw WebSocket adapter.
+
+  **Status: stub placeholder (P2).**
+
+  This adapter is not yet implemented. To implement it, establish a
+  WebSocket connection to the OpenClaw server: authenticate using the
+  OpenClaw API credentials in `config`, open a persistent session over
+  the WebSocket transport, and stream `run.delta` events matching the
+  `Canopy.Adapter` event shape.
+
+  Calls to `execute_heartbeat/1` and `send_message/2` will fail with
+  `run.failed` until a real implementation is provided.
+  """
+
+  @stub true
+
   @behaviour Canopy.Adapter
+
+  @doc "Returns true — this adapter is a stub placeholder."
+  def stub?, do: @stub
 
   @impl true
   def type, do: "openclaw"
@@ -24,12 +43,14 @@ defmodule Canopy.Adapters.OpenClaw do
   def stop(_), do: :ok
 
   @impl true
-  def execute_heartbeat(_params), do: placeholder_stream()
+  def execute_heartbeat(_params), do: stub_stream()
 
   @impl true
-  def send_message(_session, _message), do: placeholder_stream()
+  def send_message(_session, _message), do: stub_stream()
 
-  defp placeholder_stream do
+  defp stub_stream do
+    adapter_name = name()
+
     Stream.resource(
       fn -> :once end,
       fn
@@ -37,7 +58,12 @@ defmodule Canopy.Adapters.OpenClaw do
           {[
              %{
                event_type: "run.failed",
-               data: %{"error" => "OpenClaw adapter not yet implemented"},
+               data: %{
+                 "error" => "#{adapter_name} adapter is a stub and has not been implemented",
+                 "adapter" => type(),
+                 "hint" =>
+                   "Implement #{adapter_name} by connecting to the OpenClaw WebSocket API. See @moduledoc for details."
+               },
                tokens: 0
              }
            ], :done}
