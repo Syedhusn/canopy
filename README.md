@@ -1,16 +1,13 @@
 # Canopy
 
-> Open-source workspace protocol for AI agent systems.
-> If OSA/ Claude Code is the employee, Canopy is the office.
+![Canopy Command Center](desktop/static/canopy-screenshot.png)
 
-Canopy is a folder structure that turns any AI agent into a specialist. Point Claude,
-Codex, Cursor, Gemini, or any agent at a Canopy workspace — it reads the
-SYSTEM.md, discovers the skills, loads the agents, and starts working. No server.
-No database. No lock-in. Just folders of markdown files.
+> Open-source workspace protocol and command center for AI agent systems.
+> Build autonomous AI companies — not chatbots.
 
-It looks like a bunch of markdown — but underneath it has org charts, budgets,
-governance, heartbeats, tiered context loading, knowledge graphs, and multi-agent
-coordination.
+Canopy is a workspace protocol that turns folders of markdown into fully operational AI companies. Define agents, skills, teams, budgets, and governance in plain files — then connect any AI backend (Claude Code, OSA, Codex, Gemini, Cursor) and watch them work autonomously on heartbeat schedules.
+
+The desktop app gives you a native command center: hire agents from a library of 160+, watch them collaborate in a pixel-art virtual office, monitor costs in real-time, and intervene when needed. One-click setup for OSA, Claude Code, Codex, and more.
 
 **Manage AI systems, not prompts.**
 
@@ -65,65 +62,46 @@ Every design decision traces to one of four governing principles: **Shannon**
 
 ---
 
-## The Command Center: OSA
+## The Command Center
 
-Canopy is the protocol. **OSA** (Optimal System Agent) is the visual command center.
+Canopy is the protocol. The **Command Center** is the native desktop app (SvelteKit 2 + Tauri 2).
 
-While Canopy works perfectly from the terminal, OSA gives you a GUI to manage
-everything — think of it as the control tower for your agent fleet:
-
-- **Workspace Dashboard** — See all your Canopy workspaces in one view. Status,
-  active agents, budget burn, recent activity. Click into any workspace to inspect.
-- **Org Chart** — Visual hierarchy of your agent team. Who reports to whom,
-  current assignments, workload distribution. Drag to reassign. Click to inspect.
-- **Agent Terminal** — Live agent sessions. Watch agents work in real-time,
-  intervene when needed, approve decisions inline. Multiple terminals side by side.
-- **Project Board** — Initiatives → Projects → Milestones → Issues. Kanban or
-  timeline view. Auto-populated from workspace task files.
-- **Budget Console** — Token spend, dollar costs, per-workspace and per-agent
-  breakdowns. Alerts, forecasts, hard ceiling controls.
-- **Skill Library** — Browse, install, and configure skills across workspaces.
-  Preview skill definitions, test runs, version history.
-- **App Integrations** — Connect workspaces to external tools (CRM, email, Slack,
-  calendars, databases). Visual configuration, credential management, webhook setup.
-- **Marketplace** — Browse community workspaces, agent templates, and skill packs.
-  One-click install into any workspace.
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  OSA Command Center                                     ▣ ▤ ✕  │
-├──────────┬──────────────────────────────────────────────────────┤
-│          │  ┌─ sales-engine ──────────────────────────────────┐ │
-│ SPACES   │  │  5 agents active  │  $127/$500 budget          │ │
-│          │  │  12 tasks open    │  3 awaiting approval       │ │
-│ ● Sales  │  └────────────────────────────────────────────────┘ │
-│ ○ Dev    │                                                     │
-│ ○ Content│  Org Chart          │  Live Terminals               │
-│ ○ CogOS  │  ┌──────────┐      │  ┌──────────────────────────┐ │
-│          │  │ Director  │      │  │ closer > /qualify ACME   │ │
-│ AGENTS   │  ├────┬─────┤      │  │ Running MEDDPICC...      │ │
-│ 20 total │  │Close│Prosp│      │  │ Score: 7.2/10            │ │
-│ 16 active│  └────┴─────┘      │  │ > Recommending demo call │ │
-│          │                     │  └──────────────────────────┘ │
-│ BUDGET   │  Recent Activity                                    │
-│ $340/$2K │  14:32 closer qualified ACME Corp (7.2)             │
-│ ████░░░░ │  14:28 prospector found 3 new ICP matches           │
-│          │  14:15 director approved Q2 pipeline strategy        │
-├──────────┴──────────────────────────────────────────────────────┤
-│  Budget ▸ $340 / $2,000  │  Tasks ▸ 12 open  │  Approvals ▸ 3 │
-└─────────────────────────────────────────────────────────────────┘
+```bash
+cd desktop && npm install && npm run tauri:dev
 ```
 
-**OSA is open source too.** The CLI works standalone. The GUI is for people who want
-to see their agent empire at a glance. Both read the same Canopy workspace files.
+What you get:
+
+- **Dashboard** — KPIs, active agents, budget burn, recent activity across all workspaces
+- **Virtual Office** — Pixel-art view of your agent team working in real-time (screenshot above)
+- **Agent Roster** — Hire from 160+ agents across 13 categories, or define your own
+- **Sessions** — Live streaming chat with agents, tool call inspection, delegation tracking
+- **Library** — Browse agents, skills, operations, and templates. Install with one click
+- **Cost Console** — Token spend, per-agent breakdowns, anomaly alerts, budget enforcement
+- **Integrations** — Auto-detect and setup adapters (OSA, Claude Code, Codex, JidoClaw, etc.)
+- **Onboarding** — First-run wizard: pick provider, select adapter, configure workspace, launch
+
+### Supported Adapters
+
+| Adapter | Install |
+|---------|---------|
+| **OSA** | `curl -fsSL https://raw.githubusercontent.com/Miosa-osa/OSA/main/install.sh \| bash` |
+| **Claude Code** | `npm install -g @anthropic-ai/claude-code` |
+| **Codex** | `npm install -g @openai/codex` |
+| **JidoClaw** | `curl -fsSL https://raw.githubusercontent.com/robertohluna/jido_claw/main/install.sh \| bash` |
+| **OpenClaw** | `npm install -g openclaw` |
+| **Hermes** | `cargo install hermes-agent` |
+| **Bash / HTTP** | Built-in |
+
+The app auto-detects installed adapters and provides one-click setup wizards. Provider credentials are stored in the OS keychain via Tauri's secure store.
 
 Want just the protocol? Use Canopy with any terminal agent.
-Want the full experience? Use OSA for the visual layer + Canopy for the workspace.
+Want the full experience? Use the Command Center for the visual layer.
 Want managed infrastructure? Use [MIOSA](#canopy--miosa) for VMs + scaling + marketplace.
 
 ```
 Canopy (protocol)  →  Any agent reads it. Free. MIT license.
-OSA (GUI)          →  Visual command center. Free. Open source.
+Command Center     →  Native desktop app. Free. Open source.
 MIOSA (platform)   →  Managed VMs, marketplace, enterprise. Paid.
 ```
 

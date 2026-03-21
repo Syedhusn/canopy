@@ -1,10 +1,12 @@
 # Canopy Command Center
 
-![Canopy Command Center — Virtual Office](static/canopy-screenshot.png)
+<p align="center">
+  <img src="static/canopy-screenshot.png" alt="Canopy Command Center — Virtual Office" width="100%">
+</p>
 
-Desktop app for managing AI agent teams. Built with SvelteKit 2 + Tauri 2.
+Native desktop command center for AI agent teams. Hire agents, watch them work in a virtual office, monitor costs, and manage everything from one app.
 
-Canopy is the control plane for [OSA](https://github.com/Miosa-osa/OSA) (Optimal System Agent) and other AI adapters. It gives you a native desktop app to hire agents, manage sessions, monitor costs, and watch your team work in a pixel-art virtual office.
+Built with SvelteKit 2 + Tauri 2. Connects to [OSA](https://github.com/Miosa-osa/OSA), Claude Code, Codex, JidoClaw, and other AI adapters. Works offline with mock data — no backend required to start.
 
 ## Quick Start
 
