@@ -14,18 +14,22 @@
   const ICON_TRIANGLE  = 'M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4m0 4h.01';
   const ICON_CURRENCY  = 'M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6';
 
+  const kpis = $derived(dashboardStore.kpis);
+
   const activeAgentsTrend = $derived(
-    dashboardStore.kpis.active_agents > dashboardStore.kpis.total_agents / 2
-      ? ('up' as const)
-      : ('down' as const)
+    kpis === null || kpis.total_agents === 0
+      ? ('flat' as const)
+      : kpis.active_agents > kpis.total_agents / 2
+        ? ('up' as const)
+        : ('down' as const)
   );
 
   const liveRunsTrend = $derived(
-    dashboardStore.kpis.live_runs > 0 ? ('up' as const) : ('flat' as const)
+    kpis !== null && kpis.live_runs > 0 ? ('up' as const) : ('flat' as const)
   );
 
   const budgetTrend = $derived(
-    dashboardStore.kpis.budget_remaining_pct < 50 ? ('down' as const) : ('flat' as const)
+    kpis !== null && kpis.budget_remaining_pct < 50 ? ('down' as const) : ('flat' as const)
   );
 </script>
 
@@ -34,28 +38,32 @@
     {#each { length: 4 } as _, i (i)}
       <div class="kg-skeleton" aria-hidden="true"></div>
     {/each}
+  {:else if kpis === null}
+    <div class="kg-error" role="alert" aria-live="assertive">
+      {dashboardStore.error ?? 'Failed to load metrics'}
+    </div>
   {:else}
     <MetricCard
       label="Active Agents"
-      value={dashboardStore.kpis.active_agents}
-      subtitle="of {dashboardStore.kpis.total_agents} total"
+      value={kpis.active_agents}
+      subtitle="of {kpis.total_agents} total"
       trend={activeAgentsTrend}
       icon={ICON_USERS}
     />
     <MetricCard
       label="Live Runs"
-      value={dashboardStore.kpis.live_runs}
+      value={kpis.live_runs}
       trend={liveRunsTrend}
       icon={ICON_PLAY}
     />
     <MetricCard
       label="Open Issues"
-      value={dashboardStore.kpis.open_issues}
+      value={kpis.open_issues}
       icon={ICON_TRIANGLE}
     />
     <MetricCard
       label="Budget Remaining"
-      value="{dashboardStore.kpis.budget_remaining_pct}%"
+      value="{kpis.budget_remaining_pct}%"
       trend={budgetTrend}
       icon={ICON_CURRENCY}
     />
@@ -90,5 +98,17 @@
 
   @media (prefers-reduced-motion: reduce) {
     .kg-skeleton { animation: none; }
+  }
+
+  .kg-error {
+    grid-column: 1 / -1;
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--accent-danger, #ef4444);
+    background: color-mix(in srgb, var(--accent-danger, #ef4444) 10%, transparent);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: var(--accent-danger, #ef4444);
+    text-align: center;
   }
 </style>

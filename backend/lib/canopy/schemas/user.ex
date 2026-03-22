@@ -24,11 +24,20 @@ defmodule Canopy.Schemas.User do
     user
     |> cast(attrs, [:name, :email, :password, :role, :provider])
     |> validate_required([:name, :email])
+    |> maybe_require_password()
     |> validate_format(:email, ~r/@/)
+    |> validate_length(:password, min: 8, message: "must be at least 8 characters")
     |> validate_inclusion(:role, ~w(admin member viewer))
     |> unique_constraint(:email)
     |> hash_password()
   end
+
+  # Require password on insert (new struct has no id); allow updates without it
+  defp maybe_require_password(%{data: %{id: nil}} = changeset) do
+    validate_required(changeset, [:password])
+  end
+
+  defp maybe_require_password(changeset), do: changeset
 
   defp hash_password(%{valid?: true, changes: %{password: password}} = changeset) do
     put_change(changeset, :password_hash, Bcrypt.hash_pwd_salt(password))

@@ -2,67 +2,63 @@
   import { goto } from '$app/navigation';
   import { browser } from '$app/environment';
   import { onMount } from 'svelte';
-  import { initializeAuth, getToken, isMockEnabled, workspaces, agents } from '$api/client';
+  import { initializeAuth, getToken, isMockEnabled, isFirstRun } from '$api/client';
 
   /**
-   * Determine whether onboarding has already been completed.
+   * Determine where to send the user after auth initializes.
    *
-   * Priority order:
-   * 1. Backend is reachable AND caller has a valid auth token → backend has
-   *    real data; mark onboarding done and go straight to /app.
-   * 2. Backend is reachable AND workspaces + agents exist (token-less probe
-   *    path, e.g. public API) → same result.
-   * 3. Fall back to localStorage flags (legacy / offline / mock mode).
+   * Decision tree:
+   *
+   *  1. initializeAuth() — probes /health, reads /auth/status (_firstRun),
+   *     restores saved token, attempts dev auto-login if VITE_DEV_EMAIL set.
+   *
+   *  2. Backend unreachable (isMockEnabled):
+   *       → /onboarding   (offline / mock setup flow)
+   *
+   *  3. Backend reachable, no users yet (_firstRun = true):
+   *       → /auth         (show registration form)
+   *
+   *  4. Backend reachable, users exist, but no valid token:
+   *       → /auth         (show login form)
+   *
+   *  5. Backend reachable, valid token, onboarding not complete:
+   *       → /onboarding
+   *
+   *  6. Backend reachable, valid token, onboarding complete:
+   *       → /app
    */
-  async function resolveDestination(): Promise<'/app' | '/onboarding'> {
-    // Run auth probe: checks health, restores saved token, attempts dev login.
+  async function resolveDestination(): Promise<'/app' | '/onboarding' | '/auth'> {
     await initializeAuth();
 
-    // If we ended up with a valid token the backend is live and the user is
-    // already authenticated — no need to re-onboard regardless of localStorage.
-    if (!isMockEnabled() && getToken()) {
-      // Persist both keys so the layout guard also short-circuits.
-      localStorage.setItem('canopy-onboarding-complete', 'true');
-      localStorage.setItem(
-        'canopy-onboarding',
-        JSON.stringify({ completed: true }),
-      );
-      return '/app';
+    // Case 2 — offline / backend down
+    if (isMockEnabled()) {
+      return '/onboarding';
     }
 
-    // Backend reachable but no auth token yet — check whether workspaces with
-    // agents exist (handles setups that don't use token-based auth).
-    if (!isMockEnabled()) {
-      try {
-        const wsList = await workspaces.list();
-        if (wsList.length > 0) {
-          // Check if any workspace has agents (scoped to first workspace)
-          const agentList = await agents.list(wsList[0].id);
-          if (agentList.length > 0) {
-            localStorage.setItem('canopy-onboarding-complete', 'true');
-            localStorage.setItem(
-              'canopy-onboarding',
-              JSON.stringify({ completed: true }),
-            );
-            return '/app';
-          }
-        }
-      } catch {
-        // Non-fatal: fall through to localStorage check
-      }
+    // Case 3 — first install, no users in DB yet
+    if (isFirstRun()) {
+      return '/auth';
     }
 
-    // Offline / mock mode — honour existing localStorage flags.
-    const raw = localStorage.getItem('canopy-onboarding');
-    const completed = raw
-      ? (JSON.parse(raw) as { completed?: boolean }).completed
-      : false;
-    if (completed) return '/app';
+    // Case 4 — users exist but no valid session token
+    if (!getToken()) {
+      return '/auth';
+    }
 
-    const legacy = localStorage.getItem('canopy-onboarding-complete');
-    if (legacy === 'true') return '/app';
+    // Cases 5 & 6 — authenticated; check onboarding state
+    return isOnboardingComplete() ? '/app' : '/onboarding';
+  }
 
-    return '/onboarding';
+  /** Check both localStorage keys used for onboarding state. */
+  function isOnboardingComplete(): boolean {
+    if (typeof localStorage === 'undefined') return false;
+    if (localStorage.getItem('canopy-onboarding-complete') === 'true') return true;
+    try {
+      const raw = localStorage.getItem('canopy-onboarding');
+      return raw ? (JSON.parse(raw) as { completed?: boolean }).completed === true : false;
+    } catch {
+      return false;
+    }
   }
 
   onMount(async () => {

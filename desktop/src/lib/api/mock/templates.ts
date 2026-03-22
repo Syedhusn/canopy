@@ -1,56 +1,90 @@
+// src/lib/api/mock/templates.ts
+// Mock AgentTemplate records served by the /templates endpoint.
+//
+// IMPORTANT: each `id` here MUST match a bundled module at:
+//   src/lib/api/mock/library/templates/{id}.ts
+//
+// The deploy service calls loadBundledTemplate(id) — if the id does not match
+// a file, the deploy silently creates an empty workspace. Keep this list in
+// sync with the files in the templates/ directory.
+
 import type { AgentTemplate } from "../types";
 
 const MOCK_TEMPLATES: AgentTemplate[] = [
   {
-    id: "tmpl-fullstack",
-    name: "Full-Stack Development Team",
+    id: "micro",
+    name: "Micro Agent",
     description:
-      "A complete dev team setup with orchestrator, frontend, backend, reviewer, and devops agents. Includes code generation, PR review, and deployment skills.",
-    adapter: "osa",
-    model: "claude-opus-4-6",
+      "Single-purpose agent for focused tasks. Minimal footprint, maximum precision.",
+    adapter: "claude_code",
+    model: "claude-sonnet-4-20250514",
     system_prompt: "",
-    skills: ["skill-codegen", "skill-review", "skill-deploy", "skill-search"],
-    config: {
-      agents: {
-        orchestrator: { adapter: "osa", model: "claude-opus-4-6" },
-        frontend: { adapter: "claude_code", model: "claude-sonnet-4-6" },
-        backend: { adapter: "claude_code", model: "claude-sonnet-4-6" },
-        reviewer: { adapter: "claude_code", model: "claude-sonnet-4-6" },
-        devops: { adapter: "bash" },
-      },
-      skills: {
-        code_generation: { enabled: true },
-        pr_review: { enabled: true },
-        deployment: { enabled: false },
-        web_search: { enabled: true },
-      },
-      schedules: {},
-    },
-    category: "development",
+    skills: [],
+    config: {},
+    category: "starter",
     downloads: 0,
     created_at: "2026-03-01T00:00:00Z",
   },
   {
-    id: "tmpl-research",
-    name: "Research Assistant",
+    id: "small",
+    name: "Small Team",
     description:
-      "A focused research team: one orchestrator coordinating a researcher and a writer. Optimised for document synthesis, literature review, and report generation.",
-    adapter: "osa",
-    model: "claude-opus-4-6",
+      "Focused team of 3 agents with specialized roles: team lead, specialist, and executor.",
+    adapter: "claude_code",
+    model: "claude-sonnet-4-20250514",
     system_prompt: "",
-    skills: ["skill-search"],
-    config: {
-      agents: {
-        orchestrator: { adapter: "osa", model: "claude-opus-4-6" },
-        researcher: { adapter: "claude_code", model: "claude-sonnet-4-6" },
-        writer: { adapter: "claude_code", model: "claude-sonnet-4-6" },
-      },
-      skills: {
-        web_search: { enabled: true },
-      },
-      schedules: {},
-    },
-    category: "research",
+    skills: ["analysis", "research", "execution"],
+    config: {},
+    category: "team",
+    downloads: 0,
+    created_at: "2026-03-01T00:00:00Z",
+  },
+  {
+    id: "full",
+    name: "Full Operation",
+    description:
+      "Complete department with 6 agents: director, operations manager, analyst, researcher, writer, and reviewer.",
+    adapter: "claude_code",
+    model: "claude-sonnet-4-20250514",
+    system_prompt: "",
+    skills: ["planning", "analysis", "research", "writing", "review"],
+    config: {},
+    category: "department",
+    downloads: 0,
+    created_at: "2026-03-01T00:00:00Z",
+  },
+  {
+    id: "enterprise",
+    name: "Enterprise",
+    description:
+      "Multi-team organisation with 15 agents across C-suite, engineering, product, marketing, and compliance.",
+    adapter: "osa",
+    model: "claude-opus-4-20250514",
+    system_prompt: "",
+    skills: [
+      "strategy",
+      "governance",
+      "code-generation",
+      "analysis",
+      "marketing",
+      "compliance",
+    ],
+    config: {},
+    category: "enterprise",
+    downloads: 0,
+    created_at: "2026-03-01T00:00:00Z",
+  },
+  {
+    id: "growth-os",
+    name: "Growth OS",
+    description:
+      "Creator business growth operating system — 36 agents across 6 modes covering research, content, outreach, sales, and analytics.",
+    adapter: "osa",
+    model: "claude-opus-4-20250514",
+    system_prompt: "",
+    skills: ["research", "content", "outreach", "sales", "analytics", "seo"],
+    config: {},
+    category: "growth",
     downloads: 0,
     created_at: "2026-03-01T00:00:00Z",
   },

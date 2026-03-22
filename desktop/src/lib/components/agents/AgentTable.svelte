@@ -83,7 +83,7 @@
     switch (adapter) {
       case 'osa':         return 'accent';
       case 'claude_code': return 'info';
-      case 'cursor':      return 'success';
+      case 'bash':        return 'success';
       default:            return 'default';
     }
   }

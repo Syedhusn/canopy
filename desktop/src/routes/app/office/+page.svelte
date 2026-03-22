@@ -1,6 +1,5 @@
 <!-- src/routes/app/office/+page.svelte -->
 <script lang="ts">
-  import { onMount } from 'svelte';
   import PageShell from '$lib/components/layout/PageShell.svelte';
   import VirtualOffice from '$lib/components/office/VirtualOffice.svelte';
   import LoadingSpinner from '$lib/components/shared/LoadingSpinner.svelte';
@@ -9,8 +8,10 @@
 
   let viewMode = $state<'2d' | '3d'>('2d');
 
-  onMount(() => {
-    void agentsStore.fetchAgents(workspaceStore.activeWorkspaceId ?? undefined);
+  // Re-fetch whenever the active workspace changes (mirrors /app/agents pattern)
+  $effect(() => {
+    const wsId = workspaceStore.activeWorkspaceId ?? undefined;
+    void agentsStore.fetchAgents(wsId);
   });
 </script>
 

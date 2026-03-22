@@ -2,6 +2,7 @@
 import { browser } from "$app/environment";
 import { isTauri } from "$lib/utils/platform";
 import type { Workspace as BackendWorkspace } from "$api/types";
+import { toastStore } from "./toasts.svelte";
 
 /**
  * Extract the `description` field from YAML frontmatter in a markdown file.
@@ -111,6 +112,10 @@ class WorkspaceStore {
       this.lastScan = result;
       return result;
     } catch {
+      toastStore.warning(
+        "Workspace scan failed",
+        `.canopy directory not found at ${path}`,
+      );
       return null;
     }
   }

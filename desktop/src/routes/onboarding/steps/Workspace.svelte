@@ -13,8 +13,10 @@
     workspaceDesc = $bindable(),
   }: Props = $props();
 
-  // Auto-fill workspace name from path
-  let lastAutoPath = '';
+  // Auto-fill workspace name from path only when the path actually changes
+  // (not on the initial render). Using $state so the guard persists across
+  // reactive re-runs within the same component instance.
+  let lastAutoPath = $state(workspacePath);
   $effect(() => {
     const p = workspacePath;
     if (p === lastAutoPath) return;

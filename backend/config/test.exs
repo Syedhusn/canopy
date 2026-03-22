@@ -5,10 +5,13 @@ import Config
 # The MIX_TEST_PARTITION environment variable can be used
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
+# NOTE: The username must match your local PostgreSQL role.
+# Change "rhl" to your OS username or the role you created for this project.
+# Example: username: System.get_env("PGUSER", "postgres")
 config :canopy, Canopy.Repo,
-  username: "rhl",
-  password: "",
-  hostname: "localhost",
+  username: System.get_env("PGUSER", "postgres"),
+  password: System.get_env("PGPASSWORD", ""),
+  hostname: System.get_env("PGHOST", "localhost"),
   database: "canopy_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2

@@ -103,30 +103,32 @@
         {goal.issue_count} issues
       </span>
     {/if}
-    {#if goal.assignee_id}
-      <span class="gc-meta-item gc-assignee" aria-label="Assigned">
-        <span class="gc-avatar" aria-hidden="true">A</span>
-      </span>
-    {/if}
-
-    <button
-      class="gc-decompose-btn"
-      class:gc-decompose-btn--loading={decomposing}
-      onclick={handleDecompose}
-      disabled={decomposing}
-      aria-label="Decompose goal into issues"
-      type="button"
-    >
-      {#if decomposing}
-        <span class="gc-decompose-spinner" aria-hidden="true"></span>
-        Decomposing…
-      {:else}
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-        </svg>
-        Decompose
+    <div class="gc-footer-right">
+      {#if goal.assignee_id}
+        <span class="gc-meta-item gc-assignee" aria-label="Assigned">
+          <span class="gc-avatar" aria-hidden="true">A</span>
+        </span>
       {/if}
-    </button>
+
+      <button
+        class="gc-decompose-btn"
+        class:gc-decompose-btn--loading={decomposing}
+        onclick={handleDecompose}
+        disabled={decomposing}
+        aria-label="Decompose goal into issues"
+        type="button"
+      >
+        {#if decomposing}
+          <span class="gc-decompose-spinner" aria-hidden="true"></span>
+          Decomposing…
+        {:else}
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+          </svg>
+          Decompose
+        {/if}
+      </button>
+    </div>
   </footer>
 </article>
 
@@ -230,7 +232,15 @@
     color: var(--text-tertiary);
   }
 
-  .gc-assignee { margin-left: auto; }
+  .gc-footer-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .gc-assignee { margin-left: 0; }
 
   .gc-avatar {
     width: 18px;
@@ -249,7 +259,6 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    margin-left: auto;
     height: 22px;
     padding: 0 8px;
     background: transparent;

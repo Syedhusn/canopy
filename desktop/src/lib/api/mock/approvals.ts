@@ -27,7 +27,7 @@ const MOCK_APPROVALS: Approval[] = [
     requester_id: "agt-rsrch-002",
     requester_name: "Research Agent",
     reviewer_id: "user-admin",
-    reviewer_name: "Roberto Luna",
+    reviewer_name: "Admin User",
     entity_type: "tool",
     entity_id: "web_fetch",
     comment: "Approved — limit to read-only fetches",

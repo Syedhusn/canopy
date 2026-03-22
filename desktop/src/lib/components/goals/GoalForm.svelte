@@ -65,8 +65,11 @@
       priority,
       parent_id: selectedParentId || null,
     };
-    onSubmit(data);
-    submitting = false;
+    try {
+      await onSubmit(data);
+    } finally {
+      submitting = false;
+    }
   }
 </script>
 

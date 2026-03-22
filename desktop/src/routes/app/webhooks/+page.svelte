@@ -1,10 +1,12 @@
 <!-- src/routes/app/webhooks/+page.svelte -->
 <script lang="ts">
-  import { onMount } from 'svelte';
   import PageShell from '$lib/components/layout/PageShell.svelte';
   import { webhooksStore } from '$lib/stores/webhooks.svelte';
+  import { workspaceStore } from '$lib/stores/workspace.svelte';
 
-  onMount(() => {
+  // Re-fetch whenever the active workspace changes (covers onMount + workspace switches)
+  $effect(() => {
+    void workspaceStore.activeWorkspaceId;
     void webhooksStore.fetchWebhooks();
   });
 

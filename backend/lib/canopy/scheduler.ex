@@ -36,7 +36,7 @@ defmodule Canopy.Scheduler do
     case Crontab.CronExpression.Parser.parse(schedule.cron_expression) do
       {:ok, cron} ->
         job =
-          Quantum.Job.new(__MODULE__)
+          __MODULE__.new_job()
           |> Quantum.Job.set_name(job_name)
           |> Quantum.Job.set_schedule(cron)
           |> Quantum.Job.set_timezone(schedule.timezone || "UTC")

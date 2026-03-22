@@ -269,6 +269,27 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
 
   // ── Issues ───────────────────────────────────────────────────────────────────
   {
+    // POST /issues/:id/dispatch
+    pattern: /^\/issues\/([^/]+)\/dispatch$/,
+    handler: (path) => {
+      const id = path.split("/")[2];
+      const issue = mockIssues().find((i) => i.id === id) ?? mockIssues()[0];
+      return {
+        ok: true,
+        message: `Issue dispatched to ${issue.assignee_name ?? "agent"}.`,
+      };
+    },
+  },
+  {
+    // POST /issues/:id/assign  POST /issues/:id/checkout  GET /issues/:id/comments  POST /issues/:id/comments
+    pattern: /^\/issues\/([^/]+)\/([^/]+)$/,
+    handler: (_path, options) => {
+      const method = (options.method ?? "GET").toUpperCase();
+      if (method === "GET") return { comments: [] };
+      return undefined;
+    },
+  },
+  {
     // GET/PATCH/DELETE /issues/:id
     pattern: /^\/issues\/([^/]+)$/,
     handler: (path, options) => {
@@ -338,6 +359,27 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
   {
     pattern: /^\/goals\/tree$/,
     handler: () => ({ tree: getGoalTree() }),
+  },
+  {
+    // POST /goals/:id/decompose
+    pattern: /^\/goals\/([^/]+)\/decompose$/,
+    handler: (path) => {
+      const id = path.split("/")[2];
+      return {
+        status: "started",
+        goal_id: id,
+        message: "Goal decomposition started. Issues will appear shortly.",
+      };
+    },
+  },
+  {
+    // GET /goals/:id/ancestry
+    pattern: /^\/goals\/([^/]+)\/ancestry$/,
+    handler: (path) => {
+      const id = path.split("/")[2];
+      const goal = getGoalById(id);
+      return { ancestry: goal ? [goal] : [] };
+    },
   },
   {
     pattern: /^\/goals\/([^/]+)$/,
@@ -422,6 +464,33 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
   {
     pattern: /^\/costs\/by-model$/,
     handler: () => ({ models: mockCosts().byModel }),
+  },
+  {
+    // GET /costs/daily?from=YYYY-MM-DD&to=YYYY-MM-DD
+    pattern: /^\/costs\/daily/,
+    handler: (_path, _options, rawPath) => {
+      const url = new URL("http://x" + rawPath);
+      const toStr = url.searchParams.get("to");
+      const fromStr = url.searchParams.get("from");
+      const to = toStr ? new Date(toStr) : new Date();
+      const from = fromStr
+        ? new Date(fromStr)
+        : new Date(to.getTime() - 30 * 86_400_000);
+      const days = Math.round((to.getTime() - from.getTime()) / 86_400_000) + 1;
+      const points: { date: string; cost_cents: number }[] = [];
+      for (let i = 0; i < days; i++) {
+        const d = new Date(from.getTime() + i * 86_400_000);
+        const dateStr = d.toISOString().slice(0, 10);
+        // Simulate realistic cost variation: weekend dips, weekday peaks
+        const dow = d.getDay();
+        const base = dow === 0 || dow === 6 ? 150 : 500;
+        const jitter = Math.floor(
+          Math.sin(i * 2.5) * 200 + Math.cos(i * 1.3) * 150,
+        );
+        points.push({ date: dateStr, cost_cents: Math.max(0, base + jitter) });
+      }
+      return { points };
+    },
   },
 
   // ── Budgets ────────────────────────────────────────────────────────────────────
@@ -820,7 +889,7 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
         ...base,
         status: action === "approve" ? "approved" : "rejected",
         reviewed_by: "user-admin",
-        reviewer_name: "Roberto Luna",
+        reviewer_name: "Admin User",
         reviewed_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };
@@ -843,7 +912,7 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
           description: null,
           status: "pending",
           requester_id: "user-admin",
-          requester_name: "Roberto Luna",
+          requester_name: "Admin User",
           reviewer_id: null,
           reviewer_name: null,
           entity_type: null,
@@ -997,7 +1066,7 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
           {
             id: "ra-1",
             user_id: "user-admin",
-            user_name: "Roberto Luna",
+            user_name: "Admin User",
             role: "admin",
             scope: "global",
             resource_type: null,
@@ -1067,6 +1136,10 @@ export function notifyMockEnabled(): void {
 /** Called by client.ts whenever it disables mock mode (backend is reachable). */
 export function notifyMockDisabled(): void {
   _mockAllowed = false;
+  // Purge all mock localStorage keys and flush the in-memory agent map so that
+  // no stale mock data can rehydrate into live workspace views on the next
+  // module load or page reload.
+  clearAllMockData();
 }
 
 // ── Mock data purge ────────────────────────────────────────────────────────────
@@ -1159,7 +1232,7 @@ const FRESH_WORKSPACE_OVERRIDES: Record<string, unknown> = {
   },
   "/costs/by-agent": { agents: [] },
   "/costs/by-model": { models: [] },
-  "/costs/daily": { days: [] },
+  "/costs/daily": { points: [] },
   "/budgets": { policies: [] },
   "/budgets/incidents": { incidents: [] },
   "/sidebar-badges": {

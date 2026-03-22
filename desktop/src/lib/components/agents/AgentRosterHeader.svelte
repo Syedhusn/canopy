@@ -25,6 +25,8 @@
   const STATUS_OPTIONS: { value: AgentStatus | 'all'; label: string }[] = [
     { value: 'all',        label: 'All statuses' },
     { value: 'running',    label: 'Running' },
+    { value: 'active',     label: 'Active' },
+    { value: 'working',    label: 'Working' },
     { value: 'idle',       label: 'Idle' },
     { value: 'sleeping',   label: 'Sleeping' },
     { value: 'paused',     label: 'Paused' },

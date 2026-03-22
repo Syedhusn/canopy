@@ -116,6 +116,6 @@ defmodule Canopy.IssueDispatcher do
   defp validate_agent(%Agent{status: status}), do: {:error, {:agent_not_ready, status}}
 
   defp validate_issue(%Issue{checked_out_by: nil}), do: :ok
-  defp validate_issue(%Issue{}), do: {:error, :already_checked_out}
+  defp validate_issue(%Issue{checked_out_by: _}), do: {:error, :already_checked_out}
 
 end

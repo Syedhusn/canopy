@@ -1,10 +1,14 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import PageShell from '$lib/components/layout/PageShell.svelte';
   import MemoryBrowser from '$lib/components/memory/MemoryBrowser.svelte';
   import { memoryStore } from '$lib/stores/memory.svelte';
+  import { workspaceStore } from '$lib/stores/workspace.svelte';
 
-  onMount(() => { memoryStore.fetch(); });
+  // Re-fetch whenever the active workspace changes (covers onMount + workspace switches)
+  $effect(() => {
+    void workspaceStore.activeWorkspaceId;
+    void memoryStore.fetch();
+  });
 </script>
 
 <PageShell

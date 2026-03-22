@@ -5,6 +5,7 @@
 import type { CanopyAgent } from "$api/types";
 import { workspaceStore } from "$lib/stores/workspace.svelte";
 import { agentsStore } from "$lib/stores/agents.svelte";
+import { toastStore } from "$lib/stores/toasts.svelte";
 import { isTauri } from "$lib/utils/platform";
 import { isMockEnabled } from "$api/client";
 
@@ -12,6 +13,7 @@ export interface DeployResult {
   success: boolean;
   workspaceId: string | null;
   agentCount: number;
+  failedAgents: Array<{ name: string; error: string }>;
   error?: string;
 }
 
@@ -45,8 +47,9 @@ export async function deployTemplate(
 
     // Step 3: Register agents in mock layer BEFORE setting active workspace
     // (so any fetchAgents triggered by setActiveWorkspace finds them)
+    let failedAgents: Array<{ name: string; error: string }> = [];
     if (agents.length > 0) {
-      await registerAgents(agents, ws.id);
+      failedAgents = await registerAgents(agents, ws.id);
     }
 
     // Step 4: Scaffold .canopy/ directory on disk via Tauri IPC
@@ -79,13 +82,15 @@ export async function deployTemplate(
     return {
       success: true,
       workspaceId: ws.id,
-      agentCount: agents.length,
+      agentCount: agents.length - failedAgents.length,
+      failedAgents,
     };
   } catch (e) {
     return {
       success: false,
       workspaceId: null,
       agentCount: 0,
+      failedAgents: [],
       error: (e as Error).message,
     };
   }
@@ -123,11 +128,13 @@ async function loadBundledTemplate(templateId: string): Promise<CanopyAgent[]> {
  * 1. Persist in mock layer (survives navigation / fetchAgents cycles)
  * 2. Inject into Svelte store for instant UI
  * 3. Persist to real backend if available
+ *
+ * Returns a list of agents that failed to register (empty on full success).
  */
 async function registerAgents(
   agents: CanopyAgent[],
   workspaceId: string,
-): Promise<void> {
+): Promise<Array<{ name: string; error: string }>> {
   if (isMockEnabled()) {
     // Mock mode only: persist agents to localStorage so they survive
     // fetchAgents() calls and page reloads while offline.
@@ -136,6 +143,7 @@ async function registerAgents(
 
     // Inject into store immediately so the UI reflects them without a refetch.
     agentsStore.agents = agents;
+    return [];
   } else {
     // Real backend available: create agents via API. The store will be
     // refreshed by the subsequent fetchAgents() call, so we do not need to
@@ -144,7 +152,7 @@ async function registerAgents(
     try {
       const { agents: agentsApi } = await import("$api/client");
 
-      await Promise.allSettled(
+      const results = await Promise.allSettled(
         agents.map((agent) =>
           agentsApi.create({
             name: agent.display_name || agent.name,
@@ -159,10 +167,41 @@ async function registerAgents(
           }),
         ),
       );
-    } catch {
-      // API creation failed — fall back to store-only injection so the
+
+      // Collect failed registrations
+      const failures: Array<{ name: string; error: string }> = [];
+      results.forEach((result, index) => {
+        if (result.status === "rejected") {
+          const agent = agents[index];
+          failures.push({
+            name: agent.display_name || agent.name,
+            error:
+              result.reason instanceof Error
+                ? result.reason.message
+                : String(result.reason),
+          });
+        }
+      });
+
+      if (failures.length > 0) {
+        const detail = failures.map((f) => `${f.name}: ${f.error}`).join("\n");
+        toastStore.warning(
+          `${failures.length} agent${failures.length > 1 ? "s" : ""} failed to register`,
+          detail,
+          8000,
+        );
+      }
+
+      return failures;
+    } catch (err) {
+      // Entire API call failed — fall back to store-only injection so the
       // user at least sees something, but do NOT persist to localStorage.
       agentsStore.agents = agents;
+      const errorMsg = err instanceof Error ? err.message : String(err);
+      return agents.map((a) => ({
+        name: a.display_name || a.name,
+        error: errorMsg,
+      }));
     }
   }
 }

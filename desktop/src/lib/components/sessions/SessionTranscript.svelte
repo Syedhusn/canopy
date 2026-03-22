@@ -130,6 +130,13 @@
           <p class="st-empty-text">No messages yet</p>
         {/if}
       </div>
+      {#if isLive}
+        <div class="st-live-indicator" aria-label="Waiting for response">
+          <span class="st-live-agent-dot" aria-hidden="true"></span>
+          <span class="st-live-text">Canopy is responding</span>
+          <StreamingCursor />
+        </div>
+      {/if}
     {:else}
       {#each filteredMessages as message (message.id)}
         <div

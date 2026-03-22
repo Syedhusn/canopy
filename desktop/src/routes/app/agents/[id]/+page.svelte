@@ -9,7 +9,7 @@
   import TimeAgo from '$lib/components/shared/TimeAgo.svelte';
   import LoadingSpinner from '$lib/components/shared/LoadingSpinner.svelte';
   import { agentsStore } from '$lib/stores/agents.svelte';
-  import { sessions as sessionsApi, inbox as inboxApi } from '$api/client';
+  import { agents as agentsApi } from '$api/client';
   import type { CanopyAgent, AgentStatus, AgentLifecycleAction, Session, InboxItem } from '$api/types';
 
   const agentId = $derived($page.params.id ?? '');
@@ -55,8 +55,8 @@
     if (activeTab === 'runs' && !runsFetched && agentId) {
       runsFetched = true;
       runsLoading = true;
-      void sessionsApi.list().then((all) => {
-        runs = all.filter((s) => s.agent_id === agentId);
+      void agentsApi.runs(agentId).then((data) => {
+        runs = (data.runs as Session[]) ?? [];
         runsLoading = false;
       }).catch(() => {
         runsLoading = false;
@@ -66,12 +66,11 @@
 
   $effect(() => {
     // Fetch inbox items when the tab becomes active (once per page load)
-    if (activeTab === 'inbox' && !inboxFetched && agent) {
+    if (activeTab === 'inbox' && !inboxFetched && agentId) {
       inboxFetched = true;
       inboxLoading = true;
-      const agentName = agent.display_name || agent.name;
-      void inboxApi.list().then((all) => {
-        inboxItems = all.filter((i) => i.source_agent === agentName);
+      void agentsApi.inbox(agentId).then((data) => {
+        inboxItems = (data.items as InboxItem[]) ?? [];
         inboxLoading = false;
       }).catch(() => {
         inboxLoading = false;
@@ -122,7 +121,7 @@
     switch (a) {
       case 'osa':         return 'accent';
       case 'claude_code': return 'info';
-      case 'cursor':      return 'success';
+      case 'bash':        return 'success';
       default:            return 'default';
     }
   }
@@ -190,17 +189,17 @@
             Wake
           </button>
         {/if}
-        {#if agent.status === 'running' || agent.status === 'idle'}
+        {#if agent.status === 'running' || agent.status === 'active' || agent.status === 'working' || agent.status === 'idle'}
           <button class="ad-btn ad-btn--accent" onclick={() => handleAction('focus')} aria-label="Focus agent on current task">
             Focus
           </button>
         {/if}
-        {#if agent.status === 'running' || agent.status === 'idle'}
+        {#if agent.status === 'running' || agent.status === 'active' || agent.status === 'working' || agent.status === 'idle'}
           <button class="ad-btn" onclick={() => handleAction('sleep')} aria-label="Put agent to sleep">
             Sleep
           </button>
         {/if}
-        {#if agent.status === 'running'}
+        {#if agent.status === 'running' || agent.status === 'active' || agent.status === 'working'}
           <button class="ad-btn" onclick={() => handleAction('pause')} aria-label="Pause agent">
             Pause
           </button>

@@ -33,6 +33,7 @@
       name: formName.trim(),
       description: formDescription.trim() || null,
       status: formStatus,
+      workspace_id: workspaceStore.activeWorkspaceId ?? undefined,
     });
     creating = false;
     if (created) {

@@ -119,7 +119,7 @@
       >
         Wake
       </button>
-    {:else if agent.status === 'running'}
+    {:else if agent.status === 'running' || agent.status === 'active' || agent.status === 'working'}
       <button
         class="ac-btn"
         onclick={(e) => handleAction(e, 'sleep')}
@@ -287,6 +287,7 @@
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     margin: 0;
   }

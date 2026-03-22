@@ -1,14 +1,16 @@
 <!-- src/routes/app/templates/+page.svelte -->
 <script lang="ts">
-  import { onMount } from 'svelte';
   import PageShell from '$lib/components/layout/PageShell.svelte';
   import { templatesStore } from '$lib/stores/templates.svelte';
   import { deployTemplate } from '$lib/services/template-deploy';
   import { toastStore } from '$lib/stores/toasts.svelte';
+  import { workspaceStore } from '$lib/stores/workspace.svelte';
 
   let deploying = $state(false);
 
-  onMount(() => {
+  // Re-fetch whenever the active workspace changes (covers onMount + workspace switches)
+  $effect(() => {
+    void workspaceStore.activeWorkspaceId;
     void templatesStore.fetchTemplates();
   });
 
@@ -23,9 +25,21 @@
           'Template deployed',
           `${template.name} — ${result.agentCount} agent${result.agentCount === 1 ? '' : 's'} registered.`,
         );
+        // Surface any non-fatal warnings (e.g. partial backend failures,
+        // filesystem scaffold failure) so the user can act on them.
+        if (result.warnings && result.warnings.length > 0) {
+          for (const w of result.warnings) {
+            toastStore.error('Deploy warning', w);
+          }
+        }
         templatesStore.selectTemplate(null);
       } else {
         toastStore.error('Deploy failed', result.error ?? 'Unknown error');
+        if (result.warnings && result.warnings.length > 0) {
+          for (const w of result.warnings) {
+            toastStore.error('Deploy warning', w);
+          }
+        }
       }
     } catch (e) {
       toastStore.error('Deploy failed', (e as Error).message);

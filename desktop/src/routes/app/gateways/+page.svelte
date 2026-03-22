@@ -1,10 +1,12 @@
 <!-- src/routes/app/gateways/+page.svelte -->
 <script lang="ts">
-  import { onMount } from 'svelte';
   import PageShell from '$lib/components/layout/PageShell.svelte';
   import { gatewaysStore } from '$lib/stores/gateways.svelte';
+  import { workspaceStore } from '$lib/stores/workspace.svelte';
 
-  onMount(() => {
+  // Re-fetch whenever the active workspace changes (covers onMount + workspace switches)
+  $effect(() => {
+    void workspaceStore.activeWorkspaceId;
     void gatewaysStore.fetchGateways();
   });
 

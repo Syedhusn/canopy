@@ -60,8 +60,11 @@
 
   async function handleRefresh() {
     isRefreshing = true;
-    await dashboardStore.fetch();
-    isRefreshing = false;
+    try {
+      await dashboardStore.fetch();
+    } finally {
+      isRefreshing = false;
+    }
   }
 </script>
 
@@ -93,7 +96,7 @@
 
   <div class="raf-scroll" role="feed" aria-label="Activity events" aria-busy={dashboardStore.isLoading}>
     {#if events.length === 0}
-      <div class="raf-empty">No recent activity</div>
+      <div class="raf-empty" aria-live="polite">No recent activity</div>
     {:else}
       {#each events as event (event.id)}
         {@const dot = levelToDot(event.level)}

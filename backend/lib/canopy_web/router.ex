@@ -9,6 +9,7 @@ defmodule CanopyWeb.Router do
   pipeline :authenticated do
     plug CanopyWeb.Plugs.Auth
     plug CanopyWeb.Plugs.WorkspaceAuth
+    plug CanopyWeb.Plugs.Idempotency
     plug CanopyWeb.Plugs.Audit
   end
 

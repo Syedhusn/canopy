@@ -8,8 +8,8 @@
 
   // Re-fetch all cost data whenever the active workspace changes (covers onMount + workspace switches)
   $effect(() => {
-    void workspaceStore.activeWorkspaceId;
-    void costsStore.fetchAll();
+    const wsId = workspaceStore.activeWorkspaceId ?? undefined;
+    void costsStore.fetchAll(wsId);
   });
 
   const DATE_RANGE_OPTIONS: { value: DateRange; label: string }[] = [

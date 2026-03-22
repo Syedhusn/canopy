@@ -5,7 +5,7 @@ const ago = (ms: number) => new Date(Date.now() - ms).toISOString();
 const MOCK_AUDIT: AuditEntry[] = [
   {
     id: "audit-001",
-    actor: "Roberto Luna",
+    actor: "Admin User",
     actor_type: "human",
     action: "agent.wake",
     entity_type: "agent",
@@ -27,7 +27,7 @@ const MOCK_AUDIT: AuditEntry[] = [
   },
   {
     id: "audit-003",
-    actor: "Roberto Luna",
+    actor: "Admin User",
     actor_type: "human",
     action: "approval.approve",
     entity_type: "approval",

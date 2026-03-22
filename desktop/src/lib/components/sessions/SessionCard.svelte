@@ -59,8 +59,8 @@
   }
 
   function formatCost(cents: number): string {
+    if (cents === 0) return '$0.00';
     if (cents < 1) return '<$0.01';
-    if (cents < 100) return `$${(cents / 100).toFixed(2)}`;
     return `$${(cents / 100).toFixed(2)}`;
   }
 

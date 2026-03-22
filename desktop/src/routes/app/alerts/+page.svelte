@@ -1,11 +1,13 @@
 <!-- src/routes/app/alerts/+page.svelte -->
 <script lang="ts">
-  import { onMount } from 'svelte';
   import PageShell from '$lib/components/layout/PageShell.svelte';
   import { alertsStore } from '$lib/stores/alerts.svelte';
+  import { workspaceStore } from '$lib/stores/workspace.svelte';
   import type { AlertRule } from '$api/types';
 
-  onMount(() => {
+  // Re-fetch whenever the active workspace changes (covers onMount + workspace switches)
+  $effect(() => {
+    void workspaceStore.activeWorkspaceId;
     void alertsStore.fetchRules();
   });
 

@@ -159,9 +159,9 @@
     <div class="so-metric" role="listitem">
       <span class="so-metric-label">Cost</span>
       <span class="so-metric-value so-metric-value--cost">{formatCost(session.cost_cents)}</span>
-      {#if session.token_usage.cache_read > 0}
+      {#if session.token_usage.cache_read > 0 && session.token_usage.input > 0}
         <span class="so-metric-sub so-metric-sub--saving">
-          ~{formatCost(Math.round(session.token_usage.cache_read * 0.1))} saved via cache
+          ~{formatCost(Math.round(session.cost_cents * (session.token_usage.cache_read / session.token_usage.input) * 0.9))} saved via cache
         </span>
       {/if}
     </div>

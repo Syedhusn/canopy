@@ -117,7 +117,10 @@ export function frontmatterToAgent(
     role: (frontmatter["role"] as string | undefined) ?? "agent",
     status: "idle",
     adapter: normaliseAdapter(frontmatter["adapter"]),
-    model: "claude-sonnet-4-20250514",
+    model:
+      typeof frontmatter["model"] === "string" && frontmatter["model"]
+        ? frontmatter["model"]
+        : "claude-sonnet-4-20250514",
     system_prompt: body.trim(),
     config: {
       division: (frontmatter["division"] as string | null | undefined) ?? null,

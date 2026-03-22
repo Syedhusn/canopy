@@ -234,7 +234,7 @@ const MOCK_ENTRIES: MockMemoryEntry[] = [
     namespace: "knowledge_graph",
     key: "miosa.signal_theory.sn_ratio",
     value:
-      "Signal-to-Noise Ratio is the governing metric. S = (M, G, T, F, W). Maximize actionable intent per unit of output. Source: Roberto H Luna, Signal Theory (MIOSA Research, Feb 2026).",
+      "Signal-to-Noise Ratio is the governing metric. S = (M, G, T, F, W). Maximize actionable intent per unit of output.",
     value_type: "string",
     metadata: {
       agent: "Master Orchestrator",

@@ -23,6 +23,30 @@ alias Canopy.Schemas.{
   Template
 }
 
+# ---------------------------------------------------------------------------
+# Demo seed guard: set CANOPY_SEED_DEMO=true to populate the database with
+# sample users, workspaces, agents, and other demo data.
+#
+#   CANOPY_SEED_DEMO=true mix run priv/repo/seeds.exs
+#
+# Without the env var, this file is a no-op so that production and CI
+# environments never accidentally create demo credentials.
+# ---------------------------------------------------------------------------
+
+unless System.get_env("CANOPY_SEED_DEMO") == "true" do
+  IO.puts("""
+
+  === Canopy Seeds ===
+
+  Skipped: CANOPY_SEED_DEMO is not set to "true".
+
+  To populate demo data, run:
+
+      CANOPY_SEED_DEMO=true mix run priv/repo/seeds.exs
+
+  """)
+else
+
 IO.puts("\n=== Canopy Dev Seeds ===\n")
 
 # ---------------------------------------------------------------------------
@@ -860,3 +884,6 @@ IO.puts("""
   Plugins       3  (github enabled, slack enabled, jira disabled)
   Templates     2  (Full-Stack Development Team, Research Assistant)
 """)
+
+# end of CANOPY_SEED_DEMO guard
+end

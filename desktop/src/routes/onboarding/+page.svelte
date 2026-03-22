@@ -11,16 +11,52 @@
   import MiosaCloud from './steps/MiosaCloud.svelte';
   import Review from './steps/Review.svelte';
 
+  // ─── Registration data (pre-filled from /auth if the user just registered) ──
+  //
+  // When a user registers, /auth stores:
+  //   canopy-registered-name           → user's full name
+  //   canopy-registered-workspace-id   → backend workspace UUID
+  //   canopy-registered-workspace-name → workspace display name
+  //
+  // We use these to seed the onboarding form so the user doesn't have to
+  // re-enter information they already provided.
+
+  const registeredName = typeof localStorage !== 'undefined'
+    ? (localStorage.getItem('canopy-registered-name') ?? '')
+    : '';
+  const registeredWorkspaceId = typeof localStorage !== 'undefined'
+    ? (localStorage.getItem('canopy-registered-workspace-id') ?? '')
+    : '';
+  const registeredWorkspaceName = typeof localStorage !== 'undefined'
+    ? (localStorage.getItem('canopy-registered-workspace-name') ?? '')
+    : '';
+
   // ─── Shared state ─────────────────────────────────────────────────────────
 
-  let step = $state(onboardingStore.currentStep);
+  // When coming directly from registration the user already entered their name.
+  // Auto-advance past the Welcome step (step 0) to avoid asking again.
+  const _initialStep = onboardingStore.currentStep === 0 && registeredName
+    ? 1
+    : onboardingStore.currentStep;
 
-  let displayName        = $state(onboardingStore.data.displayName);
+  let step = $state(_initialStep);
+
+  // Pre-fill display name from registration; fall back to store/empty.
+  let displayName        = $state(
+    onboardingStore.data.displayName ||
+    registeredName ||
+    (typeof localStorage !== 'undefined' ? (localStorage.getItem('canopy-display-name') ?? '') : '')
+  );
   let selectedProviderSlug = $state(onboardingStore.data.provider?.slug ?? '');
   let providerKeys       = $state<Record<string, string>>({});
   let selectedAdapter    = $state<AdapterType>(onboardingStore.data.adapter);
   let workspacePath      = $state(onboardingStore.data.workspace?.path ?? '~/.canopy');
-  let workspaceName      = $state(onboardingStore.data.workspace?.name ?? 'My Workspace');
+  // Pre-fill workspace name from registration response when available.
+  let workspaceName      = $state(
+    onboardingStore.data.workspace?.name ||
+    registeredWorkspaceName ||
+    'My Workspace'
+  );
   let workspaceDesc      = $state(onboardingStore.data.workspace?.description ?? '');
   let teamTemplate       = $state<TeamTemplate>(onboardingStore.data.teamTemplate ?? 'dev-team');
   let miosaCloud         = $state(onboardingStore.data.miosaCloud);
@@ -167,8 +203,13 @@
         }
 
         const { workspaceStore } = await import('$lib/stores/workspace.svelte');
+
+        // If registration already created a backend workspace, reuse its ID so
+        // the frontend store entry matches what the backend knows about.  Fall
+        // back to a new UUID only for offline / mock installs.
+        const wsId = registeredWorkspaceId || crypto.randomUUID();
         const wsEntry = {
-          id: crypto.randomUUID(),
+          id: wsId,
           path: workspacePath,
           name: workspaceName,
           description: workspaceDesc,
@@ -176,11 +217,31 @@
         };
         workspaceStore.addWorkspace(wsEntry);
         await workspaceStore.setActiveWorkspace(wsEntry.id);
+
+        // Best-effort: update the workspace record in the backend so the path
+        // and description (set during onboarding) are persisted server-side.
+        if (registeredWorkspaceId) {
+          try {
+            const { workspaces } = await import('$api/client');
+            await workspaces.update(registeredWorkspaceId, {
+              name: workspaceName,
+              path: workspacePath,
+              description: workspaceDesc || undefined,
+            });
+          } catch {
+            // Non-fatal: the backend workspace was created during registration;
+            // failing to update it just means the path/desc won't sync.
+          }
+        }
       }
 
       onboardingStore.complete();
       if (typeof localStorage !== 'undefined') {
         localStorage.setItem('canopy-onboarding-complete', 'true');
+        localStorage.setItem(
+          'canopy-onboarding',
+          JSON.stringify({ completed: true }),
+        );
         localStorage.setItem('canopy-display-name', displayName);
         localStorage.setItem('canopy-default-adapter', selectedAdapter);
         if (selectedProviderSlug) {
@@ -188,6 +249,10 @@
           const key = providerKeys[selectedProviderSlug];
           if (key) localStorage.setItem(`canopy-provider-${selectedProviderSlug}`, key);
         }
+        // Clean up registration scratch keys — no longer needed.
+        localStorage.removeItem('canopy-registered-name');
+        localStorage.removeItem('canopy-registered-workspace-id');
+        localStorage.removeItem('canopy-registered-workspace-name');
       }
 
       if (isTauri() && selectedProviderSlug) {
@@ -215,11 +280,55 @@
     }
   }
 
-  function skip() {
+  async function skip() {
+    syncToStore();
+    onboardingStore.complete();
+
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem('canopy-onboarding-complete', 'true');
+      localStorage.setItem(
+        'canopy-onboarding',
+        JSON.stringify({ completed: true }),
+      );
+      if (displayName) localStorage.setItem('canopy-display-name', displayName);
+      localStorage.setItem('canopy-default-adapter', selectedAdapter);
+      if (selectedProviderSlug) {
+        localStorage.setItem('canopy-provider-slug', selectedProviderSlug);
+        const key = providerKeys[selectedProviderSlug];
+        if (key) localStorage.setItem(`canopy-provider-${selectedProviderSlug}`, key);
+      }
+      // Clean up registration scratch keys.
+      localStorage.removeItem('canopy-registered-name');
+      localStorage.removeItem('canopy-registered-workspace-id');
+      localStorage.removeItem('canopy-registered-workspace-name');
     }
-    onboardingStore.complete();
+
+    if (isTauri() && selectedProviderSlug) {
+      try {
+        const { Store } = await import('@tauri-apps/plugin-store');
+        const credStore = await Store.load('credentials.json');
+        await credStore.set('provider', {
+          slug: selectedProviderSlug,
+          apiKey: providerKeys[selectedProviderSlug] ?? '',
+        });
+        await credStore.save();
+      } catch (e) {
+        console.warn('Skip: credential save failed:', e);
+      }
+    }
+
+    if (isTauri()) {
+      try {
+        const { Store } = await import('@tauri-apps/plugin-store');
+        const settStore = await Store.load('settings.json');
+        await settStore.set('default_adapter', selectedAdapter);
+        await settStore.set('miosa_cloud', miosaCloud);
+        await settStore.save();
+      } catch (e) {
+        console.warn('Skip: settings save failed:', e);
+      }
+    }
+
     goto('/app');
   }
 </script>

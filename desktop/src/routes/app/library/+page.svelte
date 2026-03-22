@@ -219,7 +219,16 @@
     notify(`Deploying "${op.name}"…`);
     const result = await deployTemplate(op.id, op.name);
     if (result.success) {
-      notify(`${op.emoji} ${op.name} deployed — ${result.agentCount} agents`);
+      const warn = result.warnings && result.warnings.length > 0
+        ? ` (${result.warnings.length} warning${result.warnings.length === 1 ? '' : 's'})`
+        : '';
+      notify(`${op.emoji} ${op.name} deployed — ${result.agentCount} agents${warn}`);
+      if (result.warnings) {
+        for (const w of result.warnings) {
+          // eslint-disable-next-line no-console
+          console.warn('[template-deploy]', w);
+        }
+      }
       goto('/app');
     } else {
       notify(`Deploy failed: ${result.error ?? 'unknown error'}`);
@@ -230,7 +239,16 @@
     notify(`Deploying "${tmpl.name}"…`);
     const result = await deployTemplate(tmpl.id, tmpl.name);
     if (result.success) {
-      notify(`${tmpl.emoji} ${tmpl.name} deployed — ${result.agentCount} agents`);
+      const warn = result.warnings && result.warnings.length > 0
+        ? ` (${result.warnings.length} warning${result.warnings.length === 1 ? '' : 's'})`
+        : '';
+      notify(`${tmpl.emoji} ${tmpl.name} deployed — ${result.agentCount} agents${warn}`);
+      if (result.warnings) {
+        for (const w of result.warnings) {
+          // eslint-disable-next-line no-console
+          console.warn('[template-deploy]', w);
+        }
+      }
       goto('/app');
     } else {
       notify(`Deploy failed: ${result.error ?? 'unknown error'}`);

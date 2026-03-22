@@ -139,11 +139,19 @@
         </button>
         <button
           class="sc-btn sc-btn--ghost"
-          onclick={() => schedulesStore.triggerNow(schedule.id)}
+          onclick={() => void schedulesStore.triggerNow(schedule.id)}
           aria-label="Trigger schedule now"
           type="button"
         >
           Run now
+        </button>
+        <button
+          class="sc-btn sc-btn--danger"
+          onclick={() => void schedulesStore.deleteSchedule(schedule.id)}
+          aria-label="Delete schedule"
+          type="button"
+        >
+          Delete
         </button>
       </div>
     </div>
@@ -395,6 +403,19 @@
   .sc-btn--ghost:hover {
     color: var(--text-secondary);
     border-color: var(--border-default);
+  }
+
+  .sc-btn--danger {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--accent-error, #ef4444);
+    margin-left: auto;
+  }
+
+  .sc-btn--danger:hover {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #f87171;
   }
 
   .sc-btn:focus-visible {
