@@ -168,6 +168,7 @@ async function registerAgents(
           return agentsApi.create({
             slug,
             name: agent.display_name || agent.name,
+            display_name: agent.display_name || agent.name,
             role: agent.role,
             adapter,
             model: agent.model || "sonnet",

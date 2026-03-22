@@ -8,7 +8,7 @@ export function resolveAssigneeName(issue: Issue): string {
   if (issue.assignee_name) return issue.assignee_name;
   if (issue.assignee_id) {
     const agent = agentsStore.agents.find((a) => a.id === issue.assignee_id);
-    return agent?.name ?? agent?.display_name ?? "Unknown Agent";
+    return agent?.display_name ?? agent?.name ?? "Unknown Agent";
   }
   return "Unassigned";
 }
