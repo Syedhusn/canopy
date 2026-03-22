@@ -13,6 +13,7 @@ defmodule Canopy.Application do
       Canopy.Scheduler,
       {DynamicSupervisor, name: Canopy.AdapterSupervisor, strategy: :one_for_one},
       {Task.Supervisor, name: Canopy.HeartbeatRunner},
+      {Task.Supervisor, name: Canopy.TaskSupervisor},
       Canopy.AlertEvaluator,
       CanopyWeb.Endpoint
     ]

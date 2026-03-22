@@ -83,10 +83,28 @@ defmodule CanopyWeb.DocumentController do
     with {:ok, ref_dir} <- resolve_reference_dir(params) do
       file_path = Path.join([ref_dir | path_parts])
       dir = Path.dirname(file_path)
+      relative_path = Path.join(path_parts)
 
       with :ok <- File.mkdir_p(dir),
            :ok <- File.write(file_path, content) do
-        json(conn, %{ok: true, path: Path.join(path_parts)})
+        # Create a DocumentRevision record for history tracking
+        workspace_id = params["workspace_id"] || conn.assigns[:workspace_id]
+        user_id = conn.assigns[:current_user] && conn.assigns[:current_user].id
+
+        if workspace_id do
+          %DocumentRevision{}
+          |> DocumentRevision.changeset(%{
+            path: relative_path,
+            content: content,
+            message: params["message"] || "Updated via API",
+            author_type: if(user_id, do: "user", else: "agent"),
+            author_id: user_id || params["agent_id"],
+            workspace_id: workspace_id
+          })
+          |> Repo.insert()
+        end
+
+        json(conn, %{ok: true, path: relative_path})
       else
         {:error, reason} ->
           conn |> put_status(500) |> json(%{error: inspect(reason)})

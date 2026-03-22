@@ -1,5 +1,6 @@
 defmodule CanopyWeb.GoalController do
   use CanopyWeb, :controller
+  require Logger
 
   alias Canopy.Repo
   alias Canopy.Schemas.{Goal, Issue}
@@ -111,14 +112,38 @@ defmodule CanopyWeb.GoalController do
       auto_assign: params["auto_assign"] != "false"
     ]
 
-    case Canopy.GoalDecomposer.decompose(goal_id, opts) do
-      {:ok, issues} ->
-        conn
-        |> put_status(201)
-        |> json(%{issues: Enum.map(issues, &serialize/1), count: length(issues)})
+    # Validate goal exists before accepting the request
+    case Repo.get(Goal, goal_id) do
+      nil ->
+        conn |> put_status(404) |> json(%{error: "Goal not found"})
 
-      {:error, reason} ->
-        conn |> put_status(422) |> json(%{error: humanize_error(reason)})
+      _goal ->
+        # Run decomposition asynchronously — LLM call can take 30-60s
+        Task.Supervisor.start_child(Canopy.TaskSupervisor, fn ->
+          case Canopy.GoalDecomposer.decompose(goal_id, opts) do
+            {:ok, issues} ->
+              goal = Repo.get(Goal, goal_id)
+
+              if goal do
+                Canopy.EventBus.broadcast(
+                  Canopy.EventBus.workspace_topic(goal.workspace_id),
+                  %{
+                    event: "goal.decomposed",
+                    goal_id: goal_id,
+                    issue_count: length(issues),
+                    issue_ids: Enum.map(issues, & &1.id)
+                  }
+                )
+              end
+
+            {:error, reason} ->
+              Logger.warning("[GoalDecomposer] Async decompose failed for #{goal_id}: #{inspect(reason)}")
+          end
+        end)
+
+        conn
+        |> put_status(202)
+        |> json(%{status: "accepted", goal_id: goal_id, message: "Decomposition started. Issues will appear when ready."})
     end
   end
 
@@ -166,12 +191,6 @@ defmodule CanopyWeb.GoalController do
       updated_at: i.updated_at
     }
   end
-
-  defp humanize_error(reason) when is_binary(reason), do: reason
-  defp humanize_error(:not_found), do: "Goal not found"
-  defp humanize_error(:no_workspace), do: "Goal has no workspace"
-  defp humanize_error(:decompose_failed), do: "Decomposition failed"
-  defp humanize_error(_reason), do: "An error occurred"
 
   defp format_errors(changeset) do
     Ecto.Changeset.traverse_errors(changeset, fn {msg, opts} ->
