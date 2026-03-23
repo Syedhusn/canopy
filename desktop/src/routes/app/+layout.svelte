@@ -10,6 +10,7 @@ import Sidebar from '$lib/components/layout/Sidebar.svelte';
   import { paletteStore } from '$lib/stores/palette.svelte';
   import { workspaceStore } from '$lib/stores/workspace.svelte';
   import { agentsStore } from '$lib/stores/agents.svelte';
+  import { projectsStore } from '$lib/stores/projects.svelte';
   import { settingsStore } from '$lib/stores/settings.svelte';
   import CommandPalette from '$lib/components/layout/CommandPalette.svelte';
   import ActivityWidget from '$lib/components/activity/ActivityWidget.svelte';
@@ -145,9 +146,12 @@ import Sidebar from '$lib/components/layout/Sidebar.svelte';
       }
       void approvalsStore.fetchApprovals();
 
-      // 8. Load agents: try Tauri filesystem scan first, fall back to API/mock
+      // 8. Load agents & projects: resolve workspace context first
       const ws = workspaceStore.activeWorkspace;
       const wsId = workspaceStore.activeWorkspaceId ?? undefined;
+
+      // 9. Pre-fetch projects so goals and other project-dependent pages work
+      void projectsStore.fetchProjects(wsId);
       if (ws) {
         workspaceStore.scanAndLoadAgents(ws.path).then(() => {
           workspaceStore.watchActive();
