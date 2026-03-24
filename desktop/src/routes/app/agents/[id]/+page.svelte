@@ -9,14 +9,16 @@
   import TimeAgo from '$lib/components/shared/TimeAgo.svelte';
   import LoadingSpinner from '$lib/components/shared/LoadingSpinner.svelte';
   import { agentsStore } from '$lib/stores/agents.svelte';
+  import { environmentStore } from '$lib/stores/environment.svelte';
+  import { gatewaysStore } from '$lib/stores/gateways.svelte';
   import { agents as agentsApi } from '$api/client';
-  import type { CanopyAgent, AgentStatus, AgentLifecycleAction, Session, InboxItem } from '$api/types';
+  import type { CanopyAgent, AgentStatus, AgentLifecycleAction, Session, InboxItem, AdapterType } from '$api/types';
 
   const agentId = $derived($page.params.id ?? '');
 
   let agent = $state<CanopyAgent | null>(null);
   let isLoading = $state(true);
-  let activeTab = $state<'overview' | 'config' | 'schedules' | 'skills' | 'runs' | 'budget' | 'inbox'>('overview');
+  let activeTab = $state<'overview' | 'config' | 'schedules' | 'skills' | 'runs' | 'budget' | 'inbox' | 'access'>('overview');
 
   // Runs tab state
   let runs = $state<Session[]>([]);
@@ -28,14 +30,41 @@
   let inboxLoading = $state(false);
   let inboxFetched = $state(false);
 
+  // Access tab state
+  const TOOLS = [
+    { id: 'computer_use',   label: 'Computer Use',   description: 'Desktop control, screenshots' },
+    { id: 'file_system',    label: 'File System',     description: 'Read/write local files' },
+    { id: 'shell',          label: 'Shell',           description: 'Execute shell commands' },
+    { id: 'web_fetch',      label: 'Web Fetch',       description: 'HTTP requests, web scraping' },
+    { id: 'knowledge',      label: 'Knowledge',       description: 'Semantic knowledge graph' },
+    { id: 'code_execution', label: 'Code Execution',  description: 'Run code in sandbox' },
+  ] as const;
+
+  const ADAPTER_OPTIONS: AdapterType[] = ['osa', 'claude_code', 'codex', 'openclaw', 'bash', 'http', 'cursor', 'gemini', 'custom'];
+
+  // Local editable copies for the access tab (not persisted until "Save" — for now just visual)
+  let localAdapter = $state<AdapterType>('osa');
+  let localGatewayId = $state<string>('');
+  let enabledTools = $state<Record<string, boolean>>({
+    computer_use: false,
+    file_system: false,
+    shell: false,
+    web_fetch: false,
+    knowledge: false,
+    code_execution: false,
+  });
+
+  let accessFetched = $state(false);
+
   const TABS = [
-    { id: 'overview'  as const, label: 'Overview'  },
-    { id: 'config'    as const, label: 'Config'    },
-    { id: 'schedules' as const, label: 'Schedules' },
-    { id: 'skills'    as const, label: 'Skills'    },
-    { id: 'runs'      as const, label: 'Runs'      },
-    { id: 'budget'    as const, label: 'Budget'    },
-    { id: 'inbox'     as const, label: 'Inbox'     },
+    { id: 'overview'  as const, label: 'Overview'       },
+    { id: 'config'    as const, label: 'Config'         },
+    { id: 'schedules' as const, label: 'Schedules'      },
+    { id: 'skills'    as const, label: 'Skills'         },
+    { id: 'runs'      as const, label: 'Runs'           },
+    { id: 'budget'    as const, label: 'Budget'         },
+    { id: 'inbox'     as const, label: 'Inbox'          },
+    { id: 'access'    as const, label: 'Tools & Access' },
   ];
 
   onMount(async () => {
@@ -75,6 +104,44 @@
       }).catch(() => {
         inboxLoading = false;
       });
+    }
+  });
+
+  $effect(() => {
+    // Populate access tab state from agent data once agent is loaded
+    if (agent && !accessFetched) {
+      localAdapter = agent.adapter;
+      // Derive enabled tools from agent.config.tools array if present
+      const configTools = (agent.config?.tools ?? []) as string[];
+      if (configTools.length > 0) {
+        for (const t of TOOLS) {
+          enabledTools[t.id] = configTools.includes(t.id);
+        }
+      }
+    }
+  });
+
+  $effect(() => {
+    // Lazy-load environment apps and gateways when access tab opens
+    if (activeTab === 'access' && !accessFetched) {
+      accessFetched = true;
+      if (environmentStore.apps.length === 0) {
+        void environmentStore.fetchApps();
+      }
+      if (gatewaysStore.gateways.length === 0) {
+        void gatewaysStore.fetchGateways();
+      }
+      // Set gateway selection to primary if not already set
+      if (!localGatewayId && gatewaysStore.primaryGateway) {
+        localGatewayId = gatewaysStore.primaryGateway.id;
+      }
+    }
+  });
+
+  $effect(() => {
+    // Once gateways load, set default selection if still empty
+    if (activeTab === 'access' && !localGatewayId && gatewaysStore.primaryGateway) {
+      localGatewayId = gatewaysStore.primaryGateway.id;
     }
   });
 
@@ -124,6 +191,31 @@
       case 'bash':        return 'success';
       default:            return 'default';
     }
+  }
+
+  function categoryEmoji(cat: string): string {
+    switch (cat) {
+      case 'development':   return '🛠️';
+      case 'database':      return '🗄️';
+      case 'automation':    return '⚙️';
+      case 'browser':       return '🌐';
+      case 'design':        return '🎨';
+      case 'communication': return '💬';
+      default:              return '📦';
+    }
+  }
+
+  function adapterStatusColor(a: AdapterType): string {
+    switch (a) {
+      case 'osa':         return '#a78bfa';
+      case 'claude_code': return '#60a5fa';
+      case 'bash':        return '#34d399';
+      default:            return 'var(--text-tertiary)';
+    }
+  }
+
+  function selectedGateway() {
+    return gatewaysStore.gateways.find((g) => g.id === localGatewayId) ?? null;
   }
 </script>
 
@@ -556,6 +648,196 @@
               </div>
             </section>
           {/if}
+        </div>
+
+      <!-- TOOLS & ACCESS -->
+      {:else if activeTab === 'access'}
+        <div
+          id="ad-panel-access"
+          role="tabpanel"
+          aria-label="Tools and Access tab"
+          class="ad-panel"
+        >
+
+          <!-- Section 1: Adapter -->
+          <section class="ad-card" aria-label="Adapter configuration">
+            <h2 class="ad-card-title">Adapter</h2>
+            <div class="ad-access-dl">
+              <div class="ad-access-row">
+                <dt class="ad-access-dt">Type</dt>
+                <dd class="ad-access-dd">
+                  <div class="ad-select-wrap">
+                    <span class="ad-adapter-dot" style="background: {adapterStatusColor(localAdapter)};" aria-hidden="true"></span>
+                    <select
+                      class="ad-select"
+                      bind:value={localAdapter}
+                      aria-label="Select adapter type"
+                    >
+                      {#each ADAPTER_OPTIONS as opt}
+                        <option value={opt}>{opt}</option>
+                      {/each}
+                    </select>
+                  </div>
+                </dd>
+              </div>
+              <div class="ad-access-row">
+                <dt class="ad-access-dt">Status</dt>
+                <dd class="ad-access-dd">
+                  <span class="ad-adapter-status-pill">
+                    <span class="ad-run-dot ad-run-dot--active" aria-hidden="true" style="width:6px;height:6px;"></span>
+                    active
+                  </span>
+                </dd>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 2: Gateway -->
+          <section class="ad-card" aria-label="LLM gateway configuration">
+            <h2 class="ad-card-title">Gateway</h2>
+            {#if gatewaysStore.loading}
+              <p class="ad-muted">Loading gateways…</p>
+            {:else if gatewaysStore.gateways.length === 0}
+              <p class="ad-muted">No gateways configured. Add one in <a href="/app/gateways" class="ad-link">Gateways</a>.</p>
+            {:else}
+              <div class="ad-access-dl">
+                <div class="ad-access-row">
+                  <dt class="ad-access-dt">Gateway</dt>
+                  <dd class="ad-access-dd">
+                    <select
+                      class="ad-select"
+                      bind:value={localGatewayId}
+                      aria-label="Select LLM gateway"
+                    >
+                      <option value="">— none —</option>
+                      {#each gatewaysStore.gateways as gw}
+                        <option value={gw.id}>
+                          {gw.name}
+                          {gw.is_primary ? ' (primary)' : ''}
+                          {gw.status === 'healthy' || gw.status === 'connected' ? '' : ' ⚠'}
+                        </option>
+                      {/each}
+                    </select>
+                  </dd>
+                </div>
+                {#if selectedGateway()}
+                  <div class="ad-access-row">
+                    <dt class="ad-access-dt">Provider</dt>
+                    <dd class="ad-access-dd">
+                      <code class="ad-code-inline">{selectedGateway()!.provider}</code>
+                    </dd>
+                  </div>
+                  <div class="ad-access-row">
+                    <dt class="ad-access-dt">Model</dt>
+                    <dd class="ad-access-dd">
+                      <code class="ad-code-inline">{agent!.model}</code>
+                    </dd>
+                  </div>
+                  <div class="ad-access-row">
+                    <dt class="ad-access-dt">Latency</dt>
+                    <dd class="ad-access-dd">
+                      <span class="ad-muted">
+                        {selectedGateway()!.latency_ms != null ? `${selectedGateway()!.latency_ms}ms` : '—'}
+                      </span>
+                    </dd>
+                  </div>
+                {/if}
+              </div>
+            {/if}
+          </section>
+
+          <!-- Section 3: Tools -->
+          <section class="ad-card" aria-label="Tool permissions">
+            <h2 class="ad-card-title">Tools</h2>
+            <div class="ad-tools-list" role="list" aria-label="Available tools">
+              {#each TOOLS as tool}
+                <div class="ad-tool-row" role="listitem">
+                  <div class="ad-tool-info">
+                    <span class="ad-tool-name">{tool.label}</span>
+                    <span class="ad-tool-desc">{tool.description}</span>
+                  </div>
+                  <button
+                    class="ad-toggle"
+                    class:ad-toggle--on={enabledTools[tool.id]}
+                    role="switch"
+                    aria-checked={enabledTools[tool.id]}
+                    aria-label="Toggle {tool.label}"
+                    onclick={() => { enabledTools[tool.id] = !enabledTools[tool.id]; }}
+                  >
+                    <span class="ad-toggle-thumb" aria-hidden="true"></span>
+                  </button>
+                </div>
+              {/each}
+            </div>
+          </section>
+
+          <!-- Section 4: App Access -->
+          <section class="ad-card" aria-label="Application access control">
+            <h2 class="ad-card-title">
+              App Access
+              {#if environmentStore.apps.length > 0}
+                <span class="ad-card-count">
+                  {environmentStore.apps.filter(a => a.agent_access.includes(agentId)).length}/{environmentStore.apps.length}
+                </span>
+              {/if}
+            </h2>
+
+            {#if environmentStore.loading}
+              <div class="ad-access-loading" aria-live="polite">
+                <span class="ad-muted">Detecting apps…</span>
+              </div>
+            {:else if environmentStore.apps.length === 0}
+              <p class="ad-muted">No apps detected in the environment.</p>
+            {:else}
+              <div class="ad-apps-grid" role="list" aria-label="Detected apps">
+                {#each environmentStore.apps as app (app.id)}
+                  {@const hasAccess = app.agent_access.includes(agentId)}
+                  <div
+                    class="ad-app-card"
+                    class:ad-app-card--granted={hasAccess}
+                    role="listitem"
+                    aria-label="{app.name}, access {hasAccess ? 'granted' : 'revoked'}"
+                  >
+                    <div class="ad-app-header">
+                      <span class="ad-app-emoji" aria-hidden="true">{categoryEmoji(app.category)}</span>
+                      <div class="ad-app-meta">
+                        <span class="ad-app-name">{app.name}</span>
+                        <span class="ad-app-proc">{app.process_name}</span>
+                      </div>
+                      <div class="ad-app-status" aria-label="App status: {app.status}">
+                        <span
+                          class="ad-run-dot"
+                          class:ad-run-dot--active={app.status === 'running'}
+                          style={app.status !== 'running' ? 'background: var(--border-default)' : ''}
+                          aria-hidden="true"
+                        ></span>
+                      </div>
+                    </div>
+                    <div class="ad-app-footer">
+                      <span class="ad-app-cat">{app.category}</span>
+                      <button
+                        class="ad-toggle ad-toggle--sm"
+                        class:ad-toggle--on={hasAccess}
+                        role="switch"
+                        aria-checked={hasAccess}
+                        aria-label="{hasAccess ? 'Revoke' : 'Grant'} access to {app.name}"
+                        onclick={() => {
+                          if (hasAccess) {
+                            void environmentStore.revokeAccess(app.id, agentId);
+                          } else {
+                            void environmentStore.grantAccess(app.id, agentId);
+                          }
+                        }}
+                      >
+                        <span class="ad-toggle-thumb" aria-hidden="true"></span>
+                      </button>
+                    </div>
+                  </div>
+                {/each}
+              </div>
+            {/if}
+          </section>
+
         </div>
       {/if}
 
@@ -1169,5 +1451,271 @@
     color: var(--text-tertiary);
     line-height: 1.5;
     margin: 0;
+  }
+
+  /* ── Tools & Access tab ──────────────────────────────────────────────────── */
+
+  /* Card count badge in title */
+  .ad-card-count {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: 10px;
+    padding: 1px 7px;
+    margin-left: 6px;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  /* Access definition list — shares ad-dl visual rhythm */
+  .ad-access-dl {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ad-access-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .ad-access-dt {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    min-width: 80px;
+    flex-shrink: 0;
+  }
+
+  .ad-access-dd {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+  }
+
+  /* Adapter color dot */
+  .ad-adapter-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .ad-adapter-status-pill {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  /* Select dropdown */
+  .ad-select-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ad-select {
+    height: 28px;
+    padding: 0 28px 0 10px;
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--border-default);
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    font-size: 12px;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    transition: border-color 120ms ease;
+  }
+
+  .ad-select:hover {
+    border-color: var(--border-hover);
+  }
+
+  .ad-select:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+  }
+
+  /* Toggle switch */
+  .ad-toggle {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    border-radius: 10px;
+    border: 1px solid var(--border-default);
+    background: var(--bg-secondary);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 150ms ease, border-color 150ms ease;
+    padding: 0;
+  }
+
+  .ad-toggle--sm {
+    width: 30px;
+    height: 17px;
+    border-radius: 9px;
+  }
+
+  .ad-toggle--on {
+    background: rgba(34, 197, 94, 0.2);
+    border-color: rgba(34, 197, 94, 0.5);
+  }
+
+  .ad-toggle-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--text-tertiary);
+    transition: transform 150ms ease, background 150ms ease;
+    pointer-events: none;
+  }
+
+  .ad-toggle--sm .ad-toggle-thumb {
+    width: 11px;
+    height: 11px;
+  }
+
+  .ad-toggle--on .ad-toggle-thumb {
+    transform: translateX(16px);
+    background: #22c55e;
+  }
+
+  .ad-toggle--sm.ad-toggle--on .ad-toggle-thumb {
+    transform: translateX(13px);
+  }
+
+  /* Tools list */
+  .ad-tools-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .ad-tool-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-default);
+  }
+
+  .ad-tool-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .ad-tool-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .ad-tool-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .ad-tool-desc {
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  /* Apps grid */
+  .ad-access-loading {
+    padding: 12px 0;
+  }
+
+  .ad-apps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .ad-app-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-default);
+    background: var(--bg-secondary);
+    transition: border-color 150ms ease, background 150ms ease;
+  }
+
+  .ad-app-card--granted {
+    border-color: rgba(34, 197, 94, 0.3);
+    background: rgba(34, 197, 94, 0.04);
+  }
+
+  .ad-app-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .ad-app-emoji {
+    font-size: 20px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .ad-app-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .ad-app-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ad-app-proc {
+    font-size: 10px;
+    color: var(--text-tertiary);
+    font-family: var(--font-mono);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ad-app-status {
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .ad-app-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .ad-app-cat {
+    font-size: 10px;
+    color: var(--text-tertiary);
+    text-transform: capitalize;
   }
 </style>

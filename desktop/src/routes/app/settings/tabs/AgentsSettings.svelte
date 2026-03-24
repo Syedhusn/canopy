@@ -31,6 +31,38 @@
     <div class="stg-sep"></div>
 
     <div class="stg-field">
+      <label class="stg-label" for="max-agents">Max Concurrent Agents</label>
+      <p class="stg-desc">Maximum number of agents that can run simultaneously across all sessions.</p>
+      <input
+        id="max-agents"
+        class="stg-input"
+        type="number"
+        min="1"
+        max="100"
+        value={settingsStore.data.max_concurrent_agents}
+        oninput={(e) => settingsStore.update('max_concurrent_agents', parseInt((e.target as HTMLInputElement).value) || 10)}
+      />
+    </div>
+
+    <div class="stg-sep"></div>
+
+    <div class="stg-field">
+      <label class="stg-label" for="session-timeout">Session Timeout (minutes)</label>
+      <p class="stg-desc">Idle sessions are automatically closed after this duration.</p>
+      <input
+        id="session-timeout"
+        class="stg-input"
+        type="number"
+        min="5"
+        max="1440"
+        value={settingsStore.data.session_timeout_minutes}
+        oninput={(e) => settingsStore.update('session_timeout_minutes', parseInt((e.target as HTMLInputElement).value) || 60)}
+      />
+    </div>
+
+    <div class="stg-sep"></div>
+
+    <div class="stg-field">
       <label class="stg-label" for="default-system-prompt">Default System Prompt</label>
       <p class="stg-desc">Injected into every new agent session unless overridden by the agent's own prompt.</p>
       <textarea

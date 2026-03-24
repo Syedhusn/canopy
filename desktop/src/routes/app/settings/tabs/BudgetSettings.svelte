@@ -1,5 +1,7 @@
 <!-- src/routes/app/settings/tabs/BudgetSettings.svelte -->
 <script lang="ts">
+  import { settingsStore } from '$lib/stores/settings.svelte';
+
   let dailyLimitDollars = $state(50);
   let monthlyLimitDollars = $state(500);
   let warningThreshold = $state(80);
@@ -10,6 +12,26 @@
   <h2 class="stg-section-title">Budget</h2>
 
   <div class="stg-card">
+    <div class="stg-field stg-field--row">
+      <div class="stg-field-text">
+        <label class="stg-label" for="budget-enforcement">Budget Enforcement</label>
+        <p class="stg-desc">When enabled, agents are paused when they exceed their assigned budget limits.</p>
+      </div>
+      <label class="stg-toggle" aria-label="Enable budget enforcement">
+        <input
+          id="budget-enforcement"
+          type="checkbox"
+          checked={settingsStore.data.budget_enforcement}
+          onchange={(e) => settingsStore.update('budget_enforcement', (e.target as HTMLInputElement).checked)}
+        />
+        <span class="stg-toggle-track">
+          <span class="stg-toggle-thumb"></span>
+        </span>
+      </label>
+    </div>
+
+    <div class="stg-sep"></div>
+
     <div class="stg-field">
       <label class="stg-label" for="daily-limit">Daily Limit (USD)</label>
       <p class="stg-desc">Hard ceiling on spend per calendar day across all agents.</p>

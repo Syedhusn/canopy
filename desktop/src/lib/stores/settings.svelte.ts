@@ -15,6 +15,12 @@ class SettingsStore {
         : null) ?? ("osa" as AdapterType),
     default_model: "claude-sonnet-4-6",
     working_directory: "",
+    max_concurrent_agents: 10,
+    session_timeout_minutes: 60,
+    log_level: "info",
+    telemetry_enabled: true,
+    activity_retention_days: 30,
+    budget_enforcement: true,
   });
   // miosaCloud is not part of the Settings API type — stored separately
   miosaCloud = $state(false);

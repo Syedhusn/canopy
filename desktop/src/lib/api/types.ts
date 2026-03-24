@@ -911,6 +911,13 @@ export interface Settings {
   default_adapter: AdapterType;
   default_model: string;
   working_directory: string;
+  // Instance configuration (merged from /config)
+  max_concurrent_agents: number;
+  session_timeout_minutes: number;
+  log_level: "debug" | "info" | "warn" | "error";
+  telemetry_enabled: boolean;
+  activity_retention_days: number;
+  budget_enforcement: boolean;
 }
 
 // ── Secrets ───────────────────────────────────────────────────────────────────

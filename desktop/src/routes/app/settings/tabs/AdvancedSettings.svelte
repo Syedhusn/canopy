@@ -19,6 +19,12 @@
     settingsStore.update('default_adapter', 'osa');
     settingsStore.update('default_model', 'claude-sonnet-4-6');
     settingsStore.update('working_directory', '');
+    settingsStore.update('max_concurrent_agents', 10);
+    settingsStore.update('session_timeout_minutes', 60);
+    settingsStore.update('log_level', 'info');
+    settingsStore.update('telemetry_enabled', true);
+    settingsStore.update('activity_retention_days', 30);
+    settingsStore.update('budget_enforcement', true);
     themeStore.setMode('dark');
     toastStore.info('Settings reset to defaults');
   }
@@ -59,6 +65,64 @@
 </script>
 
 <section class="stg-section">
+  <h2 class="stg-section-title">Logging & Telemetry</h2>
+
+  <div class="stg-card">
+    <div class="stg-field">
+      <label class="stg-label" for="log-level">Log Level</label>
+      <p class="stg-desc">Controls verbosity of server-side and agent logs.</p>
+      <select
+        id="log-level"
+        class="stg-select"
+        value={settingsStore.data.log_level}
+        onchange={(e) => settingsStore.update('log_level', (e.target as HTMLSelectElement).value as typeof settingsStore.data.log_level)}
+      >
+        <option value="debug">debug</option>
+        <option value="info">info</option>
+        <option value="warn">warn</option>
+        <option value="error">error</option>
+      </select>
+    </div>
+
+    <div class="stg-sep"></div>
+
+    <div class="stg-field stg-field--row">
+      <div class="stg-field-text">
+        <label class="stg-label" for="telemetry-enabled">Telemetry</label>
+        <p class="stg-desc">Send anonymous usage data to improve OSA. No prompts or file content are ever included.</p>
+      </div>
+      <label class="stg-toggle" aria-label="Enable telemetry">
+        <input
+          id="telemetry-enabled"
+          type="checkbox"
+          checked={settingsStore.data.telemetry_enabled}
+          onchange={(e) => settingsStore.update('telemetry_enabled', (e.target as HTMLInputElement).checked)}
+        />
+        <span class="stg-toggle-track">
+          <span class="stg-toggle-thumb"></span>
+        </span>
+      </label>
+    </div>
+
+    <div class="stg-sep"></div>
+
+    <div class="stg-field">
+      <label class="stg-label" for="retention-days">Activity Retention (days)</label>
+      <p class="stg-desc">How long activity logs are kept before automatic pruning.</p>
+      <input
+        id="retention-days"
+        class="stg-input"
+        type="number"
+        min="1"
+        max="365"
+        value={settingsStore.data.activity_retention_days}
+        oninput={(e) => settingsStore.update('activity_retention_days', parseInt((e.target as HTMLInputElement).value) || 30)}
+      />
+    </div>
+  </div>
+</section>
+
+<section class="stg-section stg-section--mt">
   <h2 class="stg-section-title">Advanced</h2>
 
   <div class="stg-card">
@@ -196,5 +260,99 @@
     width: 100%;
     height: 100%;
     cursor: pointer;
+  }
+
+  .stg-section--mt { margin-top: 32px; }
+
+  .stg-field--row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .stg-field-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .stg-input {
+    width: 100%;
+    padding: 7px 10px;
+    font-size: 13px;
+    color: var(--text-primary);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    outline: none;
+    transition: border-color var(--transition-fast);
+  }
+
+  .stg-input:focus { border-color: var(--border-focus); }
+
+  .stg-select {
+    width: 100%;
+    padding: 7px 10px;
+    font-size: 13px;
+    color: var(--text-primary);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    outline: none;
+    cursor: pointer;
+    transition: border-color var(--transition-fast);
+    appearance: auto;
+  }
+
+  .stg-select:focus { border-color: var(--border-focus); }
+
+  .stg-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .stg-toggle input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .stg-toggle-track {
+    position: relative;
+    display: inline-block;
+    width: 36px;
+    height: 20px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-full);
+    transition: background var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .stg-toggle input:checked ~ .stg-toggle-track {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+  }
+
+  .stg-toggle-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 14px;
+    height: 14px;
+    background: var(--text-tertiary);
+    border-radius: 50%;
+    transition: transform var(--transition-fast), background var(--transition-fast);
+  }
+
+  .stg-toggle input:checked ~ .stg-toggle-track .stg-toggle-thumb {
+    transform: translateX(16px);
+    background: #fff;
   }
 </style>
