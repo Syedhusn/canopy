@@ -38,6 +38,8 @@ defmodule CanopyWeb.HierarchyController do
   end
 
   defp render_hierarchy(conn, org) do
+    user_workspace_ids = conn.assigns[:user_workspace_ids] || []
+
     # 1. Fetch all divisions
     divisions = Repo.all(from d in Division, where: d.organization_id == ^org.id, order_by: [asc: d.name])
     division_ids = Enum.map(divisions, & &1.id)
@@ -62,12 +64,12 @@ defmodule CanopyWeb.HierarchyController do
 
     team_ids = Enum.map(teams, & &1.id)
 
-    # 4. Fetch all agents in those teams (via team_memberships)
+    # 4. Fetch all agents in those teams (via team_memberships) — filtered by workspace
     agent_memberships =
       if team_ids == [] do
         []
       else
-        Repo.all(
+        query =
           from tm in TeamMembership,
             join: a in Agent, on: tm.agent_id == a.id,
             where: tm.team_id in ^team_ids,
@@ -84,7 +86,15 @@ defmodule CanopyWeb.HierarchyController do
               model: a.model,
               avatar_emoji: a.avatar_emoji
             }
-        )
+
+        query =
+          if user_workspace_ids != [] do
+            where(query, [_tm, a], a.workspace_id in ^user_workspace_ids)
+          else
+            query
+          end
+
+        Repo.all(query)
       end
 
     # Assemble bottom-up
