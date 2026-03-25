@@ -45,7 +45,8 @@ defmodule CanopyWeb.Router do
     end
 
     # Agents
-    get "/agents/hierarchy", AgentController, :hierarchy
+    get  "/agents/hierarchy", AgentController, :hierarchy
+    post "/agents/batch",     AgentController, :batch_create
     resources "/agents", AgentController, except: [:new, :edit] do
       post "/wake", AgentController, :wake, as: :wake
       post "/sleep", AgentController, :sleep, as: :sleep
