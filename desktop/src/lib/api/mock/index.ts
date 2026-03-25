@@ -1983,9 +1983,48 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
   },
   {
     pattern: /^\/divisions\/([^/]+)$/,
-    handler: (path) => {
+    handler: (path, options) => {
       const id = path.split("/")[2];
+      if ((options.method ?? "GET").toUpperCase() === "PATCH" && options.body) {
+        const body = JSON.parse(
+          typeof options.body === "string" ? options.body : "{}",
+        ) as Record<string, unknown>;
+        return {
+          id,
+          name: "Division",
+          slug: "division",
+          departments: [],
+          ...body,
+        };
+      }
+      if ((options.method ?? "GET").toUpperCase() === "DELETE")
+        return { ok: true };
       return { id, name: "Division", slug: "division", departments: [] };
+    },
+  },
+  {
+    // POST /divisions — create a new division
+    pattern: /^\/divisions$/,
+    handler: (_path, options) => {
+      if ((options.method ?? "GET").toUpperCase() === "POST") {
+        const body = JSON.parse(
+          typeof options.body === "string" ? options.body : "{}",
+        ) as Record<string, unknown>;
+        return {
+          id: `div-${Date.now()}`,
+          name: (body.name as string) ?? "New Division",
+          slug: ((body.name as string) ?? "division")
+            .toLowerCase()
+            .replace(/\s+/g, "-"),
+          workspace_id: (body.workspace_id as string) ?? null,
+          head_agent_id: (body.head_agent_id as string) ?? null,
+          budget_cents: 0,
+          departments: [],
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+      }
+      return { divisions: [] };
     },
   },
   {
@@ -1994,20 +2033,109 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
   },
   {
     pattern: /^\/departments\/([^/]+)$/,
-    handler: (path) => {
+    handler: (path, options) => {
       const id = path.split("/")[2];
+      if ((options.method ?? "GET").toUpperCase() === "PATCH" && options.body) {
+        const body = JSON.parse(
+          typeof options.body === "string" ? options.body : "{}",
+        ) as Record<string, unknown>;
+        return {
+          id,
+          name: "Department",
+          slug: "department",
+          teams: [],
+          ...body,
+        };
+      }
+      if ((options.method ?? "GET").toUpperCase() === "DELETE")
+        return { ok: true };
       return { id, name: "Department", slug: "department", teams: [] };
     },
   },
   {
+    // POST /departments — create a new department
+    pattern: /^\/departments$/,
+    handler: (_path, options) => {
+      if ((options.method ?? "GET").toUpperCase() === "POST") {
+        const body = JSON.parse(
+          typeof options.body === "string" ? options.body : "{}",
+        ) as Record<string, unknown>;
+        return {
+          id: `dept-${Date.now()}`,
+          name: (body.name as string) ?? "New Department",
+          slug: ((body.name as string) ?? "department")
+            .toLowerCase()
+            .replace(/\s+/g, "-"),
+          division_id: (body.division_id as string) ?? null,
+          workspace_id: (body.workspace_id as string) ?? null,
+          head_agent_id: (body.head_agent_id as string) ?? null,
+          budget_cents: 0,
+          teams: [],
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+      }
+      return { departments: [] };
+    },
+  },
+  {
     pattern: /^\/teams\/([^/]+)\/(agents|members)$/,
-    handler: () => ({ agents: [], members: [] }),
+    handler: (path, options) => {
+      const teamId = path.split("/")[2];
+      if ((options.method ?? "GET").toUpperCase() === "POST") {
+        const body = JSON.parse(
+          typeof options.body === "string" ? options.body : "{}",
+        ) as Record<string, unknown>;
+        return {
+          id: `tm-${Date.now()}`,
+          team_id: teamId,
+          agent_id: (body.agent_id as string) ?? null,
+          role: (body.role as string) ?? "member",
+          joined_at: new Date().toISOString(),
+        };
+      }
+      return { agents: [], members: [] };
+    },
   },
   {
     pattern: /^\/teams\/([^/]+)$/,
-    handler: (path) => {
+    handler: (path, options) => {
       const id = path.split("/")[2];
+      if ((options.method ?? "GET").toUpperCase() === "PATCH" && options.body) {
+        const body = JSON.parse(
+          typeof options.body === "string" ? options.body : "{}",
+        ) as Record<string, unknown>;
+        return { id, name: "Team", slug: "team", agents: [], ...body };
+      }
+      if ((options.method ?? "GET").toUpperCase() === "DELETE")
+        return { ok: true };
       return { id, name: "Team", slug: "team", agents: [] };
+    },
+  },
+  {
+    // POST /teams — create a new team
+    pattern: /^\/teams$/,
+    handler: (_path, options) => {
+      if ((options.method ?? "GET").toUpperCase() === "POST") {
+        const body = JSON.parse(
+          typeof options.body === "string" ? options.body : "{}",
+        ) as Record<string, unknown>;
+        return {
+          id: `team-${Date.now()}`,
+          name: (body.name as string) ?? "New Team",
+          slug: ((body.name as string) ?? "team")
+            .toLowerCase()
+            .replace(/\s+/g, "-"),
+          department_id: (body.department_id as string) ?? null,
+          workspace_id: (body.workspace_id as string) ?? null,
+          manager_agent_id: (body.manager_agent_id as string) ?? null,
+          budget_cents: 0,
+          agents: [],
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+      }
+      return { teams: [] };
     },
   },
   // ── Skills sub-routes ──────────────────────────────────────────────────────────
@@ -2477,6 +2605,78 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
       return { reports: filtered, count: filtered.length };
     },
   },
+
+  // ── Dispatch routes ───────────────────────────────────────────────────────────
+  {
+    pattern: /^\/dispatch\/routes$/,
+    handler: () => ({
+      routes: [
+        {
+          id: "route-1",
+          pattern: "code.*",
+          adapter: "claude-code",
+          priority: 10,
+        },
+        { id: "route-2", pattern: "refactor.*", adapter: "codex", priority: 5 },
+        { id: "route-3", pattern: ".*", adapter: "bash", priority: 1 },
+      ],
+    }),
+  },
+  {
+    pattern: /^\/dispatch\/preview$/,
+    handler: (_path, options) => {
+      const body = JSON.parse(
+        typeof options.body === "string" ? options.body : "{}",
+      ) as Record<string, unknown>;
+      return {
+        adapter: "claude-code",
+        confidence: 0.85,
+        matched_pattern: "code.*",
+        content_preview: String(body.content ?? "").slice(0, 100),
+      };
+    },
+  },
+
+  // ── Delegations ───────────────────────────────────────────────────────────────
+  {
+    pattern: /^\/delegations$/,
+    handler: (_path, options) => {
+      if ((options.method ?? "GET").toUpperCase() === "POST") {
+        const body = JSON.parse(
+          typeof options.body === "string" ? options.body : "{}",
+        ) as Record<string, unknown>;
+        return {
+          id: `del-${Date.now()}`,
+          from_agent_id: (body.from_agent_id as string) ?? null,
+          to_agent_id: (body.to_agent_id as string) ?? null,
+          task: (body.task as string) ?? "",
+          status: "pending",
+          created_at: new Date().toISOString(),
+        };
+      }
+      return { delegations: [] };
+    },
+  },
+
+  // ── Analytics costs ───────────────────────────────────────────────────────────
+  {
+    pattern: /^\/analytics\/costs$/,
+    handler: () => ({ daily: [], total_cents: 0 }),
+  },
+
+  // ── Config revisions CRUD ─────────────────────────────────────────────────────
+  {
+    pattern: /^\/config\/revisions$/,
+    handler: (_path, options) => {
+      if ((options.method ?? "GET").toUpperCase() === "POST") {
+        return {
+          id: `rev-${Date.now()}`,
+          created_at: new Date().toISOString(),
+        };
+      }
+      return { revisions: [] };
+    },
+  },
 ];
 
 // ── Re-export workspace agent helpers for use by deploy service ────────────────
@@ -2763,8 +2963,11 @@ export async function handleRequest<T>(
   // Strip query params for matching
   const cleanPath = path.split("?")[0];
 
-  // Fresh workspace override: return empty data for operational endpoints
-  if (isFreshWorkspace()) {
+  // Fresh workspace override: return empty data for operational GET endpoints.
+  // Write methods (POST/PATCH/PUT/DELETE) always fall through to route handlers
+  // so that create/update/delete operations work in fresh workspaces.
+  const method = (_options.method ?? "GET").toUpperCase();
+  if (isFreshWorkspace() && method === "GET") {
     const override = FRESH_WORKSPACE_OVERRIDES[cleanPath];
     if (override !== undefined) {
       return override as T;
