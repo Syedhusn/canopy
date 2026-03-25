@@ -4,6 +4,7 @@ defmodule Canopy.Repo.Migrations.AddMissingFkIndexes do
   def change do
     create_if_not_exists index(:workspaces, [:owner_id])
     create_if_not_exists index(:goals, [:parent_id])
+    create_if_not_exists index(:goals, [:project_id])
     create_if_not_exists index(:issues, [:project_id])
     create_if_not_exists index(:issues, [:goal_id])
     create_if_not_exists index(:issues, [:assignee_id])

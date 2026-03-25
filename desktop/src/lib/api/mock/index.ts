@@ -1707,12 +1707,57 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
   // ── Templates ─────────────────────────────────────────────────────────────────
   {
     pattern: /^\/templates\/([^/]+)$/,
-    handler: (path) => {
+    handler: (path, options) => {
       const id = path.split("/")[2];
+      const method = (options.method ?? "GET").toUpperCase();
+      if (method === "DELETE") {
+        return undefined;
+      }
+      if (method === "PATCH" && options.body) {
+        const existing =
+          mockTemplates().find((t) => t.id === id) ?? mockTemplates()[0];
+        let updates: Record<string, unknown> = {};
+        try {
+          updates = JSON.parse(
+            typeof options.body === "string" ? options.body : "{}",
+          ) as Record<string, unknown>;
+        } catch {
+          /* ignore */
+        }
+        return { ...existing, ...updates, id };
+      }
       return mockTemplates().find((t) => t.id === id) ?? mockTemplates()[0];
     },
   },
-  { pattern: /^\/templates$/, handler: () => ({ templates: mockTemplates() }) },
+  {
+    pattern: /^\/templates$/,
+    handler: (_path, options) => {
+      if ((options.method ?? "GET").toUpperCase() === "POST") {
+        let body: Record<string, unknown> = {};
+        try {
+          body = JSON.parse(
+            typeof options.body === "string" ? options.body : "{}",
+          ) as Record<string, unknown>;
+        } catch {
+          /* ignore */
+        }
+        return {
+          id: `tpl-${Date.now()}`,
+          name: (body.name as string) ?? "New Template",
+          description: (body.description as string) ?? "",
+          adapter: (body.adapter as string) ?? "claude_code",
+          model: (body.model as string) ?? "claude-sonnet-4-20250514",
+          system_prompt: (body.system_prompt as string) ?? "",
+          skills: (body.skills as string[]) ?? [],
+          config: (body.config as Record<string, unknown>) ?? {},
+          category: (body.category as string) ?? "starter",
+          downloads: 0,
+          created_at: new Date().toISOString(),
+        };
+      }
+      return { templates: mockTemplates() };
+    },
+  },
 
   // ── Config ────────────────────────────────────────────────────────────────────
   { pattern: /^\/config/, handler: () => ({ config: mockConfig() }) },
@@ -2521,25 +2566,28 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
 
   // ── Delegations ────────────────────────────────────────────────────────────────
   {
-    // POST /delegations
+    // GET/POST /delegations
     pattern: /^\/delegations$/,
     handler: (_path, options) => {
-      let body: Record<string, unknown> = {};
-      try {
-        body = JSON.parse(options.body as string);
-      } catch {
-        /* ignore */
+      if ((options.method ?? "GET").toUpperCase() === "POST") {
+        let body: Record<string, unknown> = {};
+        try {
+          body = JSON.parse(options.body as string);
+        } catch {
+          /* ignore */
+        }
+        const now = new Date().toISOString();
+        return {
+          id: `task-del-${Date.now()}`,
+          parent_task_id: (body.parent_task_id as string) ?? null,
+          description: (body.description as string) ?? "Delegated subtask",
+          adapter: (body.adapter as string) ?? "osa",
+          agent_id: (body.agent_id as string) ?? null,
+          status: "pending",
+          created_at: now,
+        };
       }
-      const now = new Date().toISOString();
-      return {
-        id: `task-del-${Date.now()}`,
-        parent_task_id: (body.parent_task_id as string) ?? null,
-        description: (body.description as string) ?? "Delegated subtask",
-        adapter: (body.adapter as string) ?? "osa",
-        agent_id: (body.agent_id as string) ?? null,
-        status: "pending",
-        created_at: now,
-      };
+      return { delegations: [] };
     },
   },
 
@@ -2819,58 +2867,6 @@ const routes: Array<{ pattern: RegExp; handler: RouteHandler }> = [
         ? all.filter((r) => r.report_type === reportType)
         : all;
       return { reports: filtered, count: filtered.length };
-    },
-  },
-
-  // ── Dispatch routes ───────────────────────────────────────────────────────────
-  {
-    pattern: /^\/dispatch\/routes$/,
-    handler: () => ({
-      routes: [
-        {
-          id: "route-1",
-          pattern: "code.*",
-          adapter: "claude-code",
-          priority: 10,
-        },
-        { id: "route-2", pattern: "refactor.*", adapter: "codex", priority: 5 },
-        { id: "route-3", pattern: ".*", adapter: "bash", priority: 1 },
-      ],
-    }),
-  },
-  {
-    pattern: /^\/dispatch\/preview$/,
-    handler: (_path, options) => {
-      const body = JSON.parse(
-        typeof options.body === "string" ? options.body : "{}",
-      ) as Record<string, unknown>;
-      return {
-        adapter: "claude-code",
-        confidence: 0.85,
-        matched_pattern: "code.*",
-        content_preview: String(body.content ?? "").slice(0, 100),
-      };
-    },
-  },
-
-  // ── Delegations ───────────────────────────────────────────────────────────────
-  {
-    pattern: /^\/delegations$/,
-    handler: (_path, options) => {
-      if ((options.method ?? "GET").toUpperCase() === "POST") {
-        const body = JSON.parse(
-          typeof options.body === "string" ? options.body : "{}",
-        ) as Record<string, unknown>;
-        return {
-          id: `del-${Date.now()}`,
-          from_agent_id: (body.from_agent_id as string) ?? null,
-          to_agent_id: (body.to_agent_id as string) ?? null,
-          task: (body.task as string) ?? "",
-          status: "pending",
-          created_at: new Date().toISOString(),
-        };
-      }
-      return { delegations: [] };
     },
   },
 

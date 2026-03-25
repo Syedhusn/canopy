@@ -28,6 +28,7 @@ alias Canopy.Schemas.{
   Workflow,
   WorkflowStep,
   Conversation,
+  ConversationMessage,
   Dataset,
   Notification,
   LibraryItem,
@@ -1271,6 +1272,107 @@ end
 
 IO.puts("    2 conversations (architecture planning active, OSA implementation archived)")
 
+# Seed messages for each conversation so the messages table is not empty.
+planning_conv =
+  Repo.one!(
+    from c in Conversation,
+      where:
+        c.workspace_id == ^workspace.id and
+          c.title == "Architecture planning session"
+  )
+
+impl_conv =
+  Repo.one!(
+    from c in Conversation,
+      where:
+        c.workspace_id == ^workspace.id and
+          c.title == "OSA adapter implementation"
+  )
+
+now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+planning_messages = [
+  %{
+    conversation_id: planning_conv.id,
+    role: "user",
+    content: "What adapter pattern should we use for the multi-provider integration?",
+    content_type: "text",
+    inserted_at: now,
+    updated_at: now
+  },
+  %{
+    conversation_id: planning_conv.id,
+    role: "agent",
+    content:
+      "I recommend a strategy pattern with a common AdapterBehaviour. Each provider implements connect/2, execute/2, and disconnect/1. This keeps the dispatch layer provider-agnostic.",
+    content_type: "text",
+    inserted_at: now,
+    updated_at: now
+  },
+  %{
+    conversation_id: planning_conv.id,
+    role: "user",
+    content: "Good — draft the behaviour module and one concrete adapter for Claude Code.",
+    content_type: "text",
+    inserted_at: now,
+    updated_at: now
+  }
+]
+
+impl_messages = [
+  %{
+    conversation_id: impl_conv.id,
+    role: "user",
+    content: "Start implementing the OSA adapter based on the architecture plan.",
+    content_type: "text",
+    inserted_at: now,
+    updated_at: now
+  },
+  %{
+    conversation_id: impl_conv.id,
+    role: "agent",
+    content:
+      "Created lib/canopy/adapters/osa.ex implementing AdapterBehaviour. It wraps the local CLI subprocess with JSON-RPC framing.",
+    content_type: "text",
+    inserted_at: now,
+    updated_at: now
+  },
+  %{
+    conversation_id: impl_conv.id,
+    role: "user",
+    content: "Add error handling for timeouts and process crashes.",
+    content_type: "text",
+    inserted_at: now,
+    updated_at: now
+  },
+  %{
+    conversation_id: impl_conv.id,
+    role: "agent",
+    content:
+      "Done. Added a GenServer monitor on the subprocess PID. On :DOWN we return {:error, :adapter_crashed} and log the exit reason. Timeouts use Process.send_after/3 with a configurable interval defaulting to 30 seconds.",
+    content_type: "text",
+    inserted_at: now,
+    updated_at: now
+  },
+  %{
+    conversation_id: impl_conv.id,
+    role: "user",
+    content: "Looks solid. Mark this conversation as complete.",
+    content_type: "text",
+    inserted_at: now,
+    updated_at: now
+  }
+]
+
+for msg <- planning_messages ++ impl_messages do
+  Repo.insert!(
+    ConversationMessage.changeset(%ConversationMessage{}, msg),
+    on_conflict: :nothing
+  )
+end
+
+IO.puts("    8 messages (3 in planning, 5 in implementation)")
+
 # ---------------------------------------------------------------------------
 # SECTION 24: Datasets
 # ---------------------------------------------------------------------------
@@ -1698,6 +1800,7 @@ IO.puts("""
   Workflows     2  (daily-standup active, security-scan active)
   Wf Steps      3  (standup x2, security x1)
   Conversations 2  (planning active, implementation archived)
+  Messages      8  (3 in planning, 5 in implementation)
   Datasets      2  (session-performance-log, issue-velocity-export)
   Notifications 5  (approval, budget warn, task, broadcast, alert)
   Library Items 10 (templates, skills, workflows)

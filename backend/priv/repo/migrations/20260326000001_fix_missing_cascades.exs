@@ -57,6 +57,19 @@ defmodule Canopy.Repo.Migrations.FixMissingCascades do
              references(:budget_policies, type: :binary_id, on_delete: :nilify_all)
     end
 
+    # budget_incidents.agent_id — must drop NOT NULL before nilify_all
+    execute(
+      "ALTER TABLE budget_incidents ALTER COLUMN agent_id DROP NOT NULL",
+      "ALTER TABLE budget_incidents ALTER COLUMN agent_id SET NOT NULL"
+    )
+
+    drop constraint(:budget_incidents, "budget_incidents_agent_id_fkey")
+
+    alter table(:budget_incidents) do
+      modify :agent_id,
+             references(:agents, type: :binary_id, on_delete: :nilify_all)
+    end
+
     # activity_events.agent_id → agents
     drop constraint(:activity_events, "activity_events_agent_id_fkey")
 
