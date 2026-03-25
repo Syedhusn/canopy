@@ -144,11 +144,11 @@ import Sidebar from '$lib/components/layout/Sidebar.svelte';
         void hierarchyStore.fetchDivisions(organizationsStore.current.id);
         void hierarchyStore.fetchTeams();
       }
-      void approvalsStore.fetchApprovals();
-
       // 8. Load agents & projects: resolve workspace context first
       const ws = workspaceStore.activeWorkspace;
       const wsId = workspaceStore.activeWorkspaceId ?? undefined;
+
+      void approvalsStore.fetchApprovals(wsId);
 
       // 9. Pre-fetch projects so goals and other project-dependent pages work
       void projectsStore.fetchProjects(wsId);
